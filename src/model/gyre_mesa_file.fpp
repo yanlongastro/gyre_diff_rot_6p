@@ -42,6 +42,7 @@ module gyre_mesa_file
   integer, parameter :: N_COLS_V0_01 = 18
   integer, parameter :: N_COLS_V0_19 = 18
   integer, parameter :: N_COLS_V1_0X = 18
+  integer, parameter :: N_COLS_V2_33 = 20    ! syl200803
 
   ! Access specifiers
 
@@ -99,6 +100,8 @@ contains
        n_cols = N_COLS_V0_19
     case (100,101)
        n_cols = N_COLS_V1_0X
+    case (233)
+       n_cols = N_COLS_V2_33     !syl200803
     case default
        $ABORT(Unrecognized MESA file version)
     end select
@@ -167,6 +170,8 @@ contains
     real(WP), allocatable       :: kap_rho(:)
     real(WP), allocatable       :: kap_T(:)
     real(WP), allocatable       :: Omega_rot(:)
+    real(WP), allocatable       :: dOmega_dr(:)
+    real(WP), allocatable       :: f_Omega(:)      !syl200803
     real(WP), allocatable       :: x(:)
     real(WP), allocatable       :: V_2(:)
     real(WP), allocatable       :: As(:)
@@ -198,6 +203,8 @@ contains
        call extract_data_v0_19_()
     case (100,101)
        call extract_data_v1_0X_()
+    case (233)
+       call extract_data_v2_33_()   !syl200803
     case default
        $ABORT(Unrecognized MESA memory version)
     end select
@@ -460,6 +467,64 @@ contains
       return
 
     end subroutine extract_data_v1_0X_
+
+
+
+   !syl200803: read mesa initial files with rotation gradient and f_Omega
+
+    subroutine extract_data_v2_33_ ()
+
+      real(WP), allocatable :: eps_eps_rho(:)
+      real(WP), allocatable :: eps_eps_T(:)
+      real(WP), allocatable :: kap_kap_T(:)
+      real(WP), allocatable :: kap_kap_rho(:)
+
+      $CHECK_BOUNDS(SIZE(point_data, 1),N_COLS_V1_0X)
+
+      ! Extract data from the version-1.0X point array
+
+      r = point_data(1,:)
+      M_r = point_data(2,:)
+      L_r = point_data(3,:)
+      P = point_data(4,:)
+      T = point_data(5,:)
+      rho = point_data(6,:)
+      nabla = point_data(7,:)
+      N2 = point_data(8,:)
+      Gamma_1 = point_data(9,:)
+      nabla_ad = point_data(10,:)
+      delta = point_data(11,:)
+      kap = point_data(12,:)
+      kap_kap_T = point_data(13,:)
+      kap_kap_rho = point_data(14,:)
+      eps = point_data(15,:)
+      eps_eps_T = point_data(16,:)
+      eps_eps_rho = point_data(17,:)
+      Omega_rot = point_data(18,:)
+      dOmega_dr = point_data(19,:) !syl200803: added this and the next line.
+      f_Omega = point_data(20,:)
+
+      ! Note: technically incorrect in version 1.00, because eps in versions < 1.01 includes eps_grav
+
+      allocate(eps_rho(n))
+      allocate(eps_T(n))
+
+      where (eps /= 0._WP)
+         eps_rho = eps_eps_rho/eps
+         eps_T = eps_eps_T/eps
+      elsewhere
+         eps_rho = 0._WP
+         eps_T = 0._WP
+      end where
+
+      kap_T = kap_kap_T/kap
+      kap_rho = kap_kap_rho/kap
+
+      ! Finish
+
+      return
+
+    end subroutine extract_data_v2_33_
 
   end subroutine init_mesa_model
 
