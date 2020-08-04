@@ -4,7 +4,7 @@
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
 !   includes: ../extern/core/core.inc
-!   uses: gyre_model ISO_FORTRAN_ENV gyre_constants core_order core_kinds gyre_evol_model gyre_model_util gyre_util gyre_model_par
+!   uses: gyre_model_par gyre_model_util gyre_constants core_order gyre_util gyre_evol_model gyre_model ISO_FORTRAN_ENV core_kinds
 !   provides: gyre_mesa_file
 !end dependencies
 !
@@ -72,6 +72,7 @@ module gyre_mesa_file
   integer, parameter :: N_COLS_V0_01 = 18
   integer, parameter :: N_COLS_V0_19 = 18
   integer, parameter :: N_COLS_V1_0X = 18
+  integer, parameter :: N_COLS_V2_33 = 20    ! syl200803
 
   ! Access specifiers
 
@@ -129,9 +130,11 @@ contains
        n_cols = N_COLS_V0_19
     case (100,101)
        n_cols = N_COLS_V1_0X
+    case (233)
+       n_cols = N_COLS_V2_33     !syl200803
     case default
 
-    write(UNIT=ERROR_UNIT, FMT=*) 'ABORT at line 103 <gyre_mesa_file:read_mesa_model>:'
+    write(UNIT=ERROR_UNIT, FMT=*) 'ABORT at line 106 <gyre_mesa_file:read_mesa_model>:'
     write(UNIT=ERROR_UNIT, FMT=*) 'Unrecognized MESA file version'
 
   stop 'Program aborted'
@@ -144,7 +147,7 @@ contains
        read(unit, *) k_chk, point_data(:,k)
 
     if(.NOT. (k == k_chk)) then
-      write(UNIT=ERROR_UNIT, FMT=*) 'ASSERT ''k == k_chk'' failed at line 110 <gyre_mesa_file:read_mesa_model>:'
+      write(UNIT=ERROR_UNIT, FMT=*) 'ASSERT ''k == k_chk'' failed at line 113 <gyre_mesa_file:read_mesa_model>:'
       write(UNIT=ERROR_UNIT, FMT=*) 'Index mismatch'
       stop
     endif
@@ -208,6 +211,8 @@ contains
     real(WP), allocatable       :: kap_rho(:)
     real(WP), allocatable       :: kap_T(:)
     real(WP), allocatable       :: Omega_rot(:)
+    real(WP), allocatable       :: dOmega_dr(:)
+    real(WP), allocatable       :: f_Omega(:)      !syl200803
     real(WP), allocatable       :: x(:)
     real(WP), allocatable       :: V_2(:)
     real(WP), allocatable       :: As(:)
@@ -239,9 +244,11 @@ contains
        call extract_data_v0_19_()
     case (100,101)
        call extract_data_v1_0X_()
+    case (233)
+       call extract_data_v2_33_()   !syl200803
     case default
 
-    write(UNIT=ERROR_UNIT, FMT=*) 'ABORT at line 202 <gyre_mesa_file:init_mesa_model>:'
+    write(UNIT=ERROR_UNIT, FMT=*) 'ABORT at line 209 <gyre_mesa_file:init_mesa_model>:'
     write(UNIT=ERROR_UNIT, FMT=*) 'Unrecognized MESA memory version'
 
   stop 'Program aborted'
@@ -377,6 +384,12 @@ contains
       allocate(Omega_rot(n))
       Omega_rot = 0._WP
 
+      allocate(dOmega_dr(n))
+      dOmega_dr = 0._WP
+
+      allocate(f_Omega(n))
+      f_Omega = 0._WP
+
       ! Evaluate eps_rho and eps_T from eps_eps_*
 
       k = MAXLOC(ABS(eps_eps_T), DIM=1)
@@ -445,6 +458,12 @@ contains
          eps_T = 0._WP
       end where
 
+      allocate(dOmega_dr(n))
+      dOmega_dr = 0._WP
+
+      allocate(f_Omega(n))
+      f_Omega = 0._WP
+
       ! Finish
 
       return
@@ -495,11 +514,71 @@ contains
       kap_T = kap_kap_T/kap
       kap_rho = kap_kap_rho/kap
 
+      allocate(dOmega_dr(n))
+      dOmega_dr = 0._WP
+
+      allocate(f_Omega(n))
+      f_Omega = 0._WP
+
       ! Finish
 
       return
 
     end subroutine extract_data_v1_0X_
+
+   !syl200803: read mesa initial files with rotation gradient and f_Omega
+
+    subroutine extract_data_v2_33_ ()
+
+      real(WP), allocatable :: eps_eps_rho(:)
+      real(WP), allocatable :: eps_eps_T(:)
+      real(WP), allocatable :: kap_kap_T(:)
+      real(WP), allocatable :: kap_kap_rho(:)
+
+      ! Extract data from the version-1.0X point array
+
+      r = point_data(1,:)
+      M_r = point_data(2,:)
+      L_r = point_data(3,:)
+      P = point_data(4,:)
+      T = point_data(5,:)
+      rho = point_data(6,:)
+      nabla = point_data(7,:)
+      N2 = point_data(8,:)
+      Gamma_1 = point_data(9,:)
+      nabla_ad = point_data(10,:)
+      delta = point_data(11,:)
+      kap = point_data(12,:)
+      kap_kap_T = point_data(13,:)
+      kap_kap_rho = point_data(14,:)
+      eps = point_data(15,:)
+      eps_eps_T = point_data(16,:)
+      eps_eps_rho = point_data(17,:)
+      Omega_rot = point_data(18,:)
+      dOmega_dr = point_data(19,:) !syl200803: added this and the next line.
+      f_Omega = point_data(20,:)
+
+      ! Note: technically incorrect in version 1.00, because eps in versions < 1.01 includes eps_grav
+
+      allocate(eps_rho(n))
+      allocate(eps_T(n))
+
+      where (eps /= 0._WP)
+         eps_rho = eps_eps_rho/eps
+         eps_T = eps_eps_T/eps
+      elsewhere
+         eps_rho = 0._WP
+         eps_T = 0._WP
+      end where
+
+      kap_T = kap_kap_T/kap
+      kap_rho = kap_kap_rho/kap
+
+      ! Finish
+
+      return
+
+    end subroutine extract_data_v2_33_
 
   end subroutine init_mesa_model
 

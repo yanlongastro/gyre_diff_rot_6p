@@ -340,6 +340,12 @@ contains
       allocate(Omega_rot(n))
       Omega_rot = 0._WP
 
+      allocate(dOmega_dr(n))
+      dOmega_dr = 0._WP
+
+      allocate(f_Omega(n))
+      f_Omega = 0._WP
+
       ! Evaluate eps_rho and eps_T from eps_eps_*
 
       k = MAXLOC(ABS(eps_eps_T), DIM=1)
@@ -410,6 +416,12 @@ contains
          eps_T = 0._WP
       end where
 
+      allocate(dOmega_dr(n))
+      dOmega_dr = 0._WP
+
+      allocate(f_Omega(n))
+      f_Omega = 0._WP
+
       ! Finish
 
       return
@@ -461,6 +473,13 @@ contains
 
       kap_T = kap_kap_T/kap
       kap_rho = kap_kap_rho/kap
+
+
+      allocate(dOmega_dr(n))
+      dOmega_dr = 0._WP
+
+      allocate(f_Omega(n))
+      f_Omega = 0._WP
 
       ! Finish
 
