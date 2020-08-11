@@ -49,7 +49,14 @@ module gyre_ad_eqns
   integer, parameter :: J_OMEGA_ROT = 6
   integer, parameter :: J_OMEGA_ROT_I = 7
 
-  integer, parameter :: J_LAST = J_OMEGA_ROT_I
+  !syl200811: add new variables
+  integer, parameter :: J_W = 8
+  integer, parameter :: J_F_OMEGA = 9
+  integer, parameter :: J_DOMEGA_DX =10
+
+
+  !syl200811: update J_LAST
+  integer, parameter :: J_LAST = J_DOMEGA_DX
 
   ! Derived-type definitions
 
@@ -134,7 +141,9 @@ contains
 
     associate (ml => this%cx%ml)
 
-      call check_model(ml, [I_V_2,I_AS,I_U,I_C_1,I_GAMMA_1,I_OMEGA_ROT])
+      !call check_model(ml, [I_V_2,I_AS,I_U,I_C_1,I_GAMMA_1,I_OMEGA_ROT])
+      !syl200811: add new variables
+      call check_model(ml, [I_V_2,I_AS,I_U,I_C_1,I_GAMMA_1,I_OMEGA_ROT,I_W,I_F_OMEGA,I_DOMEGA_DX])
 
       n_s = SIZE(pt)
 
@@ -148,6 +157,11 @@ contains
          this%coeff(i,J_C_1) = ml%coeff(I_C_1, pt(i))
          this%coeff(i,J_GAMMA_1) = ml%coeff(I_GAMMA_1, pt(i))
          this%coeff(i,J_OMEGA_ROT) = ml%coeff(I_OMEGA_ROT, pt(i))
+
+         !syl200811: add new variables
+         this%coeff(i,J_W) = ml%coeff(I_W, pt(i))
+         this%coeff(i,J_F_OMEGA) = ml%coeff(I_F_OMEGA, pt(i))
+         this%coeff(i,J_DOMEGA_DX) = ml%coeff(I_DOMEGA_DX, pt(i))
       end do
 
       this%coeff(:,J_OMEGA_ROT_I) = ml%coeff(I_OMEGA_ROT, this%cx%pt_i)
@@ -199,8 +213,8 @@ contains
     real(WP) :: l_i
 
     ! syl200808: New variables for centrifugal forces
-    real(WP) :: W
-    real(WP) :: f_Omega
+    !real(WP) :: W
+    !real(WP) :: f_Omega
     
     ! Evaluate the log(x)-space RHS matrix
 
@@ -213,7 +227,11 @@ contains
          Omega_rot => this%coeff(i,J_OMEGA_ROT), &
          Omega_rot_i => this%coeff(i,J_OMEGA_ROT_I), &
          alpha_gr => this%alpha_gr, &
-         alpha_om => this%alpha_om)
+         alpha_om => this%alpha_om, &
+         W => this%coeff(i,J_W), &
+         f_Omega => this%coeff(i,J_F_OMEGA), &
+         dOmega_dr => this%coeff(i,J_DOMEGA_DX))
+         !added new variables above
 
       omega_c = this%cx%omega_c(Omega_rot, st)
 
@@ -223,12 +241,15 @@ contains
       ! Set up the matrix
 
       xA(1,1) = V/Gamma_1 - 1._WP - l_i
-      xA(1,2) = lambda/(c_1*alpha_om*omega_c**2) - V/Gamma_1
+      !xA(1,2) = lambda/(c_1*alpha_om*omega_c**2) - V/Gamma_1
+      xA(1,2) = lambda/(c_1*alpha_om*omega_c**2) - (V+W)/Gamma_1
       xA(1,3) = alpha_gr*(lambda/(c_1*alpha_om*omega_c**2))
       xA(1,4) = alpha_gr*(0._WP)
 
-      xA(2,1) = c_1*alpha_om*omega_c**2 - As
-      xA(2,2) = As - U + 3._WP - l_i
+      !xA(2,1) = c_1*alpha_om*omega_c**2 - As
+      xA(2,1) = c_1*alpha_om*omega_c**2 - (1-c_1*Omega_rot**2)*As - c_1*Omega_rot**2*(V/Gamma_1 -2._WP - 2._WP*f_Omega)
+      !xA(2,2) = As - U + 3._WP - l_i
+      xA(2,2) = As - U + 3._WP - l_i + c_1*Omega_rot**2*(V+W)/Gamma_1
       xA(2,3) = alpha_gr*(0._WP)
       xA(2,4) = alpha_gr*(-1._WP)
 
@@ -238,7 +259,8 @@ contains
       xA(3,4) = alpha_gr*(1._WP)
 
       xA(4,1) = alpha_gr*(U*As)
-      xA(4,2) = alpha_gr*(U*V/Gamma_1)
+      !xA(4,2) = alpha_gr*(U*V/Gamma_1)
+      xA(4,2) = alpha_gr*(U*(V+W)/Gamma_1)
       xA(4,3) = alpha_gr*(lambda)
       xA(4,4) = alpha_gr*(-U - l_i + 2._WP)
 
