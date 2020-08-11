@@ -188,6 +188,9 @@ contains
     real(WP), allocatable       :: f_luan_t(:)
     real(WP), allocatable       :: f_luan_c(:)
 
+    !syl200811: add new coeff's
+    real(WP), allocatable       :: W(:)
+
     ! Extract data from the global and point arrays
 
     M_star = global_data(1)
@@ -223,6 +226,9 @@ contains
     allocate(c_1(n))
     allocate(c_lum(n))
     allocate(f_luan_t(n))
+
+    !syl200811: allocate
+    allocate(W(n))
     
     where (x /= 0._WP)
        V_2 = G_GRAVITY*M_r*rho/(P*r*x**2)
@@ -270,6 +276,10 @@ contains
        Omega_rot = Omega_rot*SQRT(R_star**3/(G_GRAVITY*M_star))
     endif
 
+
+    !syl200811: set up new coeff's
+    W = rho*(Omega_rot*r)**2 / P
+
     ! Initialize the evol_model_t
 
     allocate(em, SOURCE=evol_model_t(x, M_star, R_star, L_star, ml_p))
@@ -301,6 +311,11 @@ contains
     call em%define(I_F_LUAN_C, f_luan_c)
 
     call em%define(I_OMEGA_ROT, Omega_rot)
+
+    !syl200811: define new coeff's
+    call em%define(I_W, W)
+    call em%define(I_F_OMEGA, f_Omega)
+    call em%define(I_DOMEGA_DX, dOmega_dr)
 
     ! Finish
 

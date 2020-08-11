@@ -4,7 +4,7 @@
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
 !   includes: ../extern/core/core.inc
-!   uses: gyre_model_par gyre_model_util gyre_constants core_order gyre_util gyre_evol_model gyre_model ISO_FORTRAN_ENV core_kinds
+!   uses: gyre_model_util core_order gyre_constants gyre_model_par gyre_util gyre_model core_kinds gyre_evol_model ISO_FORTRAN_ENV
 !   provides: gyre_mesa_file
 !end dependencies
 !
@@ -229,6 +229,9 @@ contains
     real(WP), allocatable       :: f_luan_t(:)
     real(WP), allocatable       :: f_luan_c(:)
 
+    !syl200811: add new coeff's
+    real(WP), allocatable       :: W(:)
+
     ! Extract data from the global and point arrays
 
     M_star = global_data(1)
@@ -248,7 +251,7 @@ contains
        call extract_data_v2_33_()   !syl200803
     case default
 
-    write(UNIT=ERROR_UNIT, FMT=*) 'ABORT at line 209 <gyre_mesa_file:init_mesa_model>:'
+    write(UNIT=ERROR_UNIT, FMT=*) 'ABORT at line 212 <gyre_mesa_file:init_mesa_model>:'
     write(UNIT=ERROR_UNIT, FMT=*) 'Unrecognized MESA memory version'
 
   stop 'Program aborted'
@@ -269,6 +272,9 @@ contains
     allocate(c_1(n))
     allocate(c_lum(n))
     allocate(f_luan_t(n))
+
+    !syl200811: allocate
+    allocate(W(n))
 
     where (x /= 0._WP)
        V_2 = G_GRAVITY*M_r*rho/(P*r*x**2)
@@ -316,6 +322,9 @@ contains
        Omega_rot = Omega_rot*SQRT(R_star**3/(G_GRAVITY*M_star))
     endif
 
+    !syl200811: set up new coeff's
+    W = rho*(Omega_rot*r)**2 / P
+
     ! Initialize the evol_model_t
 
     allocate(em, SOURCE=evol_model_t(x, M_star, R_star, L_star, ml_p))
@@ -347,6 +356,11 @@ contains
     call em%define(I_F_LUAN_C, f_luan_c)
 
     call em%define(I_OMEGA_ROT, Omega_rot)
+
+    !syl200811: define new coeff's
+    call em%define(I_W, W)
+    call em%define(I_F_OMEGA, f_Omega)
+    call em%define(I_DOMEGA_DX, dOmega_dr)
 
     ! Finish
 
@@ -388,7 +402,7 @@ contains
       dOmega_dr = 0._WP
 
       allocate(f_Omega(n))
-      f_Omega = 0._WP
+      f_Omega = 0._WP      !syl200803: allocate new variables
 
       ! Evaluate eps_rho and eps_T from eps_eps_*
 
@@ -462,7 +476,7 @@ contains
       dOmega_dr = 0._WP
 
       allocate(f_Omega(n))
-      f_Omega = 0._WP
+      f_Omega = 0._WP      !syl200803: allocate new variables
 
       ! Finish
 
@@ -518,7 +532,7 @@ contains
       dOmega_dr = 0._WP
 
       allocate(f_Omega(n))
-      f_Omega = 0._WP
+      f_Omega = 0._WP         !syl200803: allocate new variables
 
       ! Finish
 
