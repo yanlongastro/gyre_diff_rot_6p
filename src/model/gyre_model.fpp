@@ -52,8 +52,15 @@ module gyre_model
   integer, parameter :: I_F_LUAN_T = 20
   integer, parameter :: I_F_LUAN_C = 21
   integer, parameter :: I_OMEGA_ROT = 22
+  
+  !syl200811: add new variables in coefficents
+  integer, parameter :: I_W = 23
+  integer, parameter :: I_F_OMEGA = 24
+  integer, parameter :: I_DOMEGA_DX = 25
 
-  integer, parameter :: I_LAST = I_OMEGA_ROT
+
+  !syl200811: also update I_LAST
+  integer, parameter :: I_LAST = I_DOMEGA_DX
 
   ! Derived-type definitions
 
@@ -162,5 +169,10 @@ module gyre_model
   public :: I_F_LUAN_C
   public :: I_OMEGA_ROT
   public :: I_LAST
+
+  !syl200811: add new coeff's
+  public :: I_W
+  public :: I_F_OMEGA
+  public :: I_DOMEGA_DX
 
 end module gyre_model

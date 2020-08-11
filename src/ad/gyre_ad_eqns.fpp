@@ -197,6 +197,10 @@ contains
     real(WP) :: omega_c
     real(WP) :: lambda
     real(WP) :: l_i
+
+    ! syl200808: New variables for centrifugal forces
+    real(WP) :: W
+    real(WP) :: f_Omega
     
     ! Evaluate the log(x)-space RHS matrix
 

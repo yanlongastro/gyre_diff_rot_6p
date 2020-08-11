@@ -344,7 +344,7 @@ contains
       dOmega_dr = 0._WP
 
       allocate(f_Omega(n))
-      f_Omega = 0._WP
+      f_Omega = 0._WP      !syl200803: allocate new variables
 
       ! Evaluate eps_rho and eps_T from eps_eps_*
 
@@ -420,7 +420,7 @@ contains
       dOmega_dr = 0._WP
 
       allocate(f_Omega(n))
-      f_Omega = 0._WP
+      f_Omega = 0._WP      !syl200803: allocate new variables
 
       ! Finish
 
@@ -479,7 +479,7 @@ contains
       dOmega_dr = 0._WP
 
       allocate(f_Omega(n))
-      f_Omega = 0._WP
+      f_Omega = 0._WP         !syl200803: allocate new variables
 
       ! Finish
 
