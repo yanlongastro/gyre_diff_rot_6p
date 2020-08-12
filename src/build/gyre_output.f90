@@ -3,8 +3,8 @@
 !dependencies
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
-!   includes: ../extern/core/core.inc ../output/gyre_output.inc
-!   uses: gyre_writer gyre_model core_kinds core_string gyre_constants gyre_hdf_writer gyre_util gyre_freq gyre_txt_writer gyre_poly_model gyre_point gyre_mode gyre_evol_model ISO_FORTRAN_ENV gyre_out_par
+!   includes: ../output/gyre_output.inc ../extern/core/core.inc
+!   uses: gyre_constants gyre_point gyre_evol_model gyre_writer gyre_txt_writer core_kinds gyre_hdf_writer ISO_FORTRAN_ENV gyre_model gyre_poly_model gyre_out_par gyre_freq gyre_mode core_string gyre_util
 !   provides: gyre_output
 !end dependencies
 !

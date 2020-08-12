@@ -483,7 +483,10 @@ contains
       ! Set up the boundary conditions
 
       B(1,1) = 1._WP
-      B(1,2) = -1._WP
+      ! B(1,2) = -1._WP
+      !syl200811: modify boundary condition
+      B(1,2) = -1._WP -Omega_rot**2
+      
       B(1,3) = alpha_gr*(0._WP)
       B(1,4) = alpha_gr*(0._WP)
       

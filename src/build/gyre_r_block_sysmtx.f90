@@ -3,8 +3,8 @@
 !dependencies
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
-!   includes: ../matrix/gyre_block_sysmtx.inc ../extern/core/core.inc
-!   uses: core_kinds core_parallel gyre_ext core_linalg ISO_FORTRAN_ENV gyre_linalg gyre_sysmtx
+!   includes: ../extern/core/core.inc ../matrix/gyre_block_sysmtx.inc
+!   uses: core_parallel gyre_ext gyre_sysmtx ISO_FORTRAN_ENV gyre_linalg core_kinds core_linalg
 !   provides: gyre_r_block_sysmtx
 !end dependencies
 !

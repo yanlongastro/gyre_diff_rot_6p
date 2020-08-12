@@ -4,7 +4,7 @@
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
 !   includes: ../extern/core/core.inc ../matrix/gyre_band_sysmtx.inc
-!   uses: ISO_FORTRAN_ENV core_linalg core_kinds gyre_ext gyre_linalg gyre_sysmtx core_parallel
+!   uses: gyre_sysmtx core_parallel gyre_linalg gyre_ext core_linalg core_kinds ISO_FORTRAN_ENV
 !   provides: gyre_r_band_sysmtx
 !end dependencies
 !

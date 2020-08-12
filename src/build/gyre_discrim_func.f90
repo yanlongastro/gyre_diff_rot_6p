@@ -4,7 +4,7 @@
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
 !   includes: 
-!   uses: gyre_r_discrim_func gyre_c_discrim_func
+!   uses: gyre_c_discrim_func gyre_r_discrim_func
 !   provides: gyre_discrim_func
 !end dependencies
 !

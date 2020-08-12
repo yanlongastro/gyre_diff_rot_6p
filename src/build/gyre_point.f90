@@ -4,7 +4,7 @@
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
 !   includes: ../extern/core/core.inc ../extern/core/core_parallel.inc
-!   uses: core_kinds core_parallel
+!   uses: core_parallel core_kinds
 !   provides: gyre_point
 !end dependencies
 !

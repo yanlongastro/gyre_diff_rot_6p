@@ -4,7 +4,7 @@
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
 !   includes: ../extern/core/core.inc
-!   uses: core_kinds ISO_FORTRAN_ENV core_linalg core_order
+!   uses: ISO_FORTRAN_ENV core_order core_linalg core_kinds
 !   provides: gyre_linalg
 !end dependencies
 !

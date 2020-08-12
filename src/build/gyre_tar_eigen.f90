@@ -4,7 +4,7 @@
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
 !   includes: ../extern/core/core.inc
-!   uses: ISO_FORTRAN_ENV f95_lapack core_kinds
+!   uses: ISO_FORTRAN_ENV core_kinds f95_lapack
 !   provides: gyre_tar_eigen
 !end dependencies
 !

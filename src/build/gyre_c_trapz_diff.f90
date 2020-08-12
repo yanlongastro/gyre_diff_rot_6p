@@ -4,7 +4,7 @@
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
 !   includes: ../extern/core/core.inc ../diff/gyre_trapz_diff.inc
-!   uses: gyre_linalg gyre_point gyre_eqns gyre_diff core_kinds ISO_FORTRAN_ENV gyre_state core_linalg gyre_ext
+!   uses: gyre_ext core_kinds gyre_diff gyre_eqns gyre_state core_linalg ISO_FORTRAN_ENV gyre_point gyre_linalg
 !   provides: gyre_c_trapz_diff
 !end dependencies
 !

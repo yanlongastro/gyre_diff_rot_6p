@@ -4,7 +4,7 @@
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
 !   includes: ../extern/core/core.inc
-!   uses: core_kinds ISO_C_BINDING hdf5 ISO_FORTRAN_ENV
+!   uses: ISO_FORTRAN_ENV hdf5 core_kinds ISO_C_BINDING
 !   provides: core_hgroup
 !end dependencies
 !

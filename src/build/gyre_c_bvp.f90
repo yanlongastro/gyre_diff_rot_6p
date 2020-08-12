@@ -4,7 +4,7 @@
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
 !   includes: ../bvp/gyre_bvp.inc ../extern/core/core.inc
-!   uses: gyre_sysmtx_factory gyre_state ISO_FORTRAN_ENV gyre_status core_kinds gyre_ext gyre_num_par gyre_bound gyre_sysmtx gyre_diff
+!   uses: gyre_status gyre_num_par gyre_ext core_kinds ISO_FORTRAN_ENV gyre_bound gyre_diff gyre_state gyre_sysmtx_factory gyre_sysmtx
 !   provides: gyre_c_bvp
 !end dependencies
 !

@@ -4,7 +4,7 @@
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
 !   includes: ../extern/core/core.inc
-!   uses: core_kinds gyre_model_util gyre_point gyre_model gyre_osc_par ISO_FORTRAN_ENV gyre_ad_trans gyre_state gyre_context gyre_mode_par gyre_eqns
+!   uses: gyre_ad_trans gyre_osc_par ISO_FORTRAN_ENV gyre_context core_kinds gyre_mode_par gyre_model_util gyre_model gyre_state gyre_point gyre_eqns
 !   provides: gyre_ad_eqns
 !end dependencies
 !
@@ -271,6 +271,9 @@ contains
 
       lambda = this%cx%lambda(Omega_rot, st)
       l_i = this%cx%l_e(Omega_rot_i, st)
+
+      !syl200811: debug
+      !print *, i, SQRT(W/V)
 
       ! Set up the matrix
 

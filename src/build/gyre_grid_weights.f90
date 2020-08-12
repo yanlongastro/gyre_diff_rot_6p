@@ -4,7 +4,7 @@
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
 !   includes: ../extern/core/core.inc
-!   uses: gyre_grid core_func core_kinds
+!   uses: core_kinds core_func gyre_grid
 !   provides: gyre_grid_weights
 !end dependencies
 !

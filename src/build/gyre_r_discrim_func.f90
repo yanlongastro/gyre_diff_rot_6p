@@ -4,7 +4,7 @@
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
 !   includes: ../extern/core/core.inc
-!   uses: gyre_state core_kinds gyre_status gyre_bvp gyre_ext gyre_ext_func ISO_FORTRAN_ENV
+!   uses: ISO_FORTRAN_ENV gyre_bvp gyre_status gyre_ext gyre_state gyre_ext_func core_kinds
 !   provides: gyre_r_discrim_func
 !end dependencies
 !

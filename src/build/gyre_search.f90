@@ -4,7 +4,7 @@
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
 !   includes: 
-!   uses: gyre_r_search gyre_c_search
+!   uses: gyre_c_search gyre_r_search
 !   provides: gyre_search
 !end dependencies
 !

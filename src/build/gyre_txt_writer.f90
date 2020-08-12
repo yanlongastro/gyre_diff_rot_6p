@@ -4,7 +4,7 @@
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
 !   includes: ../extern/core/core.inc
-!   uses: ISO_FORTRAN_ENV core_kinds gyre_writer core_memory gyre_util
+!   uses: gyre_writer core_memory gyre_util core_kinds ISO_FORTRAN_ENV
 !   provides: gyre_txt_writer
 !end dependencies
 !

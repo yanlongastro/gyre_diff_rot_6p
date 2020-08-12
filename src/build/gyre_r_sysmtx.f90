@@ -3,7 +3,7 @@
 !dependencies
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
-!   includes: ../matrix/gyre_sysmtx.inc ../extern/core/core.inc
+!   includes: ../extern/core/core.inc ../matrix/gyre_sysmtx.inc
 !   uses: gyre_ext core_kinds
 !   provides: gyre_r_sysmtx
 !end dependencies

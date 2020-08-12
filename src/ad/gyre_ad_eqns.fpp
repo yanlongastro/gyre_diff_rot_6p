@@ -238,6 +238,9 @@ contains
       lambda = this%cx%lambda(Omega_rot, st)
       l_i = this%cx%l_e(Omega_rot_i, st)
 
+      !syl200811: debug
+      !print *, i, SQRT(W/V)
+
       ! Set up the matrix
 
       xA(1,1) = V/Gamma_1 - 1._WP - l_i

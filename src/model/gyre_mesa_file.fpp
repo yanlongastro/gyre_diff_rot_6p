@@ -278,7 +278,10 @@ contains
 
 
     !syl200811: set up new coeff's
-    W = rho*(Omega_rot*r)**2 / P
+    W = rho*(Omega_rot*SQRT((G_GRAVITY*M_star)/R_star**3) *r)**2 / (P)
+    
+    print *, '  Omega_rot(1) =', Omega_rot(1)
+    print *, '  f_Omega(1) =', f_Omega(1)
 
     ! Initialize the evol_model_t
 
@@ -513,7 +516,7 @@ contains
       real(WP), allocatable :: kap_kap_T(:)
       real(WP), allocatable :: kap_kap_rho(:)
 
-      $CHECK_BOUNDS(SIZE(point_data, 1),N_COLS_V1_0X)
+      $CHECK_BOUNDS(SIZE(point_data, 1),N_COLS_V2_33)
 
       ! Extract data from the version-1.0X point array
 

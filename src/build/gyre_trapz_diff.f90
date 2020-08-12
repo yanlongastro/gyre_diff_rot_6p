@@ -4,7 +4,7 @@
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
 !   includes: 
-!   uses: gyre_c_trapz_diff gyre_r_trapz_diff
+!   uses: gyre_r_trapz_diff gyre_c_trapz_diff
 !   provides: gyre_trapz_diff
 !end dependencies
 !

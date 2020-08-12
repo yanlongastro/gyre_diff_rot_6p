@@ -4,7 +4,7 @@
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
 !   includes: ../extern/core/core.inc
-!   uses: gyre_ad_trans gyre_state gyre_context gyre_osc_par gyre_model_util gyre_atmos gyre_model gyre_bound gyre_mode_par ISO_FORTRAN_ENV gyre_point core_kinds
+!   uses: gyre_ad_trans gyre_state gyre_model_util gyre_point gyre_bound gyre_model gyre_atmos gyre_mode_par ISO_FORTRAN_ENV gyre_context core_kinds gyre_osc_par
 !   provides: gyre_ad_bound
 !end dependencies
 !
@@ -546,7 +546,10 @@ contains
       ! Set up the boundary conditions
 
       B(1,1) = 1._WP
-      B(1,2) = -1._WP
+      ! B(1,2) = -1._WP
+      !syl200811: modify boundary condition
+      B(1,2) = -1._WP -Omega_rot**2
+
       B(1,3) = alpha_gr*(0._WP)
       B(1,4) = alpha_gr*(0._WP)
 

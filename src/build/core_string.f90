@@ -3,7 +3,7 @@
 !dependencies
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
-!   includes: ../extern/core/core.inc ../extern/core/core_parallel.inc
+!   includes: ../extern/core/core_parallel.inc ../extern/core/core.inc
 !   uses: ISO_FORTRAN_ENV core_kinds
 !   provides: core_string
 !end dependencies

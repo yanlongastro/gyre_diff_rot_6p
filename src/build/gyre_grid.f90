@@ -3,8 +3,8 @@
 !dependencies
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
-!   includes: ../extern/core/core_parallel.inc ../extern/core/core.inc
-!   uses: gyre_point core_kinds core_parallel ISO_FORTRAN_ENV
+!   includes: ../extern/core/core.inc ../extern/core/core_parallel.inc
+!   uses: gyre_point core_kinds ISO_FORTRAN_ENV core_parallel
 !   provides: gyre_grid
 !end dependencies
 !

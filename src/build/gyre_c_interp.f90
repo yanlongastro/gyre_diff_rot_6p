@@ -3,8 +3,8 @@
 !dependencies
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
-!   includes: ../extern/core/core_parallel.inc ../interp/gyre_interp.inc ../extern/core/core.inc
-!   uses: core_hgroup core_order core_kinds gyre_calc core_parallel core_linalg ISO_FORTRAN_ENV
+!   includes: ../extern/core/core.inc ../extern/core/core_parallel.inc ../interp/gyre_interp.inc
+!   uses: ISO_FORTRAN_ENV core_hgroup core_kinds gyre_calc core_linalg core_parallel core_order
 !   provides: gyre_c_interp
 !end dependencies
 !

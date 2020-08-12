@@ -4,7 +4,7 @@
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
 !   includes: 
-!   uses: gyre_r_magnus_diff gyre_c_magnus_diff
+!   uses: gyre_c_magnus_diff gyre_r_magnus_diff
 !   provides: gyre_magnus_diff
 !end dependencies
 !

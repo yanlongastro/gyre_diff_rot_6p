@@ -4,7 +4,7 @@
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
 !   includes: ../extern/core/core.inc
-!   uses: core_kinds gyre_wave gyre_root gyre_state gyre_num_par gyre_rot_factory gyre_point gyre_freq gyre_rot core_parallel gyre_mode gyre_ad_bvp core_order gyre_scan_par gyre_status gyre_rad_bvp gyre_context gyre_constants gyre_grid gyre_osc_par gyre_discrim_func gyre_mode_par gyre_ext gyre_model gyre_util core_memory ISO_FORTRAN_ENV gyre_bvp
+!   uses: gyre_mode gyre_scan_par gyre_wave gyre_status gyre_rot gyre_point gyre_model gyre_num_par gyre_mode_par ISO_FORTRAN_ENV gyre_rot_factory gyre_util gyre_context gyre_state gyre_discrim_func core_parallel core_kinds gyre_bvp core_order gyre_ad_bvp gyre_freq gyre_ext gyre_constants core_memory gyre_rad_bvp gyre_root gyre_grid gyre_osc_par
 !   provides: gyre_r_search
 !end dependencies
 !

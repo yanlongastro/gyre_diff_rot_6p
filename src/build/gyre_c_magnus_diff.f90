@@ -4,7 +4,7 @@
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
 !   includes: ../diff/gyre_magnus_diff.inc ../extern/core/core.inc
-!   uses: gyre_state ISO_FORTRAN_ENV gyre_diff gyre_ext gyre_linalg core_kinds gyre_eqns gyre_point
+!   uses: gyre_linalg gyre_point core_kinds gyre_state gyre_eqns gyre_ext gyre_diff ISO_FORTRAN_ENV
 !   provides: gyre_c_magnus_diff
 !end dependencies
 !

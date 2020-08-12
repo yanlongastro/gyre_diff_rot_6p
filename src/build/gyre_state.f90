@@ -4,7 +4,7 @@
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
 !   includes: ../extern/core/core.inc
-!   uses: gyre_c_state gyre_r_state
+!   uses: gyre_r_state gyre_c_state
 !   provides: gyre_state
 !end dependencies
 !

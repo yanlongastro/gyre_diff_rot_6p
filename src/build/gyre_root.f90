@@ -4,7 +4,7 @@
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
 !   includes: 
-!   uses: gyre_c_root gyre_r_root
+!   uses: gyre_r_root gyre_c_root
 !   provides: gyre_root
 !end dependencies
 !

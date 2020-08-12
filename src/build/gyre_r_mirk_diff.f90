@@ -3,8 +3,8 @@
 !dependencies
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
-!   includes: ../extern/core/core.inc ../diff/gyre_mirk_diff.inc
-!   uses: gyre_linalg gyre_point ISO_FORTRAN_ENV gyre_ext gyre_state gyre_eqns gyre_diff core_kinds core_linalg
+!   includes: ../diff/gyre_mirk_diff.inc ../extern/core/core.inc
+!   uses: gyre_state core_kinds gyre_diff gyre_eqns gyre_point core_linalg ISO_FORTRAN_ENV gyre_linalg gyre_ext
 !   provides: gyre_r_mirk_diff
 !end dependencies
 !
