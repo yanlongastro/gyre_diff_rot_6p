@@ -280,8 +280,9 @@ contains
     !syl200811: set up new coeff's
     W = rho*(Omega_rot*SQRT((G_GRAVITY*M_star)/R_star**3) *r)**2 / (P)
     
-    print *, '  Omega_rot(1) =', Omega_rot(1)
+    print *, '  Omega_rot(1)^2 =', Omega_rot(1)**2
     print *, '  f_Omega(1) =', f_Omega(1)
+    print *, '  Gamma_1(1) =', Gamma_1(1)
 
     ! Initialize the evol_model_t
 

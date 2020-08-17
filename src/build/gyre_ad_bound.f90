@@ -4,7 +4,7 @@
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
 !   includes: ../extern/core/core.inc
-!   uses: gyre_ad_trans gyre_state gyre_model_util gyre_point gyre_bound gyre_model gyre_atmos gyre_mode_par ISO_FORTRAN_ENV gyre_context core_kinds gyre_osc_par
+!   uses: gyre_model_util gyre_context gyre_osc_par gyre_state gyre_ad_trans ISO_FORTRAN_ENV core_kinds gyre_point gyre_mode_par gyre_bound gyre_atmos gyre_model
 !   provides: gyre_ad_bound
 !end dependencies
 !
@@ -88,7 +88,12 @@ module gyre_ad_bound
   integer, parameter :: J_C_1 = 5
   integer, parameter :: J_OMEGA_ROT = 6
 
-  integer, parameter :: J_LAST = J_OMEGA_ROT
+  !syl200811: add new variables
+  integer, parameter :: J_W = 7
+  integer, parameter :: J_F_OMEGA = 8
+  integer, parameter :: J_DOMEGA_DX = 9
+
+  integer, parameter :: J_LAST = J_DOMEGA_DX
 
   ! Derived-type definitions
 
@@ -149,7 +154,7 @@ contains
     case ('REGULAR')
 
     if(.NOT. (cx%pt_i%x == 0._WP)) then
-      write(UNIT=ERROR_UNIT, FMT=*) 'ASSERT ''cx%pt_i%x == 0._WP'' failed at line 120 <gyre_ad_bound:ad_bound_t_>:'
+      write(UNIT=ERROR_UNIT, FMT=*) 'ASSERT ''cx%pt_i%x == 0._WP'' failed at line 126 <gyre_ad_bound:ad_bound_t_>:'
       write(UNIT=ERROR_UNIT, FMT=*) 'Boundary condition invalid for x /= 0'
       stop
     endif
@@ -158,7 +163,7 @@ contains
     case ('ZERO_R')
 
     if(.NOT. (cx%pt_i%x /= 0._WP)) then
-      write(UNIT=ERROR_UNIT, FMT=*) 'ASSERT ''cx%pt_i%x /= 0._WP'' failed at line 123 <gyre_ad_bound:ad_bound_t_>:'
+      write(UNIT=ERROR_UNIT, FMT=*) 'ASSERT ''cx%pt_i%x /= 0._WP'' failed at line 129 <gyre_ad_bound:ad_bound_t_>:'
       write(UNIT=ERROR_UNIT, FMT=*) 'Boundary condition invalid for x == 0'
       stop
     endif
@@ -167,7 +172,7 @@ contains
     case ('ZERO_H')
 
     if(.NOT. (cx%pt_i%x /= 0._WP)) then
-      write(UNIT=ERROR_UNIT, FMT=*) 'ASSERT ''cx%pt_i%x /= 0._WP'' failed at line 126 <gyre_ad_bound:ad_bound_t_>:'
+      write(UNIT=ERROR_UNIT, FMT=*) 'ASSERT ''cx%pt_i%x /= 0._WP'' failed at line 132 <gyre_ad_bound:ad_bound_t_>:'
       write(UNIT=ERROR_UNIT, FMT=*) 'Boundary condition invalid for x == 0'
       stop
     endif
@@ -175,7 +180,7 @@ contains
        bd%type_i = ZERO_H_TYPE
     case default
 
-    write(UNIT=ERROR_UNIT, FMT=*) 'ABORT at line 129 <gyre_ad_bound:ad_bound_t_>:'
+    write(UNIT=ERROR_UNIT, FMT=*) 'ABORT at line 135 <gyre_ad_bound:ad_bound_t_>:'
     write(UNIT=ERROR_UNIT, FMT=*) 'Invalid inner_bound'
 
   stop 'Program aborted'
@@ -211,7 +216,7 @@ contains
        endif
     case default
 
-    write(UNIT=ERROR_UNIT, FMT=*) 'ABORT at line 160 <gyre_ad_bound:ad_bound_t_>:'
+    write(UNIT=ERROR_UNIT, FMT=*) 'ABORT at line 166 <gyre_ad_bound:ad_bound_t_>:'
     write(UNIT=ERROR_UNIT, FMT=*) 'Invalid outer_bound'
 
   stop 'Program aborted'
@@ -231,7 +236,7 @@ contains
        bd%alpha_om = -1._WP
     case default
 
-    write(UNIT=ERROR_UNIT, FMT=*) 'ABORT at line 175 <gyre_ad_bound:ad_bound_t_>:'
+    write(UNIT=ERROR_UNIT, FMT=*) 'ABORT at line 181 <gyre_ad_bound:ad_bound_t_>:'
     write(UNIT=ERROR_UNIT, FMT=*) 'Invalid time_factor'
 
   stop 'Program aborted'
@@ -276,7 +281,7 @@ contains
       case (ZERO_H_TYPE)
       case default
 
-    write(UNIT=ERROR_UNIT, FMT=*) 'ABORT at line 215 <gyre_ad_bound:stencil_>:'
+    write(UNIT=ERROR_UNIT, FMT=*) 'ABORT at line 221 <gyre_ad_bound:stencil_>:'
     write(UNIT=ERROR_UNIT, FMT=*) 'Invalid type_i'
 
   stop 'Program aborted'
@@ -284,6 +289,11 @@ contains
       end select
 
       this%coeff(1,J_OMEGA_ROT) = ml%coeff(I_OMEGA_ROT, pt_i)
+
+      !syl200812: new variables
+      this%coeff(1,J_W) = ml%coeff(I_W, pt_i)
+      this%coeff(1,J_F_OMEGA) = ml%coeff(I_F_OMEGA, pt_i)
+      this%coeff(1,J_DOMEGA_DX) = ml%coeff(I_DOMEGA_DX, pt_i)
 
       ! Outer boundary
 
@@ -304,7 +314,7 @@ contains
               this%coeff(2,J_AS), this%coeff(2,J_U), this%coeff(2,J_C_1))
       case default
 
-    write(UNIT=ERROR_UNIT, FMT=*) 'ABORT at line 238 <gyre_ad_bound:stencil_>:'
+    write(UNIT=ERROR_UNIT, FMT=*) 'ABORT at line 249 <gyre_ad_bound:stencil_>:'
     write(UNIT=ERROR_UNIT, FMT=*) 'Invalid type_o'
 
   stop 'Program aborted'
@@ -312,6 +322,11 @@ contains
       end select
 
       this%coeff(2,J_OMEGA_ROT) = ml%coeff(I_OMEGA_ROT, pt_o)
+
+      !syl200812: new variables
+      this%coeff(2,J_W) = ml%coeff(I_W, pt_o)
+      this%coeff(2,J_F_OMEGA) = ml%coeff(I_F_OMEGA, pt_o)
+      this%coeff(2,J_DOMEGA_DX) = ml%coeff(I_DOMEGA_DX, pt_o)
 
     end associate
 
@@ -345,7 +360,7 @@ contains
        call this%build_zero_h_i_(st, B, scl)
     case default
 
-    write(UNIT=ERROR_UNIT, FMT=*) 'ABORT at line 274 <gyre_ad_bound:build_i>:'
+    write(UNIT=ERROR_UNIT, FMT=*) 'ABORT at line 290 <gyre_ad_bound:build_i>:'
     write(UNIT=ERROR_UNIT, FMT=*) 'Invalid type_i'
 
   stop 'Program aborted'
@@ -380,7 +395,8 @@ contains
          c_1 => this%coeff(1,J_C_1), &
          Omega_rot => this%coeff(1,J_OMEGA_ROT), &
          alpha_gr => this%alpha_gr, &
-         alpha_om => this%alpha_om)
+         alpha_om => this%alpha_om, &
+         f_Omega => this%coeff(1,J_F_OMEGA))
 
       omega_c = this%cx%omega_c(Omega_rot, st)
 
@@ -388,7 +404,7 @@ contains
 
       ! Set up the boundary conditions
 
-      B(1,1) = c_1*alpha_om*omega_c**2
+      B(1,1) = c_1*alpha_om*omega_c**2 + 2._WP*c_1*(f_Omega+1._WP)*Omega_rot**2
       B(1,2) = -l_i
       B(1,3) = alpha_gr*(-l_i)
       B(1,4) = alpha_gr*(0._WP)
@@ -506,7 +522,7 @@ contains
        call this%build_luan_o_(st, B, scl)
     case default
 
-    write(UNIT=ERROR_UNIT, FMT=*) 'ABORT at line 445 <gyre_ad_bound:build_o>:'
+    write(UNIT=ERROR_UNIT, FMT=*) 'ABORT at line 462 <gyre_ad_bound:build_o>:'
     write(UNIT=ERROR_UNIT, FMT=*) 'Invalid type_o'
 
   stop 'Program aborted'
@@ -549,6 +565,7 @@ contains
       ! B(1,2) = -1._WP
       !syl200811: modify boundary condition
       B(1,2) = -1._WP -Omega_rot**2
+      !print *, B(1,2)
 
       B(1,3) = alpha_gr*(0._WP)
       B(1,4) = alpha_gr*(0._WP)
