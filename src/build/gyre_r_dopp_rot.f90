@@ -3,8 +3,8 @@
 !dependencies
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
-!   includes: ../extern/core/core.inc ../rot/gyre_dopp_rot.inc
-!   uses: core_kinds gyre_mode_par ISO_FORTRAN_ENV gyre_rot
+!   includes: ../rot/gyre_dopp_rot.inc ../extern/core/core.inc
+!   uses: ISO_FORTRAN_ENV gyre_rot core_kinds gyre_mode_par
 !   provides: gyre_r_dopp_rot
 !end dependencies
 !

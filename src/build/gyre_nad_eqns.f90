@@ -4,7 +4,7 @@
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
 !   includes: ../extern/core/core.inc
-!   uses: gyre_mode_par gyre_linalg gyre_state gyre_model_util gyre_point gyre_nad_trans gyre_eqns gyre_model gyre_osc_par gyre_context ISO_FORTRAN_ENV core_kinds
+!   uses: gyre_model_util gyre_model gyre_osc_par core_kinds gyre_point gyre_eqns gyre_context gyre_nad_trans gyre_linalg gyre_state ISO_FORTRAN_ENV gyre_mode_par
 !   provides: gyre_nad_eqns
 !end dependencies
 !

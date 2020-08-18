@@ -3,8 +3,8 @@
 !dependencies
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
-!   includes: ../extern/core/core.inc ../diff/gyre_diff.inc
-!   uses: gyre_ext gyre_state core_kinds
+!   includes: ../diff/gyre_diff.inc ../extern/core/core.inc
+!   uses: gyre_state core_kinds gyre_ext
 !   provides: gyre_r_diff
 !end dependencies
 !

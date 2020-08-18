@@ -3,8 +3,8 @@
 !dependencies
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
-!   includes: ../extern/core/core.inc ../matrix/gyre_band_sysmtx.inc
-!   uses: gyre_sysmtx core_parallel gyre_linalg gyre_ext core_linalg core_kinds ISO_FORTRAN_ENV
+!   includes: ../matrix/gyre_band_sysmtx.inc ../extern/core/core.inc
+!   uses: gyre_linalg gyre_sysmtx gyre_ext core_parallel core_linalg ISO_FORTRAN_ENV core_kinds
 !   provides: gyre_r_band_sysmtx
 !end dependencies
 !
@@ -173,6 +173,27 @@ contains
     integer :: j_0
     integer :: i
 
+  if(SIZE(B, 1)/= this%n_i) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(B, 1) :', SIZE(B, 1)
+    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_i :', this%n_i
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(B, 1)==this%n_i failed at line 20 <gyre_r_band_sysmtx:set_B_i>'
+    stop
+  endif
+
+  if(SIZE(B, 2)/= this%n_e) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(B, 2) :', SIZE(B, 2)
+    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_e :', this%n_e
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(B, 2)==this%n_e failed at line 20 <gyre_r_band_sysmtx:set_B_i>'
+    stop
+  endif
+
+  if(SIZE(scl)/= this%n_i) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(scl) :', SIZE(scl)
+    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_i :', this%n_i
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(scl)==this%n_i failed at line 20 <gyre_r_band_sysmtx:set_B_i>'
+    stop
+  endif
+
     ! Set the inner boundary conditions
 
     i_0 = 1
@@ -201,6 +222,27 @@ contains
     integer :: i_0
     integer :: j_0
     integer :: i
+
+  if(SIZE(B, 1)/= this%n_o) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(B, 1) :', SIZE(B, 1)
+    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_o :', this%n_o
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(B, 1)==this%n_o failed at line 20 <gyre_r_band_sysmtx:set_B_o>'
+    stop
+  endif
+
+  if(SIZE(B, 2)/= this%n_e) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(B, 2) :', SIZE(B, 2)
+    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_e :', this%n_e
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(B, 2)==this%n_e failed at line 20 <gyre_r_band_sysmtx:set_B_o>'
+    stop
+  endif
+
+  if(SIZE(scl)/= this%n_o) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(scl) :', SIZE(scl)
+    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_o :', this%n_o
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(scl)==this%n_o failed at line 20 <gyre_r_band_sysmtx:set_B_o>'
+    stop
+  endif
 
     ! Set the outer boundary conditions
 
@@ -233,6 +275,34 @@ contains
     integer   :: j_0
     integer   :: i
     real(WP) :: R(2*this%n_e)
+
+  if(SIZE(E_l, 1)/= this%n_e) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(E_l, 1) :', SIZE(E_l, 1)
+    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_e :', this%n_e
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(E_l, 1)==this%n_e failed at line 20 <gyre_r_band_sysmtx:set_E>'
+    stop
+  endif
+
+  if(SIZE(E_l, 2)/= this%n_e) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(E_l, 2) :', SIZE(E_l, 2)
+    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_e :', this%n_e
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(E_l, 2)==this%n_e failed at line 20 <gyre_r_band_sysmtx:set_E>'
+    stop
+  endif
+
+  if(SIZE(E_r, 1)/= this%n_e) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(E_r, 1) :', SIZE(E_r, 1)
+    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_e :', this%n_e
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(E_r, 1)==this%n_e failed at line 20 <gyre_r_band_sysmtx:set_E>'
+    stop
+  endif
+
+  if(SIZE(E_r, 2)/= this%n_e) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(E_r, 2) :', SIZE(E_r, 2)
+    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_e :', this%n_e
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(E_r, 2)==this%n_e failed at line 20 <gyre_r_band_sysmtx:set_E>'
+    stop
+  endif
 
     if(.NOT. (k >= 1)) then
       write(UNIT=ERROR_UNIT, FMT=*) 'ASSERT ''k >= 1'' failed at line 20 <gyre_r_band_sysmtx:set_E>:'
@@ -280,6 +350,19 @@ contains
     integer :: i_b
     integer :: j_b
 
+    if(.NOT. (ABS(i_0-j_0) <= this%n_ul)) then
+      write(UNIT=ERROR_UNIT, FMT=*) 'ASSERT ''ABS(i_0-j_0) <= this%n_ul'' failed at line 20 <gyre_r_band_sysmtx:set_row_>:'
+      write(UNIT=ERROR_UNIT, FMT=*) 'Invalid indices'
+      stop
+    endif
+
+    if(.NOT. (ABS(i_0-(j_0+SIZE(R)-1)) <= this%n_ul)) then
+      write(UNIT=ERROR_UNIT, FMT=*) 'ASSERT ''ABS(i_0-(j_0+SIZE(R)-1)) <= this%n_ul'' failed at line 20 <gyre_r_band_sysmtx:set' &
+ & // '_row_>:'
+      write(UNIT=ERROR_UNIT, FMT=*) 'Invalid indices'
+      stop
+    endif
+
     ! Set data in row i_0, starting at column j_0. The rest of the row
     ! is zeroed out
 
@@ -319,6 +402,19 @@ contains
     integer :: j
     integer :: i_b
     integer :: j_b
+
+    if(.NOT. (ABS(i_0-j_0) <= this%n_ul)) then
+      write(UNIT=ERROR_UNIT, FMT=*) 'ASSERT ''ABS(i_0-j_0) <= this%n_ul'' failed at line 20 <gyre_r_band_sysmtx:get_row_>:'
+      write(UNIT=ERROR_UNIT, FMT=*) 'Invalid indices'
+      stop
+    endif
+
+    if(.NOT. (ABS(i_0-(j_0+SIZE(R)-1)) <= this%n_ul)) then
+      write(UNIT=ERROR_UNIT, FMT=*) 'ASSERT ''ABS(i_0-(j_0+SIZE(R)-1)) <= this%n_ul'' failed at line 20 <gyre_r_band_sysmtx:get' &
+ & // '_row_>:'
+      write(UNIT=ERROR_UNIT, FMT=*) 'Invalid indices'
+      stop
+    endif
 
     ! Get data from row i_0, starting at column j_0
 
@@ -537,6 +633,20 @@ contains
     real(WP) :: B(this%n_e*(this%n+1),1)
     integer   :: info
 
+  if(SIZE(w_i)/= this%n_i) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(w_i) :', SIZE(w_i)
+    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_i :', this%n_i
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(w_i)==this%n_i failed at line 20 <gyre_r_band_sysmtx:soln_vec_inhom>'
+    stop
+  endif
+
+  if(SIZE(w_o)/= this%n_o) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(w_o) :', SIZE(w_o)
+    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_o :', this%n_o
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(w_o)==this%n_o failed at line 20 <gyre_r_band_sysmtx:soln_vec_inhom>'
+    stop
+  endif
+
     ! Evaluate the solution vector v of the inhomogeneous linear
     ! system S v = w. It is assumed that the right-hand side vector w
     ! has non-zero components in only the n_i first and n_o last rows
@@ -585,6 +695,13 @@ contains
     integer   :: j_a
     integer   :: j_b
     real(WP) :: R(this%n_e*(this%n+1))
+
+  if(SIZE(v)/= this%n_e*(this%n+1)) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(v) :', SIZE(v)
+    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_e*(this%n+1) :', this%n_e*(this%n+1)
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(v)==this%n_e*(this%n+1) failed at line 20 <gyre_r_band_sysmtx:resd_vec>'
+    stop
+  endif
 
     ! Evaluate the residual vector w = S v
 

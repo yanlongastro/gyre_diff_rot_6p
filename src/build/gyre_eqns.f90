@@ -4,7 +4,7 @@
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
 !   includes: 
-!   uses: gyre_r_eqns gyre_c_eqns
+!   uses: gyre_c_eqns gyre_r_eqns
 !   provides: gyre_eqns
 !end dependencies
 !

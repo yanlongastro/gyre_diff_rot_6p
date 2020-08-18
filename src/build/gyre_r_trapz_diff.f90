@@ -3,8 +3,8 @@
 !dependencies
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
-!   includes: ../extern/core/core.inc ../diff/gyre_trapz_diff.inc
-!   uses: gyre_point gyre_diff core_kinds gyre_linalg ISO_FORTRAN_ENV gyre_state gyre_ext core_linalg gyre_eqns
+!   includes: ../diff/gyre_trapz_diff.inc ../extern/core/core.inc
+!   uses: gyre_eqns gyre_linalg ISO_FORTRAN_ENV core_linalg gyre_ext core_kinds gyre_point gyre_state gyre_diff
 !   provides: gyre_r_trapz_diff
 !end dependencies
 !
@@ -119,6 +119,19 @@ contains
     real(WP), intent(in)           :: w(:)
     type(r_trapz_diff_t)        :: df
 
+    if(.NOT. (pt_a%s == pt_b%s)) then
+      write(UNIT=ERROR_UNIT, FMT=*) 'ASSERT ''pt_a%s == pt_b%s'' failed at line 20 <gyre_r_trapz_diff:r_trapz_diff_t_>:'
+      write(UNIT=ERROR_UNIT, FMT=*) 'Segment mismatch'
+      stop
+    endif
+
+  if(SIZE(w)/= eq%n_e) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(w) :', SIZE(w)
+    write(UNIT=ERROR_UNIT, FMT=*) 'eq%n_e :', eq%n_e
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(w)==eq%n_e failed at line 20 <gyre_r_trapz_diff:r_trapz_diff_t_>'
+    stop
+  endif
+
     ! Construct the trapz_diff_t
 
     df%w = w
@@ -149,6 +162,34 @@ contains
     type(r_ext_t), intent(out)        :: scl
 
     real(WP) :: xA(this%n_e,this%n_e,2)
+
+  if(SIZE(E_l, 1)/= this%n_e) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(E_l, 1) :', SIZE(E_l, 1)
+    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_e :', this%n_e
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(E_l, 1)==this%n_e failed at line 20 <gyre_r_trapz_diff:build>'
+    stop
+  endif
+
+  if(SIZE(E_l, 2)/= this%n_e) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(E_l, 2) :', SIZE(E_l, 2)
+    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_e :', this%n_e
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(E_l, 2)==this%n_e failed at line 20 <gyre_r_trapz_diff:build>'
+    stop
+  endif
+
+  if(SIZE(E_r, 1)/= this%n_e) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(E_r, 1) :', SIZE(E_r, 1)
+    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_e :', this%n_e
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(E_r, 1)==this%n_e failed at line 20 <gyre_r_trapz_diff:build>'
+    stop
+  endif
+
+  if(SIZE(E_r, 2)/= this%n_e) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(E_r, 2) :', SIZE(E_r, 2)
+    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_e :', this%n_e
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(E_r, 2)==this%n_e failed at line 20 <gyre_r_trapz_diff:build>'
+    stop
+  endif
 
     ! Evaluate the RHS matrix
 

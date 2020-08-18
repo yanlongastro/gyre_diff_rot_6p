@@ -4,7 +4,7 @@
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
 !   includes: ../extern/core/core.inc
-!   uses: core_constants core_parallel gyre_tar_eigen gyre_cheb_fit ISO_FORTRAN_ENV core_hgroup core_kinds
+!   uses: core_kinds ISO_FORTRAN_ENV core_constants gyre_cheb_fit core_parallel gyre_tar_eigen core_hgroup
 !   provides: gyre_tar_fit
 !end dependencies
 !

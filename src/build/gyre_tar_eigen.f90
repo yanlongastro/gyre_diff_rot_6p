@@ -460,6 +460,14 @@ contains
       integer  :: P_b
       integer  :: P_m
 
+  if(SIZE(A_E)/= SIZE(A_D)) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A_E) :', SIZE(A_E)
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A_D) :', SIZE(A_D)
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(A_E)==SIZE(A_D) failed at line 463 <gyre_tar_eigen:lambda_A_bisect_:bisect' &
+ & // '_lambda_>'
+    stop
+  endif
+
       ! Set up a bracket around the estimated eigenvalue lambda_est
 
       if (lambda_est > 0._WP) then
@@ -556,6 +564,14 @@ contains
 
       real(QP) :: q(SIZE(A_D))
       integer  :: i
+
+  if(SIZE(A_E)/= SIZE(A_D)) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A_E) :', SIZE(A_E)
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A_D) :', SIZE(A_D)
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(A_E)==SIZE(A_D) failed at line 557 <gyre_tar_eigen:lambda_A_bisect_:bisect' &
+ & // '_P_>'
+    stop
+  endif
 
     if(.NOT. (SIZE(A_D) > 0)) then
       write(UNIT=ERROR_UNIT, FMT=*) 'ASSERT ''SIZE(A_D) > 0'' failed at line 559 <gyre_tar_eigen:lambda_A_bisect_:bisect_P_>:'
@@ -772,6 +788,76 @@ contains
     real(WP) :: A_3
     real(WP) :: A_4
 
+  if(SIZE(A_1)/= n) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A_1) :', SIZE(A_1)
+    write(UNIT=ERROR_UNIT, FMT=*) 'n :', n
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(A_1)==n failed at line 876 <gyre_tar_eigen:assemble_A_WP_>'
+    stop
+  endif
+
+  if(SIZE(A_2n)/= n) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A_2n) :', SIZE(A_2n)
+    write(UNIT=ERROR_UNIT, FMT=*) 'n :', n
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(A_2n)==n failed at line 876 <gyre_tar_eigen:assemble_A_WP_>'
+    stop
+  endif
+
+  if(SIZE(A_2d)/= n) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A_2d) :', SIZE(A_2d)
+    write(UNIT=ERROR_UNIT, FMT=*) 'n :', n
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(A_2d)==n failed at line 876 <gyre_tar_eigen:assemble_A_WP_>'
+    stop
+  endif
+
+  if(SIZE(A_3n)/= n) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A_3n) :', SIZE(A_3n)
+    write(UNIT=ERROR_UNIT, FMT=*) 'n :', n
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(A_3n)==n failed at line 876 <gyre_tar_eigen:assemble_A_WP_>'
+    stop
+  endif
+
+  if(SIZE(A_3d)/= n) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A_3d) :', SIZE(A_3d)
+    write(UNIT=ERROR_UNIT, FMT=*) 'n :', n
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(A_3d)==n failed at line 876 <gyre_tar_eigen:assemble_A_WP_>'
+    stop
+  endif
+
+  if(SIZE(A_4n)/= n) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A_4n) :', SIZE(A_4n)
+    write(UNIT=ERROR_UNIT, FMT=*) 'n :', n
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(A_4n)==n failed at line 876 <gyre_tar_eigen:assemble_A_WP_>'
+    stop
+  endif
+
+  if(SIZE(A_4d)/= n) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A_4d) :', SIZE(A_4d)
+    write(UNIT=ERROR_UNIT, FMT=*) 'n :', n
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(A_4d)==n failed at line 876 <gyre_tar_eigen:assemble_A_WP_>'
+    stop
+  endif
+
+  if(SIZE(A_5)/= n) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A_5) :', SIZE(A_5)
+    write(UNIT=ERROR_UNIT, FMT=*) 'n :', n
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(A_5)==n failed at line 876 <gyre_tar_eigen:assemble_A_WP_>'
+    stop
+  endif
+
+  if(SIZE(A_D)/= n) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A_D) :', SIZE(A_D)
+    write(UNIT=ERROR_UNIT, FMT=*) 'n :', n
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(A_D)==n failed at line 876 <gyre_tar_eigen:assemble_A_WP_>'
+    stop
+  endif
+
+  if(SIZE(A_E)/= n) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A_E) :', SIZE(A_E)
+    write(UNIT=ERROR_UNIT, FMT=*) 'n :', n
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(A_E)==n failed at line 876 <gyre_tar_eigen:assemble_A_WP_>'
+    stop
+  endif
+
     ! Evaluate constituent parts of the A matrix. These are defined so
     ! that:
     !
@@ -886,6 +972,76 @@ contains
     real(QP) :: A_2
     real(QP) :: A_3
     real(QP) :: A_4
+
+  if(SIZE(A_1)/= n) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A_1) :', SIZE(A_1)
+    write(UNIT=ERROR_UNIT, FMT=*) 'n :', n
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(A_1)==n failed at line 877 <gyre_tar_eigen:assemble_A_QP_>'
+    stop
+  endif
+
+  if(SIZE(A_2n)/= n) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A_2n) :', SIZE(A_2n)
+    write(UNIT=ERROR_UNIT, FMT=*) 'n :', n
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(A_2n)==n failed at line 877 <gyre_tar_eigen:assemble_A_QP_>'
+    stop
+  endif
+
+  if(SIZE(A_2d)/= n) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A_2d) :', SIZE(A_2d)
+    write(UNIT=ERROR_UNIT, FMT=*) 'n :', n
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(A_2d)==n failed at line 877 <gyre_tar_eigen:assemble_A_QP_>'
+    stop
+  endif
+
+  if(SIZE(A_3n)/= n) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A_3n) :', SIZE(A_3n)
+    write(UNIT=ERROR_UNIT, FMT=*) 'n :', n
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(A_3n)==n failed at line 877 <gyre_tar_eigen:assemble_A_QP_>'
+    stop
+  endif
+
+  if(SIZE(A_3d)/= n) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A_3d) :', SIZE(A_3d)
+    write(UNIT=ERROR_UNIT, FMT=*) 'n :', n
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(A_3d)==n failed at line 877 <gyre_tar_eigen:assemble_A_QP_>'
+    stop
+  endif
+
+  if(SIZE(A_4n)/= n) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A_4n) :', SIZE(A_4n)
+    write(UNIT=ERROR_UNIT, FMT=*) 'n :', n
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(A_4n)==n failed at line 877 <gyre_tar_eigen:assemble_A_QP_>'
+    stop
+  endif
+
+  if(SIZE(A_4d)/= n) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A_4d) :', SIZE(A_4d)
+    write(UNIT=ERROR_UNIT, FMT=*) 'n :', n
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(A_4d)==n failed at line 877 <gyre_tar_eigen:assemble_A_QP_>'
+    stop
+  endif
+
+  if(SIZE(A_5)/= n) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A_5) :', SIZE(A_5)
+    write(UNIT=ERROR_UNIT, FMT=*) 'n :', n
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(A_5)==n failed at line 877 <gyre_tar_eigen:assemble_A_QP_>'
+    stop
+  endif
+
+  if(SIZE(A_D)/= n) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A_D) :', SIZE(A_D)
+    write(UNIT=ERROR_UNIT, FMT=*) 'n :', n
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(A_D)==n failed at line 877 <gyre_tar_eigen:assemble_A_QP_>'
+    stop
+  endif
+
+  if(SIZE(A_E)/= n) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A_E) :', SIZE(A_E)
+    write(UNIT=ERROR_UNIT, FMT=*) 'n :', n
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(A_E)==n failed at line 877 <gyre_tar_eigen:assemble_A_QP_>'
+    stop
+  endif
 
     ! Evaluate constituent parts of the A matrix. These are defined so
     ! that:

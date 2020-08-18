@@ -3,8 +3,8 @@
 !dependencies
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
-!   includes: ../interp/gyre_interp.inc ../extern/core/core_parallel.inc ../extern/core/core.inc
-!   uses: gyre_calc ISO_FORTRAN_ENV core_parallel core_linalg core_order core_hgroup core_kinds
+!   includes: ../extern/core/core_parallel.inc ../interp/gyre_interp.inc ../extern/core/core.inc
+!   uses: core_linalg core_order core_parallel gyre_calc core_hgroup core_kinds ISO_FORTRAN_ENV
 !   provides: gyre_r_interp
 !end dependencies
 !
@@ -178,6 +178,20 @@ contains
     real(WP), intent(in) :: df_dx(:)
     type(r_interp_t)   :: in
 
+  if(SIZE(f)/= SIZE(x)) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(f) :', SIZE(f)
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(x) :', SIZE(x)
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(f)==SIZE(x) failed at line 20 <gyre_r_interp:r_interp_t_>'
+    stop
+  endif
+
+  if(SIZE(df_dx)/= SIZE(x)) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(df_dx) :', SIZE(df_dx)
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(x) :', SIZE(x)
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(df_dx)==SIZE(x) failed at line 20 <gyre_r_interp:r_interp_t_>'
+    stop
+  endif
+
     if(.NOT. (ALL(x(2:) > x(:SIZE(x)-1)))) then
       write(UNIT=ERROR_UNIT, FMT=*) 'ASSERT ''ALL(x(2:) > x(:SIZE(x)-1))'' failed at line 20 <gyre_r_interp:r_interp_t_>:'
       write(UNIT=ERROR_UNIT, FMT=*) 'Non-monotonic abscissa'
@@ -209,6 +223,13 @@ contains
     real(WP), optional, intent(in) :: df_dx_a
     real(WP), optional, intent(in) :: df_dx_b
     type(r_interp_t)             :: in
+
+  if(SIZE(f)/= SIZE(x)) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(f) :', SIZE(f)
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(x) :', SIZE(x)
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(f)==SIZE(x) failed at line 20 <gyre_r_interp:r_interp_t_eval_derivs_>'
+    stop
+  endif
 
     ! Construct the interp_t, with derivatives calculated according to
     ! deriv_type

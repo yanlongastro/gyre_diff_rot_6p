@@ -4,7 +4,7 @@
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
 !   includes: ../extern/core/core.inc
-!   uses: gyre_writer core_kinds core_hgroup
+!   uses: core_hgroup gyre_writer core_kinds
 !   provides: gyre_hdf_writer
 !end dependencies
 !

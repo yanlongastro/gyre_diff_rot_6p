@@ -4,7 +4,7 @@
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
 !   includes: ../extern/core/core.inc
-!   uses: gyre_model core_kinds ISO_FORTRAN_ENV gyre_model_par gyre_constants gyre_evol_model gyre_util gyre_model_util
+!   uses: gyre_util gyre_model gyre_constants ISO_FORTRAN_ENV gyre_model_util core_kinds gyre_model_par gyre_evol_model
 !   provides: gyre_fgong_file
 !end dependencies
 !
@@ -170,6 +170,8 @@ contains
     L_star = glob(3)
 
     x = var(1,:)/R_star
+
+    allocate(m(n))
 
     m = EXP(var(2,:))
     T = var(3,:)

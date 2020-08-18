@@ -4,7 +4,7 @@
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
 !   includes: ../extern/core/core.inc
-!   uses: gyre_osc_par gyre_point gyre_context gyre_model_util gyre_ext gyre_state core_kinds gyre_mode_par gyre_model ISO_FORTRAN_ENV gyre_diff gyre_rad_trans
+!   uses: core_kinds gyre_mode_par gyre_model gyre_osc_par gyre_ext ISO_FORTRAN_ENV gyre_model_util gyre_state gyre_context gyre_point gyre_rad_trans gyre_diff
 !   provides: gyre_rad_match
 !end dependencies
 !
@@ -112,6 +112,18 @@ contains
     type(osc_par_t), intent(in)          :: os_p
     type(rad_match_t)                    :: mt
 
+    if(.NOT. (pt_a%s+1 == pt_b%s)) then
+      write(UNIT=ERROR_UNIT, FMT=*) 'ASSERT ''pt_a%s+1 == pt_b%s'' failed at line 85 <gyre_rad_match:rad_match_t_>:'
+      write(UNIT=ERROR_UNIT, FMT=*) 'Mismatched segments'
+      stop
+    endif
+
+    if(.NOT. (pt_a%x == pt_b%x)) then
+      write(UNIT=ERROR_UNIT, FMT=*) 'ASSERT ''pt_a%x == pt_b%x'' failed at line 86 <gyre_rad_match:rad_match_t_>:'
+      write(UNIT=ERROR_UNIT, FMT=*) 'Mismatched abscissae'
+      stop
+    endif
+
     ! Construct the rad_match_t
 
     mt%cx => cx
@@ -168,6 +180,34 @@ contains
     real(WP), intent(out)          :: E_l(:,:)
     real(WP), intent(out)          :: E_r(:,:)
     type(r_ext_t), intent(out)     :: scl
+
+  if(SIZE(E_l, 1)/= this%n_e) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(E_l, 1) :', SIZE(E_l, 1)
+    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_e :', this%n_e
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(E_l, 1)==this%n_e failed at line 145 <gyre_rad_match:build>'
+    stop
+  endif
+
+  if(SIZE(E_l, 2)/= this%n_e) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(E_l, 2) :', SIZE(E_l, 2)
+    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_e :', this%n_e
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(E_l, 2)==this%n_e failed at line 146 <gyre_rad_match:build>'
+    stop
+  endif
+
+  if(SIZE(E_r, 1)/= this%n_e) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(E_r, 1) :', SIZE(E_r, 1)
+    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_e :', this%n_e
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(E_r, 1)==this%n_e failed at line 148 <gyre_rad_match:build>'
+    stop
+  endif
+
+  if(SIZE(E_r, 2)/= this%n_e) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(E_r, 2) :', SIZE(E_r, 2)
+    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_e :', this%n_e
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(E_r, 2)==this%n_e failed at line 149 <gyre_rad_match:build>'
+    stop
+  endif
 
     ! Build the difference equations
 

@@ -4,7 +4,7 @@
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
 !   includes: ../extern/core/core.inc
-!   uses: core_kinds ISO_FORTRAN_ENV
+!   uses: ISO_FORTRAN_ENV core_kinds
 !   provides: core_order
 !end dependencies
 !
@@ -820,6 +820,16 @@ contains
 
     indices = indices_(:n)
 
+    do i = 1,SIZE(indices)
+
+    if(.NOT. COUNT(x(indices(i)) == x(indices)) == 1) then
+      write(UNIT=ERROR_UNIT, FMT=*) 'ASSERT ''COUNT(x(indices(i)) == x(indices)) == 1'' failed at line 275 <core_order:unique_i' &
+ & // 'ndices_i_i4_>'
+      stop
+    endif
+
+    end do
+
     ! If necessary, reverse the indices
 
     if(PRESENT(descend)) then
@@ -857,6 +867,16 @@ contains
     end do
 
     indices = indices_(:n)
+
+    do i = 1,SIZE(indices)
+
+    if(.NOT. COUNT(x(indices(i)) == x(indices)) == 1) then
+      write(UNIT=ERROR_UNIT, FMT=*) 'ASSERT ''COUNT(x(indices(i)) == x(indices)) == 1'' failed at line 276 <core_order:unique_i' &
+ & // 'ndices_i_i8_>'
+      stop
+    endif
+
+    end do
 
     ! If necessary, reverse the indices
 
@@ -896,6 +916,16 @@ contains
 
     indices = indices_(:n)
 
+    do i = 1,SIZE(indices)
+
+    if(.NOT. COUNT(x(indices(i)) == x(indices)) == 1) then
+      write(UNIT=ERROR_UNIT, FMT=*) 'ASSERT ''COUNT(x(indices(i)) == x(indices)) == 1'' failed at line 277 <core_order:unique_i' &
+ & // 'ndices_r_sp_>'
+      stop
+    endif
+
+    end do
+
     ! If necessary, reverse the indices
 
     if(PRESENT(descend)) then
@@ -933,6 +963,16 @@ contains
     end do
 
     indices = indices_(:n)
+
+    do i = 1,SIZE(indices)
+
+    if(.NOT. COUNT(x(indices(i)) == x(indices)) == 1) then
+      write(UNIT=ERROR_UNIT, FMT=*) 'ASSERT ''COUNT(x(indices(i)) == x(indices)) == 1'' failed at line 278 <core_order:unique_i' &
+ & // 'ndices_r_dp_>'
+      stop
+    endif
+
+    end do
 
     ! If necessary, reverse the indices
 
@@ -972,6 +1012,16 @@ contains
 
     indices = indices_(:n)
 
+    do i = 1,SIZE(indices)
+
+    if(.NOT. COUNT(x(indices(i)) == x(indices)) == 1) then
+      write(UNIT=ERROR_UNIT, FMT=*) 'ASSERT ''COUNT(x(indices(i)) == x(indices)) == 1'' failed at line 279 <core_order:unique_i' &
+ & // 'ndices_a_>'
+      stop
+    endif
+
+    end do
+
     ! If necessary, reverse the indices
 
     if(PRESENT(descend)) then
@@ -993,6 +1043,13 @@ contains
     integer(I4)               :: i1
 
     integer :: r
+
+  if(SIZE(s)/= SIZE(i)) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(s) :', SIZE(s)
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(i) :', SIZE(i)
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(s)==SIZE(i) failed at line 316 <core_order:index_1d_i_i4_>'
+    stop
+  endif
 
     ! Calculate a 1d index from an nd index
 
@@ -1017,6 +1074,13 @@ contains
     integer(I8)               :: i1
 
     integer :: r
+
+  if(SIZE(s)/= SIZE(i)) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(s) :', SIZE(s)
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(i) :', SIZE(i)
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(s)==SIZE(i) failed at line 317 <core_order:index_1d_i_i8_>'
+    stop
+  endif
 
     ! Calculate a 1d index from an nd index
 
@@ -1044,6 +1108,13 @@ contains
 
     integer :: r
 
+  if(SIZE(s)/= SIZE(i)) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(s) :', SIZE(s)
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(i) :', SIZE(i)
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(s)==SIZE(i) failed at line 355 <core_order:index_nd_i_i4_>'
+    stop
+  endif
+
     ! Calculate an nd index from a 1d index
 
     i(1) = i1 - 1
@@ -1068,6 +1139,13 @@ contains
     integer(I8)               :: i(SIZE(s))
 
     integer :: r
+
+  if(SIZE(s)/= SIZE(i)) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(s) :', SIZE(s)
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(i) :', SIZE(i)
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(s)==SIZE(i) failed at line 356 <core_order:index_nd_i_i8_>'
+    stop
+  endif
 
     ! Calculate an nd index from a 1d index
 

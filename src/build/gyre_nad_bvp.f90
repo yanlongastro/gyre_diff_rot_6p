@@ -4,7 +4,7 @@
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
 !   includes: ../extern/core/core.inc
-!   uses: gyre_wave gyre_nad_trans ISO_FORTRAN_ENV gyre_num_par gyre_grid gyre_nad_bound gyre_mode_par gyre_model gyre_bvp gyre_point gyre_context core_kinds gyre_state gyre_ext gyre_osc_par gyre_nad_diff gyre_grid_factory
+!   uses: gyre_nad_diff gyre_mode_par gyre_wave ISO_FORTRAN_ENV gyre_context gyre_nad_bound gyre_grid_factory gyre_grid gyre_bvp gyre_num_par gyre_ext core_kinds gyre_state gyre_osc_par gyre_point gyre_model gyre_nad_trans
 !   provides: gyre_nad_bvp
 !end dependencies
 !
@@ -203,6 +203,20 @@ contains
     complex(WP) :: y(6,bp%n_k)
     integer     :: k
 
+  if(SIZE(w_i)/= bp%n_i) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(w_i) :', SIZE(w_i)
+    write(UNIT=ERROR_UNIT, FMT=*) 'bp%n_i :', bp%n_i
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(w_i)==bp%n_i failed at line 176 <gyre_nad_bvp:wave_t_inhom_>'
+    stop
+  endif
+
+  if(SIZE(w_o)/= bp%n_o) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(w_o) :', SIZE(w_o)
+    write(UNIT=ERROR_UNIT, FMT=*) 'bp%n_o :', bp%n_o
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(w_o)==bp%n_o failed at line 177 <gyre_nad_bvp:wave_t_inhom_>'
+    stop
+  endif
+
     ! Calculate the inhomogeneous solution vector
 
     call bp%build(st)
@@ -235,6 +249,20 @@ contains
     type(wave_t)                    :: wv
 
     type(c_ext_t) :: discrim
+
+  if(SIZE(y, 1)/= bp%n_e) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(y, 1) :', SIZE(y, 1)
+    write(UNIT=ERROR_UNIT, FMT=*) 'bp%n_e :', bp%n_e
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(y, 1)==bp%n_e failed at line 212 <gyre_nad_bvp:wave_t_y_>'
+    stop
+  endif
+
+  if(SIZE(y, 2)/= bp%n_k) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(y, 2) :', SIZE(y, 2)
+    write(UNIT=ERROR_UNIT, FMT=*) 'bp%n_k :', bp%n_k
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(y, 2)==bp%n_k failed at line 213 <gyre_nad_bvp:wave_t_y_>'
+    stop
+  endif
 
     ! Construct the wave_t
 

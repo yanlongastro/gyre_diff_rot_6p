@@ -4,7 +4,7 @@
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
 !   includes: ../extern/core/core.inc
-!   uses: gyre_diff gyre_ext gyre_model_util gyre_osc_par gyre_model gyre_point ISO_FORTRAN_ENV gyre_nad_trans gyre_state gyre_context gyre_mode_par core_kinds
+!   uses: gyre_model gyre_point gyre_state gyre_mode_par gyre_nad_trans gyre_diff core_kinds gyre_context gyre_ext ISO_FORTRAN_ENV gyre_osc_par gyre_model_util
 !   provides: gyre_nad_match
 !end dependencies
 !
@@ -113,6 +113,18 @@ contains
     type(osc_par_t), intent(in)          :: os_p
     type(nad_match_t)                    :: mt
 
+    if(.NOT. (pt_a%s+1 == pt_b%s)) then
+      write(UNIT=ERROR_UNIT, FMT=*) 'ASSERT ''pt_a%s+1 == pt_b%s'' failed at line 86 <gyre_nad_match:nad_match_t_>:'
+      write(UNIT=ERROR_UNIT, FMT=*) 'Mismatched segments'
+      stop
+    endif
+
+    if(.NOT. (pt_a%x == pt_b%x)) then
+      write(UNIT=ERROR_UNIT, FMT=*) 'ASSERT ''pt_a%x == pt_b%x'' failed at line 87 <gyre_nad_match:nad_match_t_>:'
+      write(UNIT=ERROR_UNIT, FMT=*) 'Mismatched abscissae'
+      stop
+    endif
+
     ! Construct the nad_match_t
 
     mt%cx => cx
@@ -175,6 +187,34 @@ contains
     complex(WP), intent(out)       :: E_l(:,:)
     complex(WP), intent(out)       :: E_r(:,:)
     type(c_ext_t), intent(out)     :: scl
+
+  if(SIZE(E_l, 1)/= this%n_e) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(E_l, 1) :', SIZE(E_l, 1)
+    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_e :', this%n_e
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(E_l, 1)==this%n_e failed at line 152 <gyre_nad_match:build>'
+    stop
+  endif
+
+  if(SIZE(E_l, 2)/= this%n_e) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(E_l, 2) :', SIZE(E_l, 2)
+    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_e :', this%n_e
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(E_l, 2)==this%n_e failed at line 153 <gyre_nad_match:build>'
+    stop
+  endif
+
+  if(SIZE(E_r, 1)/= this%n_e) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(E_r, 1) :', SIZE(E_r, 1)
+    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_e :', this%n_e
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(E_r, 1)==this%n_e failed at line 155 <gyre_nad_match:build>'
+    stop
+  endif
+
+  if(SIZE(E_r, 2)/= this%n_e) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(E_r, 2) :', SIZE(E_r, 2)
+    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_e :', this%n_e
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(E_r, 2)==this%n_e failed at line 156 <gyre_nad_match:build>'
+    stop
+  endif
 
     ! Build the difference equations
 

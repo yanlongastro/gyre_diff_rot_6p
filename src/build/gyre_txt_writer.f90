@@ -4,7 +4,7 @@
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
 !   includes: ../extern/core/core.inc
-!   uses: gyre_writer core_memory gyre_util core_kinds ISO_FORTRAN_ENV
+!   uses: core_memory core_kinds gyre_util ISO_FORTRAN_ENV gyre_writer
 !   provides: gyre_txt_writer
 !end dependencies
 !
@@ -234,6 +234,13 @@ contains
        allocate(this%v_names(16))
     else
 
+  if(SIZE(data)/= this%n) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(data) :', SIZE(data)
+    write(UNIT=ERROR_UNIT, FMT=*) 'this%n :', this%n
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(data)==this%n failed at line 240 <gyre_txt_writer:write_i_1>'
+    stop
+  endif
+
     endif
 
     this%n_v = this%n_v + 1
@@ -314,6 +321,13 @@ contains
        allocate(this%v_names(16))
     else
 
+  if(SIZE(data)/= this%n) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(data) :', SIZE(data)
+    write(UNIT=ERROR_UNIT, FMT=*) 'this%n :', this%n
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(data)==this%n failed at line 241 <gyre_txt_writer:write_r_1>'
+    stop
+  endif
+
     endif
 
     this%n_v = this%n_v + 1
@@ -393,6 +407,13 @@ contains
        allocate(this%v_data(this%n,16))
        allocate(this%v_names(16))
     else
+
+  if(SIZE(data)/= this%n) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(data) :', SIZE(data)
+    write(UNIT=ERROR_UNIT, FMT=*) 'this%n :', this%n
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(data)==this%n failed at line 242 <gyre_txt_writer:write_a_1>'
+    stop
+  endif
 
     endif
 
@@ -477,6 +498,13 @@ contains
        allocate(this%v_data(this%n,16))
        allocate(this%v_names(16))
     else
+
+  if(SIZE(data)/= this%n) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(data) :', SIZE(data)
+    write(UNIT=ERROR_UNIT, FMT=*) 'this%n :', this%n
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(data)==this%n failed at line 302 <gyre_txt_writer:write_c_1>'
+    stop
+  endif
 
     endif
 

@@ -3,8 +3,8 @@
 !dependencies
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
-!   includes: ../interp/gyre_calc.inc ../extern/core/core_parallel.inc ../extern/core/core.inc
-!   uses: core_kinds ISO_FORTRAN_ENV core_linalg
+!   includes: ../interp/gyre_calc.inc ../extern/core/core.inc ../extern/core/core_parallel.inc
+!   uses: core_linalg core_kinds ISO_FORTRAN_ENV
 !   provides: gyre_c_calc
 !end dependencies
 !
@@ -136,6 +136,13 @@ contains
     complex(WP), optional, intent(in) :: df_dx_b
     complex(WP)                       :: df_dx(SIZE(x))
 
+  if(SIZE(f)/= SIZE(x)) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(f) :', SIZE(f)
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(x) :', SIZE(x)
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(f)==SIZE(x) failed at line 20 <gyre_c_calc:deriv_>'
+    stop
+  endif
+
     ! Evaluate the derivative df/dx
 
     select case (deriv_type)
@@ -176,6 +183,13 @@ contains
     complex(WP) :: U(SIZE(x)-1)
     complex(WP) :: B(SIZE(x),1)
     integer   :: info
+
+  if(SIZE(f)/= SIZE(x)) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(f) :', SIZE(f)
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(x) :', SIZE(x)
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(f)==SIZE(x) failed at line 20 <gyre_c_calc:deriv_spline_>'
+    stop
+  endif
 
     ! Calcualte the first derivatives for a cubic spline interp
     ! (ensuring the second derivatives are continuous)
@@ -248,6 +262,13 @@ contains
     integer   :: n
     real(WP)  :: h(SIZE(x)-1)
     complex(WP) :: s(SIZE(x)-1)
+
+  if(SIZE(f)/= SIZE(x)) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(f) :', SIZE(f)
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(x) :', SIZE(x)
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(f)==SIZE(x) failed at line 20 <gyre_c_calc:deriv_findiff_>'
+    stop
+  endif
 
     ! Calculate the first derivatives via centered finite differences
 

@@ -4,7 +4,7 @@
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
 !   includes: 
-!   uses: gyre_c_band_sysmtx gyre_r_band_sysmtx
+!   uses: gyre_r_band_sysmtx gyre_c_band_sysmtx
 !   provides: gyre_band_sysmtx
 !end dependencies
 !

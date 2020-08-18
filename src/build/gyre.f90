@@ -4,7 +4,7 @@
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
 !   includes: ../extern/core/core.inc
-!   uses: gyre_bvp gyre_rad_bvp gyre_model_factory gyre_nad_bvp gyre_ad_bvp gyre_grid_par gyre_out_par gyre_output gyre_context core_system ISO_FORTRAN_ENV gyre_osc_par core_kinds gyre_scan_par gyre_mode gyre_model gyre_ext gyre_constants gyre_grid gyre_mode_par gyre_version core_parallel gyre_model_par gyre_search gyre_grid_factory gyre_util gyre_num_par
+!   uses: gyre_grid_factory gyre_constants gyre_osc_par gyre_context gyre_scan_par gyre_output gyre_model_factory core_kinds gyre_nad_bvp gyre_version gyre_out_par gyre_model core_system gyre_search gyre_num_par gyre_ad_bvp gyre_grid_par gyre_mode_par gyre_util gyre_bvp core_parallel gyre_mode gyre_grid gyre_ext gyre_rad_bvp gyre_model_par ISO_FORTRAN_ENV
 !   provides: 
 !end dependencies
 !
@@ -133,7 +133,7 @@ program gyre
 
   call init_parallel()
 
-  call set_log_level('INFO')
+  call set_log_level('DEBUG')
 
   if (check_log_level('INFO')) then
 

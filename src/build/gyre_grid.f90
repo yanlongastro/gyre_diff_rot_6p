@@ -3,8 +3,8 @@
 !dependencies
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
-!   includes: ../extern/core/core.inc ../extern/core/core_parallel.inc
-!   uses: gyre_point core_kinds ISO_FORTRAN_ENV core_parallel
+!   includes: ../extern/core/core_parallel.inc ../extern/core/core.inc
+!   uses: core_parallel ISO_FORTRAN_ENV gyre_point core_kinds
 !   provides: gyre_grid
 !end dependencies
 !
@@ -148,6 +148,12 @@ contains
 
     if (n_k > 0) then
 
+    if(.NOT. (ALL(x(2:) >= x(:n_k-1)))) then
+      write(UNIT=ERROR_UNIT, FMT=*) 'ASSERT ''ALL(x(2:) >= x(:n_k-1))'' failed at line 101 <gyre_grid:grid_t_x_>:'
+      write(UNIT=ERROR_UNIT, FMT=*) 'Non-monotonic data'
+      stop
+    endif
+
        allocate(gr%pt(n_k))
 
        gr%pt(1)%x = x(1)
@@ -233,6 +239,13 @@ contains
     integer  :: j
     integer  :: i
     real(WP) :: w
+
+  if(SIZE(dn)/= gr_base%n_k-1) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(dn) :', SIZE(dn)
+    write(UNIT=ERROR_UNIT, FMT=*) 'gr_base%n_k-1 :', gr_base%n_k-1
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(dn)==gr_base%n_k-1 failed at line 189 <gyre_grid:grid_t_resamp_>'
+    stop
+  endif
 
     ! Construct a grid_t by resampling gr_base, with dn additional
     ! points placed uniformly in each cell
@@ -494,6 +507,18 @@ contains
     integer, intent(in)       :: s
     integer                   :: k_i
 
+    if(.NOT. (s >= this%s_i())) then
+      write(UNIT=ERROR_UNIT, FMT=*) 'ASSERT ''s >= this%s_i()'' failed at line 470 <gyre_grid:k_s_i>:'
+      write(UNIT=ERROR_UNIT, FMT=*) 'Invalid segment'
+      stop
+    endif
+
+    if(.NOT. (s <= this%s_o())) then
+      write(UNIT=ERROR_UNIT, FMT=*) 'ASSERT ''s <= this%s_o()'' failed at line 471 <gyre_grid:k_s_i>:'
+      write(UNIT=ERROR_UNIT, FMT=*) 'Invalid segment'
+      stop
+    endif
+
     ! Return the index of the innermost point in segment s
 
     do k_i = 1, this%n_k
@@ -513,6 +538,18 @@ contains
     class(grid_t), intent(in) :: this
     integer, intent(in)       :: s
     integer                   :: k_o
+
+    if(.NOT. (s >= this%s_i())) then
+      write(UNIT=ERROR_UNIT, FMT=*) 'ASSERT ''s >= this%s_i()'' failed at line 493 <gyre_grid:k_s_o>:'
+      write(UNIT=ERROR_UNIT, FMT=*) 'Invalid segment'
+      stop
+    endif
+
+    if(.NOT. (s <= this%s_o())) then
+      write(UNIT=ERROR_UNIT, FMT=*) 'ASSERT ''s <= this%s_o()'' failed at line 494 <gyre_grid:k_s_o>:'
+      write(UNIT=ERROR_UNIT, FMT=*) 'Invalid segment'
+      stop
+    endif
 
     ! Return the index of the outermost point in segment s
 

@@ -3,8 +3,8 @@
 !dependencies
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
-!   includes: ../rot/gyre_tar_rot.inc ../extern/core/core.inc
-!   uses: gyre_rot core_hgroup ISO_FORTRAN_ENV core_kinds gyre_tar_fit gyre_mode_par gyre_constants gyre_freq
+!   includes: ../extern/core/core.inc ../rot/gyre_tar_rot.inc
+!   uses: gyre_freq ISO_FORTRAN_ENV core_kinds gyre_mode_par gyre_rot gyre_constants core_hgroup gyre_tar_fit
 !   provides: gyre_r_tar_rot
 !end dependencies
 !

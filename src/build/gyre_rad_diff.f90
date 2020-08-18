@@ -4,7 +4,7 @@
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
 !   includes: ../extern/core/core.inc
-!   uses: gyre_mode_par gyre_diff_factory gyre_osc_par gyre_rad_match gyre_ext gyre_context gyre_num_par gyre_rad_eqns gyre_state gyre_point ISO_FORTRAN_ENV core_kinds
+!   uses: gyre_diff_factory gyre_state gyre_point gyre_mode_par gyre_rad_eqns gyre_num_par core_kinds gyre_context gyre_osc_par ISO_FORTRAN_ENV gyre_rad_match gyre_ext
 !   provides: gyre_rad_diff
 !end dependencies
 !
@@ -144,6 +144,34 @@ contains
     real(WP), intent(out)         :: E_l(:,:)
     real(WP), intent(out)         :: E_r(:,:)
     type(r_ext_t), intent(out)    :: scl
+
+  if(SIZE(E_l, 1)/= this%n_e) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(E_l, 1) :', SIZE(E_l, 1)
+    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_e :', this%n_e
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(E_l, 1)==this%n_e failed at line 118 <gyre_rad_diff:build>'
+    stop
+  endif
+
+  if(SIZE(E_l, 2)/= this%n_e) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(E_l, 2) :', SIZE(E_l, 2)
+    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_e :', this%n_e
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(E_l, 2)==this%n_e failed at line 119 <gyre_rad_diff:build>'
+    stop
+  endif
+
+  if(SIZE(E_r, 1)/= this%n_e) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(E_r, 1) :', SIZE(E_r, 1)
+    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_e :', this%n_e
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(E_r, 1)==this%n_e failed at line 121 <gyre_rad_diff:build>'
+    stop
+  endif
+
+  if(SIZE(E_r, 2)/= this%n_e) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(E_r, 2) :', SIZE(E_r, 2)
+    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_e :', this%n_e
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(E_r, 2)==this%n_e failed at line 122 <gyre_rad_diff:build>'
+    stop
+  endif
 
     ! Build the difference equations
 

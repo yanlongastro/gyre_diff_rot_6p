@@ -3,8 +3,8 @@
 !dependencies
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
-!   includes: ../extern/core/core.inc ../matrix/gyre_block_sysmtx.inc
-!   uses: core_parallel gyre_ext gyre_sysmtx ISO_FORTRAN_ENV gyre_linalg core_kinds core_linalg
+!   includes: ../matrix/gyre_block_sysmtx.inc ../extern/core/core.inc
+!   uses: core_linalg gyre_sysmtx core_kinds gyre_ext gyre_linalg core_parallel ISO_FORTRAN_ENV
 !   provides: gyre_r_block_sysmtx
 !end dependencies
 !
@@ -131,6 +131,13 @@ contains
     integer, intent(in)       :: n_o
     type(r_block_sysmtx_t) :: sm
 
+  if(n_i+n_o/= n_e) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'n_i+n_o :', n_i+n_o
+    write(UNIT=ERROR_UNIT, FMT=*) 'n_e :', n_e
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS n_i+n_o==n_e failed at line 20 <gyre_r_block_sysmtx:r_block_sysmtx_t_>'
+    stop
+  endif
+
     ! Construct the block_sysmtx_t
 
     allocate(sm%E_l(n_e,n_e,n))
@@ -163,6 +170,27 @@ contains
     real(WP), intent(in)                     :: B(:,:)
     real(WP), intent(in)                     :: scl(:)
 
+  if(SIZE(B, 1)/= this%n_i) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(B, 1) :', SIZE(B, 1)
+    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_i :', this%n_i
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(B, 1)==this%n_i failed at line 20 <gyre_r_block_sysmtx:set_B_i>'
+    stop
+  endif
+
+  if(SIZE(B, 2)/= this%n_e) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(B, 2) :', SIZE(B, 2)
+    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_e :', this%n_e
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(B, 2)==this%n_e failed at line 20 <gyre_r_block_sysmtx:set_B_i>'
+    stop
+  endif
+
+  if(SIZE(scl)/= this%n_i) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(scl) :', SIZE(scl)
+    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_i :', this%n_i
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(scl)==this%n_i failed at line 20 <gyre_r_block_sysmtx:set_B_i>'
+    stop
+  endif
+
     ! Set the inner boundary conditions
 
     this%B_i = B
@@ -181,6 +209,27 @@ contains
     class(r_block_sysmtx_t), intent(inout) :: this
     real(WP), intent(in)                     :: B(:,:)
     real(WP), intent(in)                     :: scl(:)
+
+  if(SIZE(B, 1)/= this%n_o) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(B, 1) :', SIZE(B, 1)
+    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_o :', this%n_o
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(B, 1)==this%n_o failed at line 20 <gyre_r_block_sysmtx:set_B_o>'
+    stop
+  endif
+
+  if(SIZE(B, 2)/= this%n_e) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(B, 2) :', SIZE(B, 2)
+    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_e :', this%n_e
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(B, 2)==this%n_e failed at line 20 <gyre_r_block_sysmtx:set_B_o>'
+    stop
+  endif
+
+  if(SIZE(scl)/= this%n_o) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(scl) :', SIZE(scl)
+    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_o :', this%n_o
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(scl)==this%n_o failed at line 20 <gyre_r_block_sysmtx:set_B_o>'
+    stop
+  endif
 
     ! Set the outer boundary conditions
 
@@ -202,6 +251,34 @@ contains
     real(WP), intent(in)                     :: E_l(:,:)
     real(WP), intent(in)                     :: E_r(:,:)
     type(r_ext_t), intent(in)              :: scl
+
+  if(SIZE(E_l, 1)/= this%n_e) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(E_l, 1) :', SIZE(E_l, 1)
+    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_e :', this%n_e
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(E_l, 1)==this%n_e failed at line 20 <gyre_r_block_sysmtx:set_E>'
+    stop
+  endif
+
+  if(SIZE(E_l, 2)/= this%n_e) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(E_l, 2) :', SIZE(E_l, 2)
+    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_e :', this%n_e
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(E_l, 2)==this%n_e failed at line 20 <gyre_r_block_sysmtx:set_E>'
+    stop
+  endif
+
+  if(SIZE(E_r, 1)/= this%n_e) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(E_r, 1) :', SIZE(E_r, 1)
+    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_e :', this%n_e
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(E_r, 1)==this%n_e failed at line 20 <gyre_r_block_sysmtx:set_E>'
+    stop
+  endif
+
+  if(SIZE(E_r, 2)/= this%n_e) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(E_r, 2) :', SIZE(E_r, 2)
+    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_e :', this%n_e
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(E_r, 2)==this%n_e failed at line 20 <gyre_r_block_sysmtx:set_E>'
+    stop
+  endif
 
     if(.NOT. (k >= 1)) then
       write(UNIT=ERROR_UNIT, FMT=*) 'ASSERT ''k >= 1'' failed at line 20 <gyre_r_block_sysmtx:set_E>:'
@@ -549,6 +626,20 @@ contains
     real(WP) :: B(2*this%n_e, 1)
     real(WP) :: v_bound(2*this%n_e)
 
+  if(SIZE(w_i)/= this%n_i) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(w_i) :', SIZE(w_i)
+    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_i :', this%n_i
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(w_i)==this%n_i failed at line 20 <gyre_r_block_sysmtx:soln_vec_inhom>'
+    stop
+  endif
+
+  if(SIZE(w_o)/= this%n_o) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(w_o) :', SIZE(w_o)
+    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_o :', this%n_o
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(w_o)==this%n_o failed at line 20 <gyre_r_block_sysmtx:soln_vec_inhom>'
+    stop
+  endif
+
     ! Evaluate the solution vector v of the inhomogeneous linear
     ! system S v = w. It is assumed that the right-hand side vector w
     ! has non-zero components in only the n_i first and n_o last rows
@@ -622,6 +713,20 @@ contains
     integer   :: i_b
     integer   :: i_c
 
+  if(SIZE(v_bound)/= 2*this%n_e) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(v_bound) :', SIZE(v_bound)
+    write(UNIT=ERROR_UNIT, FMT=*) '2*this%n_e :', 2*this%n_e
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(v_bound)==2*this%n_e failed at line 20 <gyre_r_block_sysmtx:backsub_>'
+    stop
+  endif
+
+  if(SIZE(v)/= this%n_e*(this%n+1)) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(v) :', SIZE(v)
+    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_e*(this%n+1) :', this%n_e*(this%n+1)
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(v)==this%n_e*(this%n+1) failed at line 20 <gyre_r_block_sysmtx:backsub_>'
+    stop
+  endif
+
     ! Given the solution vector v_bound at the boundaries,
     ! backsubstitute to reconstruct the full solution vector v
 
@@ -678,6 +783,13 @@ contains
     integer :: k
     integer :: i_a
     integer :: i_b
+
+  if(SIZE(v)/= this%n_e*(this%n+1)) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(v) :', SIZE(v)
+    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_e*(this%n+1) :', this%n_e*(this%n+1)
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(v)==this%n_e*(this%n+1) failed at line 20 <gyre_r_block_sysmtx:resd_vec>'
+    stop
+  endif
 
     ! Evaluate the residual vector w = S v
 

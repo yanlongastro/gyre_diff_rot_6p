@@ -3,8 +3,8 @@
 !dependencies
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
-!   includes: ../extern/core/core.inc ../extern/core/core_memory.inc
-!   uses: gyre_model gyre_freq gyre_state gyre_ext gyre_osc_par core_kinds ISO_FORTRAN_ENV core_parallel gyre_rot gyre_grid gyre_context gyre_evol_model gyre_point gyre_util gyre_mode_par gyre_grid_util gyre_constants
+!   includes: ../extern/core/core_memory.inc ../extern/core/core.inc
+!   uses: gyre_freq gyre_ext gyre_mode_par gyre_constants core_parallel gyre_grid_util gyre_context gyre_model gyre_osc_par gyre_grid core_kinds gyre_state gyre_point gyre_evol_model gyre_rot ISO_FORTRAN_ENV gyre_util
 !   provides: gyre_wave
 !end dependencies
 !
@@ -202,6 +202,20 @@ contains
 
     real(WP)    :: x_ref
 
+  if(SIZE(y_c, 1)/= 6) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(y_c, 1) :', SIZE(y_c, 1)
+    write(UNIT=ERROR_UNIT, FMT=*) '6 :', 6
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(y_c, 1)==6 failed at line 152 <gyre_wave:wave_t_>'
+    stop
+  endif
+
+  if(SIZE(y_c, 2)/= gr%n_k) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(y_c, 2) :', SIZE(y_c, 2)
+    write(UNIT=ERROR_UNIT, FMT=*) 'gr%n_k :', gr%n_k
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(y_c, 2)==gr%n_k failed at line 153 <gyre_wave:wave_t_>'
+    stop
+  endif
+
     ! Construct the wave_t
 
     wv%st = st
@@ -252,7 +266,19 @@ subroutine reallocate_1_ (array, shape_new, start)
   integer                      :: i_b(1)
   integer                      :: i_c(1)
 
+    if(.NOT. (SIZE(shape_new) == 1)) then
+      write(UNIT=ERROR_UNIT, FMT=*) 'ASSERT ''SIZE(shape_new) == 1'' failed at line 194 <gyre_wave:reallocate_1_>:'
+      write(UNIT=ERROR_UNIT, FMT=*) 'Dimension mismatch'
+      stop
+    endif
+
   if(PRESENT(start)) then
+
+    if(.NOT. (SIZE(start) == 1)) then
+      write(UNIT=ERROR_UNIT, FMT=*) 'ASSERT ''SIZE(start) == 1'' failed at line 194 <gyre_wave:reallocate_1_>:'
+      write(UNIT=ERROR_UNIT, FMT=*) 'Dimension mismatch'
+      stop
+    endif
 
   end if
 

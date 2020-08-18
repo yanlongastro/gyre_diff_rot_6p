@@ -4,7 +4,7 @@
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
 !   includes: ../extern/core/core.inc
-!   uses: gyre_point gyre_mode_par gyre_model core_kinds gyre_context gyre_grid ISO_FORTRAN_ENV gyre_ext gyre_calc gyre_state gyre_osc_par gyre_nad_eqns
+!   uses: gyre_mode_par gyre_nad_eqns gyre_point gyre_context gyre_osc_par ISO_FORTRAN_ENV gyre_calc core_kinds gyre_ext gyre_state gyre_model gyre_grid
 !   provides: gyre_qad_eval
 !end dependencies
 !
@@ -142,6 +142,20 @@ contains
     complex(WP)     :: xA_5(6,this%n_k)
     complex(WP)     :: xA_6(6,this%n_k)
     complex(WP)     :: dy_6(this%n_k)
+
+  if(SIZE(y_ad, 1)/= 4) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(y_ad, 1) :', SIZE(y_ad, 1)
+    write(UNIT=ERROR_UNIT, FMT=*) '4 :', 4
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(y_ad, 1)==4 failed at line 116 <gyre_qad_eval:y_qad>'
+    stop
+  endif
+
+  if(SIZE(y_ad, 2)/= this%n_k) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(y_ad, 2) :', SIZE(y_ad, 2)
+    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_k :', this%n_k
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(y_ad, 2)==this%n_k failed at line 117 <gyre_qad_eval:y_qad>'
+    stop
+  endif
 
     ! Construct quasi-adiabatic eigenfunctions y_qad from adiabatic
     ! eigenfrequency omega_ad and eigenfunctions y_ad

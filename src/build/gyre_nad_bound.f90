@@ -4,7 +4,7 @@
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
 !   includes: ../extern/core/core.inc
-!   uses: gyre_atmos gyre_rot gyre_mode_par gyre_context gyre_bound gyre_osc_par ISO_FORTRAN_ENV gyre_model_util gyre_point gyre_nad_trans gyre_model gyre_state core_kinds
+!   uses: gyre_osc_par gyre_rot gyre_model gyre_point gyre_context ISO_FORTRAN_ENV gyre_mode_par gyre_nad_trans core_kinds gyre_state gyre_model_util gyre_bound gyre_atmos
 !   provides: gyre_nad_bound
 !end dependencies
 !
@@ -381,6 +381,27 @@ contains
     complex(WP) :: omega_c
     complex(WP) :: l_i
 
+  if(SIZE(B, 1)/= this%n_i) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(B, 1) :', SIZE(B, 1)
+    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_i :', this%n_i
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(B, 1)==this%n_i failed at line 329 <gyre_nad_bound:build_regular_i_>'
+    stop
+  endif
+
+  if(SIZE(B, 2)/= this%n_e) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(B, 2) :', SIZE(B, 2)
+    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_e :', this%n_e
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(B, 2)==this%n_e failed at line 330 <gyre_nad_bound:build_regular_i_>'
+    stop
+  endif
+
+  if(SIZE(scl)/= this%n_i) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(scl) :', SIZE(scl)
+    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_i :', this%n_i
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(scl)==this%n_i failed at line 332 <gyre_nad_bound:build_regular_i_>'
+    stop
+  endif
+
     ! Evaluate the inner boundary conditions (regular-enforcing)
 
     associate( &
@@ -435,6 +456,27 @@ contains
     complex(WP), intent(out)       :: B(:,:)
     complex(WP), intent(out)       :: scl(:)
 
+  if(SIZE(B, 1)/= this%n_i) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(B, 1) :', SIZE(B, 1)
+    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_i :', this%n_i
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(B, 1)==this%n_i failed at line 388 <gyre_nad_bound:build_zero_r_i_>'
+    stop
+  endif
+
+  if(SIZE(B, 2)/= this%n_e) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(B, 2) :', SIZE(B, 2)
+    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_e :', this%n_e
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(B, 2)==this%n_e failed at line 389 <gyre_nad_bound:build_zero_r_i_>'
+    stop
+  endif
+
+  if(SIZE(scl)/= this%n_i) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(scl) :', SIZE(scl)
+    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_i :', this%n_i
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(scl)==this%n_i failed at line 391 <gyre_nad_bound:build_zero_r_i_>'
+    stop
+  endif
+
     ! Evaluate the inner boundary conditions (zero
     ! radial displacement/gravity)
 
@@ -482,6 +524,27 @@ contains
     class(c_state_t), intent(in)   :: st
     complex(WP), intent(out)       :: B(:,:)
     complex(WP), intent(out)       :: scl(:)
+
+  if(SIZE(B, 1)/= this%n_i) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(B, 1) :', SIZE(B, 1)
+    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_i :', this%n_i
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(B, 1)==this%n_i failed at line 441 <gyre_nad_bound:build_zero_h_i_>'
+    stop
+  endif
+
+  if(SIZE(B, 2)/= this%n_e) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(B, 2) :', SIZE(B, 2)
+    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_e :', this%n_e
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(B, 2)==this%n_e failed at line 442 <gyre_nad_bound:build_zero_h_i_>'
+    stop
+  endif
+
+  if(SIZE(scl)/= this%n_i) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(scl) :', SIZE(scl)
+    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_i :', this%n_i
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(scl)==this%n_i failed at line 444 <gyre_nad_bound:build_zero_h_i_>'
+    stop
+  endif
 
     ! Evaluate the inner boundary conditions (zero
     ! horizontal displacement/gravity)
@@ -576,6 +639,27 @@ contains
     complex(WP) :: l_e
     complex(WP) :: f_rh
 
+  if(SIZE(B, 1)/= this%n_o) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(B, 1) :', SIZE(B, 1)
+    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_o :', this%n_o
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(B, 1)==this%n_o failed at line 537 <gyre_nad_bound:build_vacuum_o_>'
+    stop
+  endif
+
+  if(SIZE(B, 2)/= this%n_e) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(B, 2) :', SIZE(B, 2)
+    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_e :', this%n_e
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(B, 2)==this%n_e failed at line 538 <gyre_nad_bound:build_vacuum_o_>'
+    stop
+  endif
+
+  if(SIZE(scl)/= this%n_o) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(scl) :', SIZE(scl)
+    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_o :', this%n_o
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(scl)==this%n_o failed at line 540 <gyre_nad_bound:build_vacuum_o_>'
+    stop
+  endif
+
     ! Evaluate the outer boundary conditions (vacuum)
 
     associate( &
@@ -642,6 +726,27 @@ contains
     complex(WP) :: lambda
     complex(WP) :: l_e
     complex(WP) :: f_rh
+
+  if(SIZE(B, 1)/= this%n_o) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(B, 1) :', SIZE(B, 1)
+    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_o :', this%n_o
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(B, 1)==this%n_o failed at line 609 <gyre_nad_bound:build_dziem_o_>'
+    stop
+  endif
+
+  if(SIZE(B, 2)/= this%n_e) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(B, 2) :', SIZE(B, 2)
+    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_e :', this%n_e
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(B, 2)==this%n_e failed at line 610 <gyre_nad_bound:build_dziem_o_>'
+    stop
+  endif
+
+  if(SIZE(scl)/= this%n_o) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(scl) :', SIZE(scl)
+    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_o :', this%n_o
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(scl)==this%n_o failed at line 612 <gyre_nad_bound:build_dziem_o_>'
+    stop
+  endif
 
     ! Evaluate the outer boundary conditions ([Dzi1971] formulation)
 
@@ -719,6 +824,27 @@ contains
     complex(WP) :: b_23
     complex(WP) :: alpha_1
     complex(WP) :: alpha_2
+
+  if(SIZE(B, 1)/= this%n_o) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(B, 1) :', SIZE(B, 1)
+    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_o :', this%n_o
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(B, 1)==this%n_o failed at line 691 <gyre_nad_bound:build_unno_o_>'
+    stop
+  endif
+
+  if(SIZE(B, 2)/= this%n_e) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(B, 2) :', SIZE(B, 2)
+    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_e :', this%n_e
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(B, 2)==this%n_e failed at line 692 <gyre_nad_bound:build_unno_o_>'
+    stop
+  endif
+
+  if(SIZE(scl)/= this%n_o) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(scl) :', SIZE(scl)
+    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_o :', this%n_o
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(scl)==this%n_o failed at line 694 <gyre_nad_bound:build_unno_o_>'
+    stop
+  endif
 
     ! Evaluate the outer boundary conditions ([Unn1989] formulation)
 
@@ -806,6 +932,27 @@ contains
     complex(WP) :: beta
     complex(WP) :: b_11
     complex(WP) :: b_12
+
+  if(SIZE(B, 1)/= this%n_o) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(B, 1) :', SIZE(B, 1)
+    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_o :', this%n_o
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(B, 1)==this%n_o failed at line 783 <gyre_nad_bound:build_jcd_o_>'
+    stop
+  endif
+
+  if(SIZE(B, 2)/= this%n_e) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(B, 2) :', SIZE(B, 2)
+    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_e :', this%n_e
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(B, 2)==this%n_e failed at line 784 <gyre_nad_bound:build_jcd_o_>'
+    stop
+  endif
+
+  if(SIZE(scl)/= this%n_o) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(scl) :', SIZE(scl)
+    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_o :', this%n_o
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(scl)==this%n_o failed at line 786 <gyre_nad_bound:build_jcd_o_>'
+    stop
+  endif
 
     ! Evaluate the outer boundary conditions ([Chr2008] formulation)
 

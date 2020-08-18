@@ -4,7 +4,7 @@
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
 !   includes: ../diff/gyre_magnus_diff.inc ../extern/core/core.inc
-!   uses: gyre_linalg gyre_point core_kinds gyre_state gyre_eqns gyre_ext gyre_diff ISO_FORTRAN_ENV
+!   uses: gyre_ext gyre_diff gyre_eqns ISO_FORTRAN_ENV gyre_state gyre_point gyre_linalg core_kinds
 !   provides: gyre_c_magnus_diff
 !end dependencies
 !
@@ -142,6 +142,12 @@ contains
     real(WP), allocatable      :: c_i(:)
     type(point_t), allocatable :: pt(:)
 
+    if(.NOT. (pt_a%s == pt_b%s)) then
+      write(UNIT=ERROR_UNIT, FMT=*) 'ASSERT ''pt_a%s == pt_b%s'' failed at line 20 <gyre_c_magnus_diff:c_magnus_diff_t_>:'
+      write(UNIT=ERROR_UNIT, FMT=*) 'Segment mismatch'
+      stop
+    endif
+
     ! Construct the magnus_diff_t
 
     select case (scheme)
@@ -203,6 +209,34 @@ contains
     complex(WP) :: V_neg(this%n_e,this%n_e)
     complex(WP) :: E_l_(this%n_e,this%n_e)
     complex(WP) :: E_r_(this%n_e,this%n_e)
+
+  if(SIZE(E_l, 1)/= this%n_e) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(E_l, 1) :', SIZE(E_l, 1)
+    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_e :', this%n_e
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(E_l, 1)==this%n_e failed at line 20 <gyre_c_magnus_diff:build>'
+    stop
+  endif
+
+  if(SIZE(E_l, 2)/= this%n_e) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(E_l, 2) :', SIZE(E_l, 2)
+    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_e :', this%n_e
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(E_l, 2)==this%n_e failed at line 20 <gyre_c_magnus_diff:build>'
+    stop
+  endif
+
+  if(SIZE(E_r, 1)/= this%n_e) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(E_r, 1) :', SIZE(E_r, 1)
+    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_e :', this%n_e
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(E_r, 1)==this%n_e failed at line 20 <gyre_c_magnus_diff:build>'
+    stop
+  endif
+
+  if(SIZE(E_r, 2)/= this%n_e) then
+    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(E_r, 2) :', SIZE(E_r, 2)
+    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_e :', this%n_e
+    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(E_r, 2)==this%n_e failed at line 20 <gyre_c_magnus_diff:build>'
+    stop
+  endif
 
     ! Build the difference equations
 

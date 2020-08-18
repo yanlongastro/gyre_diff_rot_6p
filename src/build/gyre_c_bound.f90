@@ -3,7 +3,7 @@
 !dependencies
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
-!   includes: ../bvp/gyre_bound.inc ../extern/core/core.inc
+!   includes: ../extern/core/core.inc ../bvp/gyre_bound.inc
 !   uses: core_kinds gyre_state
 !   provides: gyre_c_bound
 !end dependencies
