@@ -4,7 +4,7 @@
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
 !   includes: ../extern/core/core.inc
-!   uses: gyre_output core_system gyre_util gyre_constants gyre_grid_par gyre_context core_parallel gyre_model gyre_ext gyre_bvp gyre_scan_par gyre_grid gyre_rad_bvp gyre_model_par gyre_mode gyre_mode_par gyre_nad_bvp gyre_num_par gyre_osc_par gyre_grid_factory gyre_model_factory gyre_ad_bvp gyre_version gyre_search core_kinds ISO_FORTRAN_ENV gyre_out_par
+!   uses: gyre_bvp gyre_rad_bvp gyre_model_factory gyre_nad_bvp gyre_ad_bvp gyre_grid_par gyre_out_par gyre_output gyre_context core_system ISO_FORTRAN_ENV gyre_osc_par core_kinds gyre_scan_par gyre_mode gyre_model gyre_ext gyre_constants gyre_grid gyre_mode_par gyre_version core_parallel gyre_model_par gyre_search gyre_grid_factory gyre_util gyre_num_par
 !   provides: 
 !end dependencies
 !
@@ -254,6 +254,7 @@ program gyre
      ! Find adiabatic modes
 
      if (md_p(i)%l == 0 .AND. os_p_sel%reduce_order) then
+        print *, "Running reduced-order version"
         allocate(bp_ad, SOURCE=rad_bvp_t(cx(i), gr, md_p(i), nm_p_sel, os_p_sel))
      else
         allocate(bp_ad, SOURCE=ad_bvp_t(cx(i), gr, md_p(i), nm_p_sel, os_p_sel))

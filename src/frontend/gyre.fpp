@@ -220,6 +220,7 @@ program gyre
      ! Find adiabatic modes
 
      if (md_p(i)%l == 0 .AND. os_p_sel%reduce_order) then
+        print *, "Running reduced-order version"
         allocate(bp_ad, SOURCE=rad_bvp_t(cx(i), gr, md_p(i), nm_p_sel, os_p_sel))
      else
         allocate(bp_ad, SOURCE=ad_bvp_t(cx(i), gr, md_p(i), nm_p_sel, os_p_sel))

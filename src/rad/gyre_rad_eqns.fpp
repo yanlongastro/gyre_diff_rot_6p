@@ -47,7 +47,18 @@ module gyre_rad_eqns
   integer, parameter :: J_C_1 = 4
   integer, parameter :: J_GAMMA_1 = 5
 
-  integer, parameter :: J_LAST = J_GAMMA_1
+  !integer, parameter :: J_LAST = J_GAMMA_1
+
+  !syl200817: add new variables
+  integer, parameter :: J_OMEGA_ROT = 6
+  integer, parameter :: J_OMEGA_ROT_I = 7
+  integer, parameter :: J_W = 8
+  integer, parameter :: J_F_OMEGA = 9
+  integer, parameter :: J_DOMEGA_DX = 10
+
+
+  !syl200817: update J_LAST
+  integer, parameter :: J_LAST = J_DOMEGA_DX
 
   ! Derived-type definitions
 
@@ -139,6 +150,14 @@ contains
          this%coeff(i,J_U) = ml%coeff(I_U, pt(i))
          this%coeff(i,J_C_1) = ml%coeff(I_C_1, pt(i))
          this%coeff(i,J_GAMMA_1) = ml%coeff(I_GAMMA_1, pt(i))
+
+
+
+         !syl200817: add new variables
+         this%coeff(i,J_OMEGA_ROT) = ml%coeff(I_OMEGA_ROT, pt(i))
+         this%coeff(i,J_W) = ml%coeff(I_W, pt(i))
+         this%coeff(i,J_F_OMEGA) = ml%coeff(I_F_OMEGA, pt(i))
+         this%coeff(i,J_DOMEGA_DX) = ml%coeff(I_DOMEGA_DX, pt(i))
       end do
 
       this%x = pt%x
@@ -194,17 +213,25 @@ contains
          U => this%coeff(i,J_U), &
          c_1 => this%coeff(i,J_C_1), &
          Gamma_1 => this%coeff(i,J_GAMMA_1), &
-         alpha_om => this%alpha_om)
+         alpha_om => this%alpha_om, &
+         Omega_rot => this%coeff(i,J_OMEGA_ROT), &
+         W => this%coeff(i,J_W), &
+         f_Omega => this%coeff(i,J_F_OMEGA), &
+         dOmega_dr => this%coeff(i,J_DOMEGA_DX))
+         ! syl200817: add new variables
 
       omega_c = omega
 
       ! Set up the matrix
 
       xA(1,1) = V/Gamma_1 - 1._WP
-      xA(1,2) = -V/Gamma_1
+      !xA(1,2) = -V/Gamma_1
+      xA(1,2) = -(V+W)/Gamma_1
       
-      xA(2,1) = c_1*alpha_om*omega_c**2 + U - As
-      xA(2,2) = As - U + 3._WP
+      !xA(2,1) = c_1*alpha_om*omega_c**2 + U - As
+      xA(2,1) = c_1*alpha_om*omega_c**2 - (1-c_1*Omega_rot**2)*As - c_1*Omega_rot**2*(V/Gamma_1 -2._WP - 2._WP*f_Omega) + U
+      !xA(2,2) = As - U + 3._WP
+      xA(2,2) = As - U + 3._WP + c_1*Omega_rot**2*(V+W)/Gamma_1
 
     end associate
 
