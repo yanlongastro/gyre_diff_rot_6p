@@ -4,7 +4,7 @@
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
 !   includes: ../extern/core/core.inc ../diff/gyre_mirk_diff.inc
-!   uses: gyre_ext gyre_state core_linalg ISO_FORTRAN_ENV gyre_diff gyre_eqns core_kinds gyre_linalg gyre_point
+!   uses: core_linalg gyre_state ISO_FORTRAN_ENV gyre_eqns core_kinds gyre_ext gyre_linalg gyre_point gyre_diff
 !   provides: gyre_r_mirk_diff
 !end dependencies
 !
@@ -123,12 +123,6 @@ contains
 
     type(point_t), allocatable :: pt(:)
 
-    if(.NOT. (pt_a%s == pt_b%s)) then
-      write(UNIT=ERROR_UNIT, FMT=*) 'ASSERT ''pt_a%s == pt_b%s'' failed at line 20 <gyre_r_mirk_diff:r_mirk_diff_t_>:'
-      write(UNIT=ERROR_UNIT, FMT=*) 'Segment mismatch'
-      stop
-    endif
-
     ! Construct the mirk_diff_t
 
     df%dx = pt_b%x - pt_a%x
@@ -163,34 +157,6 @@ contains
     type(r_ext_t), intent(out)       :: scl
 
     real(WP) :: A(this%n_e,this%n_e,3)
-
-  if(SIZE(E_l, 1)/= this%n_e) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(E_l, 1) :', SIZE(E_l, 1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_e :', this%n_e
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(E_l, 1)==this%n_e failed at line 20 <gyre_r_mirk_diff:build>'
-    stop
-  endif
-
-  if(SIZE(E_l, 2)/= this%n_e) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(E_l, 2) :', SIZE(E_l, 2)
-    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_e :', this%n_e
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(E_l, 2)==this%n_e failed at line 20 <gyre_r_mirk_diff:build>'
-    stop
-  endif
-
-  if(SIZE(E_r, 1)/= this%n_e) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(E_r, 1) :', SIZE(E_r, 1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_e :', this%n_e
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(E_r, 1)==this%n_e failed at line 20 <gyre_r_mirk_diff:build>'
-    stop
-  endif
-
-  if(SIZE(E_r, 2)/= this%n_e) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(E_r, 2) :', SIZE(E_r, 2)
-    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_e :', this%n_e
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(E_r, 2)==this%n_e failed at line 20 <gyre_r_mirk_diff:build>'
-    stop
-  endif
 
     ! Build the difference equations
 

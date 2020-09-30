@@ -4,7 +4,7 @@
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
 !   includes: ../extern/core/core.inc ../bvp/gyre_bvp.inc
-!   uses: gyre_sysmtx_factory gyre_sysmtx gyre_state gyre_ext core_kinds gyre_bound gyre_diff gyre_num_par gyre_status ISO_FORTRAN_ENV
+!   uses: gyre_state gyre_sysmtx gyre_bound core_kinds ISO_FORTRAN_ENV gyre_num_par gyre_diff gyre_status gyre_sysmtx_factory gyre_ext
 !   provides: gyre_c_bvp
 !end dependencies
 !
@@ -142,19 +142,6 @@ contains
     n_i = bd%n_i
     n_o = bd%n_o
 
-  if(n_i+n_o/= n_e) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'n_i+n_o :', n_i+n_o
-    write(UNIT=ERROR_UNIT, FMT=*) 'n_e :', n_e
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS n_i+n_o==n_e failed at line 20 <gyre_c_bvp:c_bvp_t_>'
-    stop
-  endif
-
-    if(.NOT. (ALL(df%n_e == n_e))) then
-      write(UNIT=ERROR_UNIT, FMT=*) 'ASSERT ''ALL(df%n_e == n_e)'' failed at line 20 <gyre_c_bvp:c_bvp_t_>:'
-      write(UNIT=ERROR_UNIT, FMT=*) 'Dimension mismatch'
-      stop
-    endif
-
     ! Construct the bvp_t
 
     allocate(bp%df(n_k-1), SOURCE=df)
@@ -270,12 +257,6 @@ contains
 
     complex(WP) :: v(this%n_e*this%n_k)
 
-    if(.NOT. (this%factored)) then
-      write(UNIT=ERROR_UNIT, FMT=*) 'ASSERT ''this%factored'' failed at line 20 <gyre_c_bvp:soln_vec_hom>:'
-      write(UNIT=ERROR_UNIT, FMT=*) 'Matrix has not been factorized'
-      stop
-    endif
-
     ! Evaluate the solution vector y of the homogeneous system
 
     v = this%sm%soln_vec_hom()
@@ -299,26 +280,6 @@ contains
 
     complex(WP) :: v(this%n_e*this%n_k)
 
-  if(SIZE(w_i)/= this%n_i) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(w_i) :', SIZE(w_i)
-    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_i :', this%n_i
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(w_i)==this%n_i failed at line 20 <gyre_c_bvp:soln_vec_inhom>'
-    stop
-  endif
-
-  if(SIZE(w_o)/= this%n_o) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(w_o) :', SIZE(w_o)
-    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_o :', this%n_o
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(w_o)==this%n_o failed at line 20 <gyre_c_bvp:soln_vec_inhom>'
-    stop
-  endif
-
-    if(.NOT. (this%factored)) then
-      write(UNIT=ERROR_UNIT, FMT=*) 'ASSERT ''this%factored'' failed at line 20 <gyre_c_bvp:soln_vec_inhom>:'
-      write(UNIT=ERROR_UNIT, FMT=*) 'Matrix has not been factorized'
-      stop
-    endif
-
     ! Evaluate the solution vector y of the inhomogeneous system
 
     v = this%sm%soln_vec_inhom(w_i, w_o)
@@ -340,26 +301,6 @@ contains
     complex(WP)                        :: w(this%n_e*this%n_k)
 
     complex(WP) :: v(this%n_e*this%n_k)
-
-  if(SIZE(y,1)/= this%n_e) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(y,1) :', SIZE(y,1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_e :', this%n_e
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(y,1)==this%n_e failed at line 20 <gyre_c_bvp:resd_vec>'
-    stop
-  endif
-
-  if(SIZE(y,2)/= this%n_k) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(y,2) :', SIZE(y,2)
-    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_k :', this%n_k
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(y,2)==this%n_k failed at line 20 <gyre_c_bvp:resd_vec>'
-    stop
-  endif
-
-    if(.NOT. (.NOT. this%factored)) then
-      write(UNIT=ERROR_UNIT, FMT=*) 'ASSERT ''.NOT. this%factored'' failed at line 20 <gyre_c_bvp:resd_vec>:'
-      write(UNIT=ERROR_UNIT, FMT=*) 'Matrix has already been factorized'
-      stop
-    endif
 
     ! Evaluate the residuals vector
 

@@ -4,7 +4,7 @@
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
 !   includes: ../extern/core/core.inc
-!   uses: gyre_constants gyre_util gyre_model_util gyre_model gyre_evol_model ISO_FORTRAN_ENV core_order gyre_model_par core_kinds
+!   uses: core_kinds gyre_constants ISO_FORTRAN_ENV gyre_model_util gyre_model_par core_order gyre_model gyre_evol_model gyre_util
 !   provides: gyre_mesa_file
 !end dependencies
 !
@@ -378,14 +378,6 @@ contains
       real(WP), allocatable :: eps_eps_T(:)
       integer               :: k
 
-  if(SIZE(point_data, 1)/= N_COLS_V0_01) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(point_data, 1) :', SIZE(point_data, 1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'N_COLS_V0_01 :', N_COLS_V0_01
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(point_data, 1)==N_COLS_V0_01 failed at line 336 <gyre_mesa_file:init_mesa_' &
- & // 'model:extract_data_v0_01_>'
-    stop
-  endif
-
       ! Extract data from the version-0.01 point array
 
       r = point_data(1,:)
@@ -450,14 +442,6 @@ contains
       real(WP), allocatable :: eps_eps_rho(:)
       real(WP), allocatable :: eps_eps_T(:)
 
-  if(SIZE(point_data, 1)/= N_COLS_V0_19) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(point_data, 1) :', SIZE(point_data, 1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'N_COLS_V0_19 :', N_COLS_V0_19
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(point_data, 1)==N_COLS_V0_19 failed at line 402 <gyre_mesa_file:init_mesa_' &
- & // 'model:extract_data_v0_19_>'
-    stop
-  endif
-
       ! Extract data from the version-0.19 point array
 
       r = point_data(1,:)
@@ -510,14 +494,6 @@ contains
       real(WP), allocatable :: eps_eps_T(:)
       real(WP), allocatable :: kap_kap_T(:)
       real(WP), allocatable :: kap_kap_rho(:)
-
-  if(SIZE(point_data, 1)/= N_COLS_V1_0X) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(point_data, 1) :', SIZE(point_data, 1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'N_COLS_V1_0X :', N_COLS_V1_0X
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(point_data, 1)==N_COLS_V1_0X failed at line 457 <gyre_mesa_file:init_mesa_' &
- & // 'model:extract_data_v1_0X_>'
-    stop
-  endif
 
       ! Extract data from the version-1.0X point array
 
@@ -576,14 +552,6 @@ contains
       real(WP), allocatable :: eps_eps_T(:)
       real(WP), allocatable :: kap_kap_T(:)
       real(WP), allocatable :: kap_kap_rho(:)
-
-  if(SIZE(point_data, 1)/= N_COLS_V2_33) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(point_data, 1) :', SIZE(point_data, 1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'N_COLS_V2_33 :', N_COLS_V2_33
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(point_data, 1)==N_COLS_V2_33 failed at line 520 <gyre_mesa_file:init_mesa_' &
- & // 'model:extract_data_v2_33_>'
-    stop
-  endif
 
       ! Extract data from the version-1.0X point array
 

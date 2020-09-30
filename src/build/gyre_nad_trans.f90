@@ -4,7 +4,7 @@
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
 !   includes: ../extern/core/core.inc
-!   uses: gyre_mode_par gyre_osc_par gyre_model ISO_FORTRAN_ENV gyre_context gyre_state gyre_model_util gyre_point core_kinds
+!   uses: gyre_point ISO_FORTRAN_ENV gyre_model gyre_model_util gyre_state gyre_mode_par core_kinds gyre_osc_par gyre_context
 !   provides: gyre_nad_trans
 !end dependencies
 !
@@ -229,20 +229,6 @@ contains
     complex(WP) :: H(this%n_e,this%n_e)
     complex(WP) :: dH(this%n_e,this%n_e)
 
-  if(SIZE(xA, 1)/= this%n_e) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(xA, 1) :', SIZE(xA, 1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_e :', this%n_e
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(xA, 1)==this%n_e failed at line 197 <gyre_nad_trans:trans_eqns>'
-    stop
-  endif
-
-  if(SIZE(xA, 2)/= this%n_e) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(xA, 2) :', SIZE(xA, 2)
-    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_e :', this%n_e
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(xA, 2)==this%n_e failed at line 198 <gyre_nad_trans:trans_eqns>'
-    stop
-  endif
-
     if (PRESENT(from)) then
        from_ = from
     else
@@ -293,13 +279,6 @@ contains
     complex(WP) :: G(this%n_e,this%n_e)
     complex(WP) :: H(this%n_e,this%n_e)
 
-  if(SIZE(C, 2)/= this%n_e) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(C, 2) :', SIZE(C, 2)
-    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_e :', this%n_e
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(C, 2)==this%n_e failed at line 247 <gyre_nad_trans:trans_cond>'
-    stop
-  endif
-
     if (PRESENT(from)) then
        from_ = from
     else
@@ -347,13 +326,6 @@ contains
     logical     :: from_
     complex(WP) :: G(this%n_e,this%n_e)
     complex(WP) :: H(this%n_e,this%n_e)
-
-  if(SIZE(y)/= this%n_e) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(y) :', SIZE(y)
-    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_e :', this%n_e
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(y)==this%n_e failed at line 297 <gyre_nad_trans:trans_vars>'
-    stop
-  endif
 
     if (PRESENT(from)) then
        from_ = from

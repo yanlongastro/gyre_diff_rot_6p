@@ -4,7 +4,7 @@
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
 !   includes: 
-!   uses: gyre_r_interp gyre_c_interp
+!   uses: gyre_c_interp gyre_r_interp
 !   provides: gyre_interp
 !end dependencies
 !

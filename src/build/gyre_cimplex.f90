@@ -4,7 +4,7 @@
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
 !   includes: ../extern/core/core.inc
-!   uses: ISO_FORTRAN_ENV core_kinds gyre_ext gyre_status gyre_ext_func
+!   uses: ISO_FORTRAN_ENV core_kinds gyre_status gyre_ext_func gyre_ext
 !   provides: gyre_cimplex
 !end dependencies
 !
@@ -121,20 +121,6 @@ contains
     class(c_ext_t), intent(in)      :: cx(:)
     class(c_ext_t), intent(in)      :: f_cx(:)
     type(cimplex_t)                 :: cm
-
-  if(SIZE(cx)/= 3) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(cx) :', SIZE(cx)
-    write(UNIT=ERROR_UNIT, FMT=*) '3 :', 3
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(cx)==3 failed at line 95 <gyre_cimplex:cimplex_t_verts_>'
-    stop
-  endif
-
-  if(SIZE(f_cx)/= 3) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(f_cx) :', SIZE(f_cx)
-    write(UNIT=ERROR_UNIT, FMT=*) '3 :', 3
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(f_cx)==3 failed at line 96 <gyre_cimplex:cimplex_t_verts_>'
-    stop
-  endif
 
     ! Construct the cimplex_t
 

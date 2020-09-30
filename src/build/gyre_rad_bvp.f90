@@ -4,7 +4,7 @@
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
 !   includes: ../extern/core/core.inc
-!   uses: gyre_ext gyre_wave gyre_osc_par gyre_util gyre_rad_trans gyre_state core_kinds gyre_rad_diff gyre_point ISO_FORTRAN_ENV gyre_num_par gyre_qad_eval gyre_grid gyre_bvp gyre_rad_bound gyre_mode_par gyre_model gyre_context
+!   uses: gyre_state gyre_rad_diff core_kinds gyre_wave gyre_osc_par gyre_ext gyre_grid gyre_num_par gyre_rad_bound ISO_FORTRAN_ENV gyre_mode_par gyre_qad_eval gyre_bvp gyre_model gyre_context gyre_util gyre_rad_trans gyre_point
 !   provides: gyre_rad_bvp
 !end dependencies
 !
@@ -225,20 +225,6 @@ contains
 
     real(WP) :: y(2,bp%n_k)
     integer  :: k
-
-  if(SIZE(w_i)/= bp%n_i) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(w_i) :', SIZE(w_i)
-    write(UNIT=ERROR_UNIT, FMT=*) 'bp%n_i :', bp%n_i
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(w_i)==bp%n_i failed at line 196 <gyre_rad_bvp:wave_t_inhom_>'
-    stop
-  endif
-
-  if(SIZE(w_o)/= bp%n_o) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(w_o) :', SIZE(w_o)
-    write(UNIT=ERROR_UNIT, FMT=*) 'bp%n_o :', bp%n_o
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(w_o)==bp%n_o failed at line 197 <gyre_rad_bvp:wave_t_inhom_>'
-    stop
-  endif
 
     ! Calculate the solution vector
 

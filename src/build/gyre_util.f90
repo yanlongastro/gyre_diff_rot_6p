@@ -4,7 +4,7 @@
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
 !   includes: ../extern/core/core.inc
-!   uses: gyre_num_par gyre_osc_par core_kinds ISO_FORTRAN_ENV gyre_scan_par core_parallel gyre_constants core_memory gyre_grid_par gyre_out_par gyre_mode_par
+!   uses: gyre_osc_par gyre_mode_par gyre_constants gyre_num_par gyre_grid_par core_parallel core_memory gyre_out_par ISO_FORTRAN_ENV core_kinds gyre_scan_par
 !   provides: gyre_util
 !end dependencies
 !
@@ -563,13 +563,6 @@ contains
 
     integer :: i
 
-  if(SIZE(n)/= SIZE(fmts)) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(n) :', SIZE(n)
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(fmts) :', SIZE(fmts)
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(n)==SIZE(fmts) failed at line 359 <gyre_util:join_fmts>'
-    stop
-  endif
-
     ! Join format strings with the appropriate repeat counts
 
     if(SUM(n) > 0) then
@@ -680,21 +673,7 @@ contains
 
     integer :: n
 
-  if(SIZE(y)/= SIZE(x)) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(y) :', SIZE(y)
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(x) :', SIZE(x)
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(y)==SIZE(x) failed at line 501 <gyre_util:integrate_r_>'
-    stop
-  endif
-
     if (PRESENT(mask)) then
-
-  if(SIZE(mask)/= SIZE(x)) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(mask) :', SIZE(mask)
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(x) :', SIZE(x)
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(mask)==SIZE(x) failed at line 501 <gyre_util:integrate_r_>'
-    stop
-  endif
 
     endif
 
@@ -724,21 +703,7 @@ contains
 
     integer :: n
 
-  if(SIZE(y)/= SIZE(x)) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(y) :', SIZE(y)
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(x) :', SIZE(x)
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(y)==SIZE(x) failed at line 502 <gyre_util:integrate_c_>'
-    stop
-  endif
-
     if (PRESENT(mask)) then
-
-  if(SIZE(mask)/= SIZE(x)) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(mask) :', SIZE(mask)
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(x) :', SIZE(x)
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(mask)==SIZE(x) failed at line 502 <gyre_util:integrate_c_>'
-    stop
-  endif
 
     endif
 
@@ -770,13 +735,6 @@ contains
     integer :: n
     integer :: i
 
-  if(SIZE(y)/= SIZE(x)) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(y) :', SIZE(y)
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(x) :', SIZE(x)
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(y)==SIZE(x) failed at line 540 <gyre_util:integral_r_>'
-    stop
-  endif
-
     ! Calculate the integral of y(x) using trapezoidal quadrature
 
     n = SIZE(x)
@@ -801,13 +759,6 @@ contains
 
     integer :: n
     integer :: i
-
-  if(SIZE(y)/= SIZE(x)) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(y) :', SIZE(y)
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(x) :', SIZE(x)
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(y)==SIZE(x) failed at line 541 <gyre_util:integral_c_>'
-    stop
-  endif
 
     ! Calculate the integral of y(x) using trapezoidal quadrature
 

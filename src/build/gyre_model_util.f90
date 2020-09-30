@@ -4,7 +4,7 @@
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
 !   includes: ../extern/core/core.inc
-!   uses: core_kinds ISO_FORTRAN_ENV gyre_model gyre_model_par gyre_constants gyre_util
+!   uses: ISO_FORTRAN_ENV gyre_util gyre_constants gyre_model_par gyre_model core_kinds
 !   provides: gyre_model_util
 !end dependencies
 !
@@ -207,13 +207,6 @@ contains
     real(WP) :: m_snap
 
     if (PRESENT(m)) then
-
-  if(SIZE(m)/= SIZE(x)) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(m) :', SIZE(m)
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(x) :', SIZE(x)
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(m)==SIZE(x) failed at line 134 <gyre_model_util:snap_points>'
-    stop
-  endif
 
     endif
 

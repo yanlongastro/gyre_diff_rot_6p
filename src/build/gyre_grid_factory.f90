@@ -4,7 +4,7 @@
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
 !   includes: ../extern/core/core.inc
-!   uses: ISO_FORTRAN_ENV gyre_context gyre_freq gyre_mode_par core_kinds gyre_grid_spec gyre_grid gyre_osc_par gyre_state gyre_model gyre_util gyre_grid_par gyre_grid_util gyre_point gyre_constants
+!   uses: gyre_constants gyre_util gyre_grid_util gyre_model gyre_point gyre_state gyre_grid gyre_freq gyre_osc_par core_kinds gyre_grid_par gyre_grid_spec gyre_context gyre_mode_par ISO_FORTRAN_ENV
 !   provides: gyre_grid_factory
 !end dependencies
 !
@@ -123,12 +123,6 @@ contains
     integer                 :: i
     integer                 :: s
 
-    if(.NOT. (SIZE(gs) >= 1)) then
-      write(UNIT=ERROR_UNIT, FMT=*) 'ASSERT ''SIZE(gs) >= 1'' failed at line 96 <gyre_grid_factory:grid_t_grid_spec_>:'
-      write(UNIT=ERROR_UNIT, FMT=*) 'Too few grid_specs'
-      stop
-    endif
-
     ! Construct the grid_t using the supplied array of
     ! grid_specs. Each grid spec supplies a context and the set of
     ! frequencies to adopt for that context
@@ -140,28 +134,9 @@ contains
 
     ! Check that the grid_specs are all associated with the same model
 
-    if(.NOT. (ASSOCIATED(gs(1)%cx))) then
-      write(UNIT=ERROR_UNIT, FMT=*) 'ASSERT ''ASSOCIATED(gs(1)%cx)'' failed at line 109 <gyre_grid_factory:grid_t_grid_spec_>:'
-      write(UNIT=ERROR_UNIT, FMT=*) 'Null pointer'
-      stop
-    endif
-
     ml => gs(1)%cx%ml
 
     check_loop : do i = 1, SIZE(gs)
-
-    if(.NOT. (ASSOCIATED(gs(i)%cx))) then
-      write(UNIT=ERROR_UNIT, FMT=*) 'ASSERT ''ASSOCIATED(gs(i)%cx)'' failed at line 114 <gyre_grid_factory:grid_t_grid_spec_>:'
-      write(UNIT=ERROR_UNIT, FMT=*) 'Null pointer'
-      stop
-    endif
-
-    if(.NOT. (ASSOCIATED(gs(i)%cx%ml, ml))) then
-      write(UNIT=ERROR_UNIT, FMT=*) 'ASSERT ''ASSOCIATED(gs(i)%cx%ml, ml)'' failed at line 115 <gyre_grid_factory:grid_t_grid_s' &
- & // 'pec_>:'
-      write(UNIT=ERROR_UNIT, FMT=*) 'Contexts are associated with different models'
-      stop
-    endif
 
     end do check_loop
 

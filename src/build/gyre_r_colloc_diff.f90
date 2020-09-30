@@ -4,7 +4,7 @@
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
 !   includes: ../extern/core/core.inc ../diff/gyre_colloc_diff.inc
-!   uses: ISO_FORTRAN_ENV gyre_point gyre_state core_kinds gyre_ext gyre_linalg gyre_diff core_linalg gyre_eqns
+!   uses: gyre_point gyre_eqns gyre_linalg gyre_ext gyre_state core_kinds ISO_FORTRAN_ENV gyre_diff core_linalg
 !   provides: gyre_r_colloc_diff
 !end dependencies
 !
@@ -168,12 +168,6 @@ contains
     real(WP), allocatable      :: c_i(:)
     type(point_t), allocatable :: pt(:)
 
-    if(.NOT. (pt_a%s == pt_b%s)) then
-      write(UNIT=ERROR_UNIT, FMT=*) 'ASSERT ''pt_a%s == pt_b%s'' failed at line 20 <gyre_r_colloc_diff:r_colloc_diff_t_>:'
-      write(UNIT=ERROR_UNIT, FMT=*) 'Segment mismatch'
-      stop
-    endif
-
     ! Construct the colloc_diff_t
 
     select case (scheme)
@@ -233,34 +227,6 @@ contains
     real(WP), intent(out)                :: E_l(:,:)
     real(WP), intent(out)                :: E_r(:,:)
     type(r_ext_t), intent(out)         :: scl
-
-  if(SIZE(E_l, 1)/= this%n_e) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(E_l, 1) :', SIZE(E_l, 1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_e :', this%n_e
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(E_l, 1)==this%n_e failed at line 20 <gyre_r_colloc_diff:build>'
-    stop
-  endif
-
-  if(SIZE(E_l, 2)/= this%n_e) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(E_l, 2) :', SIZE(E_l, 2)
-    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_e :', this%n_e
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(E_l, 2)==this%n_e failed at line 20 <gyre_r_colloc_diff:build>'
-    stop
-  endif
-
-  if(SIZE(E_r, 1)/= this%n_e) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(E_r, 1) :', SIZE(E_r, 1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_e :', this%n_e
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(E_r, 1)==this%n_e failed at line 20 <gyre_r_colloc_diff:build>'
-    stop
-  endif
-
-  if(SIZE(E_r, 2)/= this%n_e) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(E_r, 2) :', SIZE(E_r, 2)
-    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_e :', this%n_e
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(E_r, 2)==this%n_e failed at line 20 <gyre_r_colloc_diff:build>'
-    stop
-  endif
 
     ! Build the difference equations
 
@@ -388,27 +354,6 @@ contains
     real(WP) :: B(this%n_s*this%n_e,this%n_e)
     real(WP) :: X(this%n_s*this%n_e,this%n_e)
     real(WP) :: K(this%n_e,this%n_e,this%n_s)
-
-  if(SIZE(a_ij, 1)/= this%n_s) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(a_ij, 1) :', SIZE(a_ij, 1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_s :', this%n_s
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(a_ij, 1)==this%n_s failed at line 20 <gyre_r_colloc_diff:build_irk_>'
-    stop
-  endif
-
-  if(SIZE(a_ij, 2)/= this%n_s) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(a_ij, 2) :', SIZE(a_ij, 2)
-    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_s :', this%n_s
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(a_ij, 2)==this%n_s failed at line 20 <gyre_r_colloc_diff:build_irk_>'
-    stop
-  endif
-
-  if(SIZE(b_i)/= this%n_s) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(b_i) :', SIZE(b_i)
-    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_s :', this%n_s
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(b_i)==this%n_s failed at line 20 <gyre_r_colloc_diff:build_irk_>'
-    stop
-  endif
 
     ! Build the difference equations using an n_s-step implicit Runge
     ! Kutta (IRK) scheme with Butcher tableaux coefficients a_ij and

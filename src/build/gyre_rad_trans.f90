@@ -4,7 +4,7 @@
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
 !   includes: ../extern/core/core.inc
-!   uses: gyre_state gyre_osc_par ISO_FORTRAN_ENV gyre_mode_par gyre_context gyre_model_util gyre_model core_kinds gyre_point
+!   uses: core_kinds gyre_context ISO_FORTRAN_ENV gyre_mode_par gyre_state gyre_osc_par gyre_point gyre_model gyre_model_util
 !   provides: gyre_rad_trans
 !end dependencies
 !
@@ -219,20 +219,6 @@ contains
     real(WP) :: H(this%n_e,this%n_e)
     real(WP) :: dH(this%n_e,this%n_e)
 
-  if(SIZE(xA, 1)/= this%n_e) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(xA, 1) :', SIZE(xA, 1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_e :', this%n_e
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(xA, 1)==this%n_e failed at line 187 <gyre_rad_trans:trans_eqns>'
-    stop
-  endif
-
-  if(SIZE(xA, 2)/= this%n_e) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(xA, 2) :', SIZE(xA, 2)
-    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_e :', this%n_e
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(xA, 2)==this%n_e failed at line 188 <gyre_rad_trans:trans_eqns>'
-    stop
-  endif
-
     if (PRESENT(from)) then
        from_ = from
     else
@@ -285,13 +271,6 @@ contains
     real(WP) :: G(this%n_e,this%n_e)
     real(WP) :: H(this%n_e,this%n_e)
 
-  if(SIZE(C, 2)/= this%n_e) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(C, 2) :', SIZE(C, 2)
-    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_e :', this%n_e
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(C, 2)==this%n_e failed at line 239 <gyre_rad_trans:trans_cond>'
-    stop
-  endif
-
     if (PRESENT(from)) then
        from_ = from
     else
@@ -343,13 +322,6 @@ contains
     logical  :: from_
     real(WP) :: G(this%n_e,this%n_e)
     real(WP) :: H(this%n_e,this%n_e)
-
-  if(SIZE(y)/= this%n_e) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(y) :', SIZE(y)
-    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_e :', this%n_e
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(y)==this%n_e failed at line 293 <gyre_rad_trans:trans_vars>'
-    stop
-  endif
 
     if (PRESENT(from)) then
        from_ = from

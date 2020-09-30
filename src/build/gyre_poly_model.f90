@@ -4,7 +4,7 @@
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
 !   includes: ../extern/core/core.inc
-!   uses: ISO_FORTRAN_ENV gyre_point gyre_interp gyre_model core_kinds gyre_constants gyre_grid
+!   uses: ISO_FORTRAN_ENV core_kinds gyre_constants gyre_model gyre_grid gyre_point gyre_interp
 !   provides: gyre_poly_model
 !end dependencies
 !
@@ -141,27 +141,6 @@ contains
     real(WP) :: v_o_prev
     real(WP) :: d2Theta(SIZE(xi))
 
-  if(SIZE(Theta)/= SIZE(xi)) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(Theta) :', SIZE(Theta)
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(xi) :', SIZE(xi)
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(Theta)==SIZE(xi) failed at line 114 <gyre_poly_model:poly_model_t_>'
-    stop
-  endif
-
-  if(SIZE(dTheta)/= SIZE(xi)) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(dTheta) :', SIZE(dTheta)
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(xi) :', SIZE(xi)
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(dTheta)==SIZE(xi) failed at line 115 <gyre_poly_model:poly_model_t_>'
-    stop
-  endif
-
-  if(SIZE(Delta_d)/= SIZE(n_poly)-1) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(Delta_d) :', SIZE(Delta_d)
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(n_poly)-1 :', SIZE(n_poly)-1
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(Delta_d)==SIZE(n_poly)-1 failed at line 117 <gyre_poly_model:poly_model_t_>'
-    stop
-  endif
-
     ! Construct the poly_model_t from the Lane-Emden solutions Theta,
     ! dTheta/dxi. Per-segment polytropic indices and density jumps are
     ! supplied in n_poly and Delta_d, respectively
@@ -178,13 +157,6 @@ contains
 
     ml%s_i = ml%gr%s_i()
     ml%s_o = ml%gr%s_o()
-
-  if(SIZE(n_poly)/= ml%s_o-ml%s_i+1) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(n_poly) :', SIZE(n_poly)
-    write(UNIT=ERROR_UNIT, FMT=*) 'ml%s_o-ml%s_i+1 :', ml%s_o-ml%s_i+1
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(n_poly)==ml%s_o-ml%s_i+1 failed at line 136 <gyre_poly_model:poly_model_t_>'
-    stop
-  endif
 
     ! Allocate arrays
 
@@ -281,25 +253,6 @@ contains
     type(point_t), intent(in)       :: pt
     real(WP)                        :: coeff
 
-    if(.NOT. (i >= 1 .AND. i <= I_LAST)) then
-      write(UNIT=ERROR_UNIT, FMT=*) 'ASSERT ''i >= 1 .AND. i <= I_LAST'' failed at line 233 <gyre_poly_model:coeff>:'
-      write(UNIT=ERROR_UNIT, FMT=*) 'Invalid index'
-      stop
-    endif
-
-    if(.NOT. (this%is_defined(i))) then
-      write(UNIT=ERROR_UNIT, FMT=*) 'ASSERT ''this%is_defined(i)'' failed at line 234 <gyre_poly_model:coeff>:'
-      write(UNIT=ERROR_UNIT, FMT=*) 'Undefined coefficient'
-      stop
-    endif
-
-    if(.NOT. (pt%s >= this%s_i .AND. pt%s <= this%s_o)) then
-      write(UNIT=ERROR_UNIT, FMT=*) 'ASSERT ''pt%s >= this%s_i .AND. pt%s <= this%s_o'' failed at line 236 <gyre_poly_model:coe' &
- & // 'ff>:'
-      write(UNIT=ERROR_UNIT, FMT=*) 'Invalid segment'
-      stop
-    endif
-
     ! Evaluate the i'th coefficient
 
     select case (i)
@@ -339,12 +292,6 @@ contains
     real(WP) :: Theta
     real(WP) :: dTheta
 
-    if(.NOT. (.NOT. this%is_vacuum(pt))) then
-      write(UNIT=ERROR_UNIT, FMT=*) 'ASSERT ''.NOT. this%is_vacuum(pt)'' failed at line 277 <gyre_poly_model:coeff_V_2_>:'
-      write(UNIT=ERROR_UNIT, FMT=*) 'V_2 evaluation at vacuum point'
-      stop
-    endif
-
     ! Evaluate the V_2 coefficient
 
     if (pt%x /= 0._WP) then
@@ -375,12 +322,6 @@ contains
     class(poly_model_t), intent(in) :: this
     type(point_t), intent(in)       :: pt
     real(WP)                        :: coeff
-
-    if(.NOT. (.NOT. this%is_vacuum(pt))) then
-      write(UNIT=ERROR_UNIT, FMT=*) 'ASSERT ''.NOT. this%is_vacuum(pt)'' failed at line 310 <gyre_poly_model:coeff_As_>:'
-      write(UNIT=ERROR_UNIT, FMT=*) 'As evaluation at vacuum point'
-      stop
-    endif
 
     ! Evaluate the As coefficient
 
@@ -461,25 +402,6 @@ contains
     type(point_t), intent(in)       :: pt
     real(WP)                        :: dcoeff
 
-    if(.NOT. (i >= 1 .AND. i <= I_LAST)) then
-      write(UNIT=ERROR_UNIT, FMT=*) 'ASSERT ''i >= 1 .AND. i <= I_LAST'' failed at line 391 <gyre_poly_model:dcoeff>:'
-      write(UNIT=ERROR_UNIT, FMT=*) 'Invalid index'
-      stop
-    endif
-
-    if(.NOT. (this%is_defined(i))) then
-      write(UNIT=ERROR_UNIT, FMT=*) 'ASSERT ''this%is_defined(i)'' failed at line 392 <gyre_poly_model:dcoeff>:'
-      write(UNIT=ERROR_UNIT, FMT=*) 'Undefined coefficient'
-      stop
-    endif
-
-    if(.NOT. (pt%s >= this%s_i .AND. pt%s <= this%s_o)) then
-      write(UNIT=ERROR_UNIT, FMT=*) 'ASSERT ''pt%s >= this%s_i .AND. pt%s <= this%s_o'' failed at line 394 <gyre_poly_model:dco' &
- & // 'eff>:'
-      write(UNIT=ERROR_UNIT, FMT=*) 'Invalid segment'
-      stop
-    endif
-
     ! Evaluate the i'th coefficient
 
     select case (i)
@@ -519,12 +441,6 @@ contains
     real(WP) :: Theta
     real(WP) :: dTheta
 
-    if(.NOT. (.NOT. this%is_vacuum(pt))) then
-      write(UNIT=ERROR_UNIT, FMT=*) 'ASSERT ''.NOT. this%is_vacuum(pt)'' failed at line 435 <gyre_poly_model:dcoeff_V_2_>:'
-      write(UNIT=ERROR_UNIT, FMT=*) 'dV_2 evaluation at vacuum point'
-      stop
-    endif
-
     ! Evaluate the logarithmic derivative of the V_2 coefficient
 
     if (pt%x /= 0._WP) then
@@ -556,12 +472,6 @@ contains
     type(point_t), intent(in)       :: pt
     real(WP)                        :: dcoeff
 
-    if(.NOT. (.NOT. this%is_vacuum(pt))) then
-      write(UNIT=ERROR_UNIT, FMT=*) 'ASSERT ''.NOT. this%is_vacuum(pt)'' failed at line 468 <gyre_poly_model:dcoeff_As_>:'
-      write(UNIT=ERROR_UNIT, FMT=*) 'dAs evaluation at vacuum point'
-      stop
-    endif
-
     ! Evaluate the logarithmic derivative of the As coefficient
 
     dcoeff = this%dcoeff_V_2_(pt)*pt%x**2 * &
@@ -584,12 +494,6 @@ contains
     real(WP) :: xi
     real(WP) :: Theta
     real(WP) :: dTheta
-
-    if(.NOT. (.NOT. this%is_vacuum(pt))) then
-      write(UNIT=ERROR_UNIT, FMT=*) 'ASSERT ''.NOT. this%is_vacuum(pt)'' failed at line 493 <gyre_poly_model:dcoeff_U_>:'
-      write(UNIT=ERROR_UNIT, FMT=*) 'dU evaluation at vacuum point'
-      stop
-    endif
 
     ! Evaluate the logarithmic derivative of the U coefficient
 
@@ -662,12 +566,6 @@ contains
     integer, intent(in)             :: i
     logical                         :: is_defined
 
-    if(.NOT. (i >= 1 .AND. i <= I_LAST)) then
-      write(UNIT=ERROR_UNIT, FMT=*) 'ASSERT ''i >= 1 .AND. i <= I_LAST'' failed at line 566 <gyre_poly_model:is_defined>:'
-      write(UNIT=ERROR_UNIT, FMT=*) 'Invalid index'
-      stop
-    endif
-
     ! Return the definition status of the i'th coefficient
 
     select case (i)
@@ -690,13 +588,6 @@ contains
     class(poly_model_t), intent(in) :: this
     type(point_t), intent(in)       :: pt
     logical                         :: is_vacuum
-
-    if(.NOT. (pt%s >= this%s_i .AND. pt%s <= this%s_o)) then
-      write(UNIT=ERROR_UNIT, FMT=*) 'ASSERT ''pt%s >= this%s_i .AND. pt%s <= this%s_o'' failed at line 591 <gyre_poly_model:is_' &
- & // 'vacuum>:'
-      write(UNIT=ERROR_UNIT, FMT=*) 'Invalid segment'
-      stop
-    endif
 
     ! Return whether the point is a vacuum
 

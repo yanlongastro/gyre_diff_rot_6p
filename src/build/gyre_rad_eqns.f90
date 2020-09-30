@@ -4,7 +4,7 @@
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
 !   includes: ../extern/core/core.inc
-!   uses: gyre_context gyre_state gyre_rad_trans gyre_model gyre_model_util gyre_mode_par ISO_FORTRAN_ENV gyre_eqns gyre_osc_par gyre_point core_kinds
+!   uses: gyre_mode_par gyre_osc_par gyre_model gyre_rad_trans core_kinds gyre_eqns gyre_model_util ISO_FORTRAN_ENV gyre_point gyre_context gyre_state
 !   provides: gyre_rad_eqns
 !end dependencies
 !
@@ -235,6 +235,7 @@ contains
     real(WP)                      :: xA(this%n_e,this%n_e)
 
     real(WP) :: omega_c
+    real(WP) :: W
 
     ! Evaluate the log(x)-space RHS matrix
 
@@ -247,23 +248,33 @@ contains
          Gamma_1 => this%coeff(i,J_GAMMA_1), &
          alpha_om => this%alpha_om, &
          Omega_rot => this%coeff(i,J_OMEGA_ROT), &
-         W => this%coeff(i,J_W), &
+         !W => this%coeff(i,J_W), &
          f_Omega => this%coeff(i,J_F_OMEGA), &
          dOmega_dr => this%coeff(i,J_DOMEGA_DX))
          ! syl200817: add new variables
 
       omega_c = omega
 
+      ! syl200930: alnternative W
+      !W = c_1*Omega_rot**2/(1-c_1*Omega_rot**2) *V
+      W = c_1*Omega_rot**2 *V
+      !print *, c_1*Omega_rot**2/(1-c_1*Omega_rot**2) *V/W
+
       ! Set up the matrix
 
-      xA(1,1) = V/Gamma_1 - 1._WP
+      !xA(1,1) = V/Gamma_1 - 1._WP
+      xA(1,1) = V*(1-c_1*Omega_rot**2)/Gamma_1 - 1._WP
       !xA(1,2) = -V/Gamma_1
-      xA(1,2) = -(V+W)/Gamma_1
+      xA(1,2) = -(V)/Gamma_1
+
+      !print *, i, V, W
 
       !xA(2,1) = c_1*alpha_om*omega_c**2 + U - As
-      xA(2,1) = c_1*alpha_om*omega_c**2 - (1-c_1*Omega_rot**2)*As - c_1*Omega_rot**2*(V/Gamma_1 -2._WP - 2._WP*f_Omega) + U
-      !xA(2,2) = As - U + 3._WP
-      xA(2,2) = As - U + 3._WP + c_1*Omega_rot**2*(V+W)/Gamma_1
+      !xA(2,1) = c_1*alpha_om*omega_c**2 - (1-c_1*Omega_rot**2)*As - c_1*Omega_rot**2*(V/Gamma_1 -2._WP - 2._WP*f_Omega) + U
+      !xA(2,1) = -V/Gamma_1 -As + U -1._WP +V -c_1*Omega_rot**2*(-V/Gamma_1-As+2._WP+V) - V/(V+W)*(V-V/Gamma_1-1._WP) +c_1*(omega_c**2+(3._WP+2._WP*f_Omega)*Omega_rot**2)
+      xA(2,1) = c_1*alpha_om*omega_c**2 - (1-c_1*Omega_rot**2)*As + c_1*Omega_rot**2*(2._WP*f_Omega) + U
+      xA(2,2) = As - U + 3._WP
+      !xA(2,2) = As - U + 3._WP + c_1*Omega_rot**2*(V+W)/Gamma_1
 
     end associate
 

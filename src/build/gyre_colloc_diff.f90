@@ -4,7 +4,7 @@
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
 !   includes: 
-!   uses: gyre_c_colloc_diff gyre_r_colloc_diff
+!   uses: gyre_r_colloc_diff gyre_c_colloc_diff
 !   provides: gyre_colloc_diff
 !end dependencies
 !

@@ -136,13 +136,6 @@ contains
     real(WP), optional, intent(in) :: df_dx_b
     real(WP)                       :: df_dx(SIZE(x))
 
-  if(SIZE(f)/= SIZE(x)) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(f) :', SIZE(f)
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(x) :', SIZE(x)
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(f)==SIZE(x) failed at line 20 <gyre_r_calc:deriv_>'
-    stop
-  endif
-
     ! Evaluate the derivative df/dx
 
     select case (deriv_type)
@@ -186,13 +179,6 @@ contains
     real(WP) :: U(SIZE(x)-1)
     real(WP) :: B(SIZE(x),1)
     integer   :: info
-
-  if(SIZE(f)/= SIZE(x)) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(f) :', SIZE(f)
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(x) :', SIZE(x)
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(f)==SIZE(x) failed at line 20 <gyre_r_calc:deriv_spline_>'
-    stop
-  endif
 
     ! Calcualte the first derivatives for a cubic spline interp
     ! (ensuring the second derivatives are continuous)
@@ -266,13 +252,6 @@ contains
     real(WP)  :: h(SIZE(x)-1)
     real(WP) :: s(SIZE(x)-1)
 
-  if(SIZE(f)/= SIZE(x)) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(f) :', SIZE(f)
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(x) :', SIZE(x)
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(f)==SIZE(x) failed at line 20 <gyre_r_calc:deriv_findiff_>'
-    stop
-  endif
-
     ! Calculate the first derivatives via centered finite differences
 
     n = SIZE(x)
@@ -316,13 +295,6 @@ contains
     real(WP) :: s(SIZE(x)-1)
     real(WP) :: p(SIZE(x))
     integer   :: i
-
-  if(SIZE(f)/= SIZE(x)) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(f) :', SIZE(f)
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(x) :', SIZE(x)
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(f)==SIZE(x) failed at line 20 <gyre_r_calc:deriv_mono_>'
-    stop
-  endif
 
     ! Calculate the first derivatives using the Steffen (1990, A&A,
     ! 239, 443) monontonicity preserving algorithm

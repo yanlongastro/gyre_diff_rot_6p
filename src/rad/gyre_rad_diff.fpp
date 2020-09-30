@@ -93,6 +93,8 @@ contains
 
        ! Segment boundary; use match conditions
 
+      ! print *, 2333
+
        allocate(df%df, SOURCE=rad_match_t(cx, pt_i, pt_a, pt_b, md_p, os_p))
 
     endif

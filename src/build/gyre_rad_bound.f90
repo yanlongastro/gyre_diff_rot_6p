@@ -4,7 +4,7 @@
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
 !   includes: ../extern/core/core.inc
-!   uses: gyre_atmos gyre_osc_par gyre_model gyre_state gyre_mode_par ISO_FORTRAN_ENV gyre_model_util gyre_rad_trans core_kinds gyre_context gyre_point gyre_bound
+!   uses: gyre_osc_par ISO_FORTRAN_ENV gyre_rad_trans core_kinds gyre_model gyre_model_util gyre_context gyre_atmos gyre_mode_par gyre_point gyre_state gyre_bound
 !   provides: gyre_rad_bound
 !end dependencies
 !
@@ -284,6 +284,7 @@ contains
       select case (this%type_o)
       case (VACUUM_TYPE)
          this%coeff(2, J_U) = ml%coeff(I_U, pt_o)
+         this%coeff(2,J_V) = ml%coeff(I_V_2, pt_o)*pt_o%x**2
       case (DZIEM_TYPE)
          this%coeff(2,J_V) = ml%coeff(I_V_2, pt_o)*pt_o%x**2
          this%coeff(2,J_C_1) = ml%coeff(I_C_1, pt_o)
@@ -298,7 +299,7 @@ contains
               this%coeff(2,J_AS), this%coeff(2,J_U), this%coeff(2,J_C_1))
       case default
 
-    write(UNIT=ERROR_UNIT, FMT=*) 'ABORT at line 241 <gyre_rad_bound:stencil_>:'
+    write(UNIT=ERROR_UNIT, FMT=*) 'ABORT at line 242 <gyre_rad_bound:stencil_>:'
     write(UNIT=ERROR_UNIT, FMT=*) 'Invalid type_o'
 
   stop 'Program aborted'
@@ -332,27 +333,6 @@ contains
     real(WP), intent(out)          :: B(:,:)
     real(WP), intent(out)          :: scl(:)
 
-  if(SIZE(B, 1)/= this%n_i) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(B, 1) :', SIZE(B, 1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_i :', this%n_i
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(B, 1)==this%n_i failed at line 272 <gyre_rad_bound:build_i>'
-    stop
-  endif
-
-  if(SIZE(B, 2)/= this%n_e) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(B, 2) :', SIZE(B, 2)
-    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_e :', this%n_e
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(B, 2)==this%n_e failed at line 273 <gyre_rad_bound:build_i>'
-    stop
-  endif
-
-  if(SIZE(scl)/= this%n_i) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(scl) :', SIZE(scl)
-    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_i :', this%n_i
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(scl)==this%n_i failed at line 275 <gyre_rad_bound:build_i>'
-    stop
-  endif
-
     ! Evaluate the inner boundary conditions
 
     select case (this%type_i)
@@ -362,7 +342,7 @@ contains
        call this%build_zero_r_i_(st, B, scl)
     case default
 
-    write(UNIT=ERROR_UNIT, FMT=*) 'ABORT at line 285 <gyre_rad_bound:build_i>:'
+    write(UNIT=ERROR_UNIT, FMT=*) 'ABORT at line 286 <gyre_rad_bound:build_i>:'
     write(UNIT=ERROR_UNIT, FMT=*) 'Invalid type_i'
 
   stop 'Program aborted'
@@ -390,27 +370,6 @@ contains
 
     real(WP) :: omega_c
 
-  if(SIZE(B, 1)/= this%n_i) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(B, 1) :', SIZE(B, 1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_i :', this%n_i
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(B, 1)==this%n_i failed at line 309 <gyre_rad_bound:build_regular_i_>'
-    stop
-  endif
-
-  if(SIZE(B, 2)/= this%n_e) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(B, 2) :', SIZE(B, 2)
-    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_e :', this%n_e
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(B, 2)==this%n_e failed at line 310 <gyre_rad_bound:build_regular_i_>'
-    stop
-  endif
-
-  if(SIZE(scl)/= this%n_i) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(scl) :', SIZE(scl)
-    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_i :', this%n_i
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(scl)==this%n_i failed at line 312 <gyre_rad_bound:build_regular_i_>'
-    stop
-  endif
-
     ! Evaluate the inner boundary conditions (regular-enforcing)
 
     associate( &
@@ -428,7 +387,7 @@ contains
       !print *, c_1
 
       !B(1,1) = c_1*alpha_om*omega_c**2
-      B(1,1) = c_1*alpha_om*omega_c**2 - c_1*Omega_rot**2*(-2._WP - 2._WP*f_Omega)
+      B(1,1) = c_1*alpha_om*omega_c**2 + c_1*Omega_rot**2*(2._WP*f_Omega)
       !B(1,2) = 0._WP
       B(1,2) = 0._WP
 
@@ -452,27 +411,6 @@ contains
     class(r_state_t), intent(in)   :: st
     real(WP), intent(out)          :: B(:,:)
     real(WP), intent(out)          :: scl(:)
-
-  if(SIZE(B, 1)/= this%n_i) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(B, 1) :', SIZE(B, 1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_i :', this%n_i
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(B, 1)==this%n_i failed at line 356 <gyre_rad_bound:build_zero_r_i_>'
-    stop
-  endif
-
-  if(SIZE(B, 2)/= this%n_e) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(B, 2) :', SIZE(B, 2)
-    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_e :', this%n_e
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(B, 2)==this%n_e failed at line 357 <gyre_rad_bound:build_zero_r_i_>'
-    stop
-  endif
-
-  if(SIZE(scl)/= this%n_i) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(scl) :', SIZE(scl)
-    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_i :', this%n_i
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(scl)==this%n_i failed at line 359 <gyre_rad_bound:build_zero_r_i_>'
-    stop
-  endif
 
     ! Evaluate the inner boundary conditions (zero radial
     ! displacement)
@@ -499,27 +437,6 @@ contains
     real(WP), intent(out)          :: B(:,:)
     real(WP), intent(out)          :: scl(:)
 
-  if(SIZE(B, 1)/= this%n_o) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(B, 1) :', SIZE(B, 1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_o :', this%n_o
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(B, 1)==this%n_o failed at line 386 <gyre_rad_bound:build_o>'
-    stop
-  endif
-
-  if(SIZE(B, 2)/= this%n_e) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(B, 2) :', SIZE(B, 2)
-    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_e :', this%n_e
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(B, 2)==this%n_e failed at line 387 <gyre_rad_bound:build_o>'
-    stop
-  endif
-
-  if(SIZE(scl)/= this%n_o) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(scl) :', SIZE(scl)
-    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_o :', this%n_o
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(scl)==this%n_o failed at line 389 <gyre_rad_bound:build_o>'
-    stop
-  endif
-
     ! Evaluate the outer boundary conditions
 
     select case (this%type_o)
@@ -535,7 +452,7 @@ contains
        call this%build_luan_o_(st, B, scl)
     case default
 
-    write(UNIT=ERROR_UNIT, FMT=*) 'ABORT at line 405 <gyre_rad_bound:build_o>:'
+    write(UNIT=ERROR_UNIT, FMT=*) 'ABORT at line 406 <gyre_rad_bound:build_o>:'
     write(UNIT=ERROR_UNIT, FMT=*) 'Invalid type_o'
 
   stop 'Program aborted'
@@ -561,39 +478,25 @@ contains
     real(WP), intent(out)          :: B(:,:)
     real(WP), intent(out)          :: scl(:)
 
-  if(SIZE(B, 1)/= this%n_o) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(B, 1) :', SIZE(B, 1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_o :', this%n_o
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(B, 1)==this%n_o failed at line 427 <gyre_rad_bound:build_vacuum_o_>'
-    stop
-  endif
-
-  if(SIZE(B, 2)/= this%n_e) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(B, 2) :', SIZE(B, 2)
-    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_e :', this%n_e
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(B, 2)==this%n_e failed at line 428 <gyre_rad_bound:build_vacuum_o_>'
-    stop
-  endif
-
-  if(SIZE(scl)/= this%n_o) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(scl) :', SIZE(scl)
-    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_o :', this%n_o
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(scl)==this%n_o failed at line 430 <gyre_rad_bound:build_vacuum_o_>'
-    stop
-  endif
-
     ! Evaluate the outer boundary conditions (vacuum)
 
     ! Set up the boundary conditions
 
     !syl200817
     associate(&
-      Omega_rot => this%coeff(1,J_OMEGA_ROT))
+      Omega_rot => this%coeff(2,J_OMEGA_ROT), &
+      V => this%coeff(2,J_V), &
+      W => this%coeff(2,J_W))
 
-    !print *, Omega_rot
-    B(1,1) = 1._WP
-    !B(1,2) = -1._WP
-    B(1,2) = -(1._WP + Omega_rot**2)
+    !print *, Omega_rot**2
+    !B(1,1) = 1._WP
+    B(1,1) = 1._WP - Omega_rot**2
+    !B(1,1) = V
+
+    B(1,2) = -1._WP
+    !B(1,2) = -(1._WP + Omega_rot**2)
+    !Qprint *, W, V, Omega_rot**2
+    !B(1,2) = -(V+W)
     !print *, B(1,2)
 
     scl = 1._WP
@@ -616,27 +519,6 @@ contains
     real(WP), intent(out)          :: scl(:)
 
     real(WP) :: omega_c
-
-  if(SIZE(B, 1)/= this%n_o) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(B, 1) :', SIZE(B, 1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_o :', this%n_o
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(B, 1)==this%n_o failed at line 467 <gyre_rad_bound:build_dziem_o_>'
-    stop
-  endif
-
-  if(SIZE(B, 2)/= this%n_e) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(B, 2) :', SIZE(B, 2)
-    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_e :', this%n_e
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(B, 2)==this%n_e failed at line 468 <gyre_rad_bound:build_dziem_o_>'
-    stop
-  endif
-
-  if(SIZE(scl)/= this%n_o) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(scl) :', SIZE(scl)
-    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_o :', this%n_o
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(scl)==this%n_o failed at line 470 <gyre_rad_bound:build_dziem_o_>'
-    stop
-  endif
 
     ! Evaluate the outer boundary conditions ([Dzi1971] formulation)
 
@@ -676,27 +558,6 @@ contains
     real(WP) :: beta
     real(WP) :: b_11
     real(WP) :: b_12
-
-  if(SIZE(B, 1)/= this%n_o) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(B, 1) :', SIZE(B, 1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_o :', this%n_o
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(B, 1)==this%n_o failed at line 511 <gyre_rad_bound:build_unno_o_>'
-    stop
-  endif
-
-  if(SIZE(B, 2)/= this%n_e) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(B, 2) :', SIZE(B, 2)
-    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_e :', this%n_e
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(B, 2)==this%n_e failed at line 512 <gyre_rad_bound:build_unno_o_>'
-    stop
-  endif
-
-  if(SIZE(scl)/= this%n_o) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(scl) :', SIZE(scl)
-    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_o :', this%n_o
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(scl)==this%n_o failed at line 514 <gyre_rad_bound:build_unno_o_>'
-    stop
-  endif
 
     ! Evaluate the outer boundary conditions ([Unn1989] formulation)
 
@@ -742,27 +603,6 @@ contains
     real(WP) :: beta
     real(WP) :: b_11
     real(WP) :: b_12
-
-  if(SIZE(B, 1)/= this%n_o) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(B, 1) :', SIZE(B, 1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_o :', this%n_o
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(B, 1)==this%n_o failed at line 561 <gyre_rad_bound:build_jcd_o_>'
-    stop
-  endif
-
-  if(SIZE(B, 2)/= this%n_e) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(B, 2) :', SIZE(B, 2)
-    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_e :', this%n_e
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(B, 2)==this%n_e failed at line 562 <gyre_rad_bound:build_jcd_o_>'
-    stop
-  endif
-
-  if(SIZE(scl)/= this%n_o) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(scl) :', SIZE(scl)
-    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_o :', this%n_o
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(scl)==this%n_o failed at line 564 <gyre_rad_bound:build_jcd_o_>'
-    stop
-  endif
 
     ! Evaluate the outer boundary conditions ([Chr2008] formulation)
 
@@ -810,27 +650,6 @@ contains
     real(WP) :: beta
     real(WP) :: b_11
     real(WP) :: b_12
-
-  if(SIZE(B, 1)/= this%n_o) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(B, 1) :', SIZE(B, 1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_o :', this%n_o
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(B, 1)==this%n_o failed at line 613 <gyre_rad_bound:build_luan_o_>'
-    stop
-  endif
-
-  if(SIZE(B, 2)/= this%n_e) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(B, 2) :', SIZE(B, 2)
-    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_e :', this%n_e
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(B, 2)==this%n_e failed at line 614 <gyre_rad_bound:build_luan_o_>'
-    stop
-  endif
-
-  if(SIZE(scl)/= this%n_o) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(scl) :', SIZE(scl)
-    write(UNIT=ERROR_UNIT, FMT=*) 'this%n_o :', this%n_o
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(scl)==this%n_o failed at line 616 <gyre_rad_bound:build_luan_o_>'
-    stop
-  endif
 
     ! Evaluate the outer boundary conditions (Luan formulation)
 

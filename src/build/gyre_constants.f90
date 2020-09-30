@@ -4,7 +4,7 @@
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
 !   includes: ../extern/core/core.inc
-!   uses: core_constants core_system core_kinds
+!   uses: core_system core_constants core_kinds
 !   provides: gyre_constants
 !end dependencies
 !

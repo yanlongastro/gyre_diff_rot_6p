@@ -3,8 +3,8 @@
 !dependencies
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
-!   includes: ../extern/core/core.inc ../extern/core/core_memory.inc
-!   uses: gyre_osc_par gyre_ext gyre_state gyre_grid gyre_mode_par gyre_util core_parallel gyre_context core_kinds gyre_wave ISO_FORTRAN_ENV gyre_grid_util
+!   includes: ../extern/core/core_memory.inc ../extern/core/core.inc
+!   uses: gyre_grid core_kinds gyre_osc_par gyre_grid_util gyre_state ISO_FORTRAN_ENV gyre_context core_parallel gyre_util gyre_ext gyre_mode_par gyre_wave
 !   provides: gyre_mode
 !end dependencies
 !
@@ -302,21 +302,7 @@ contains
       integer  :: k
       real(WP) :: y_2_cross
 
-  if(SIZE(y_2)/= SIZE(y_1)) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(y_2) :', SIZE(y_2)
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(y_1) :', SIZE(y_1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(y_2)==SIZE(y_1) failed at line 252 <gyre_mode:classify_:count_windings_>'
-    stop
-  endif
-
       if(PRESENT(x)) then
-
-  if(SIZE(x)/= SIZE(y_1)) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(x) :', SIZE(x)
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(y_1) :', SIZE(y_1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(x)==SIZE(y_1) failed at line 255 <gyre_mode:classify_:count_windings_>'
-    stop
-  endif
 
       endif
 
@@ -382,19 +368,7 @@ subroutine reallocate_1_ (array, shape_new, start)
   integer                      :: i_b(1)
   integer                      :: i_c(1)
 
-    if(.NOT. (SIZE(shape_new) == 1)) then
-      write(UNIT=ERROR_UNIT, FMT=*) 'ASSERT ''SIZE(shape_new) == 1'' failed at line 309 <gyre_mode:reallocate_1_>:'
-      write(UNIT=ERROR_UNIT, FMT=*) 'Dimension mismatch'
-      stop
-    endif
-
   if(PRESENT(start)) then
-
-    if(.NOT. (SIZE(start) == 1)) then
-      write(UNIT=ERROR_UNIT, FMT=*) 'ASSERT ''SIZE(start) == 1'' failed at line 309 <gyre_mode:reallocate_1_>:'
-      write(UNIT=ERROR_UNIT, FMT=*) 'Dimension mismatch'
-      stop
-    endif
 
   end if
 

@@ -4,7 +4,7 @@
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
 !   includes: ../extern/core/core.inc
-!   uses: gyre_r_ext_func gyre_c_ext_func
+!   uses: gyre_c_ext_func gyre_r_ext_func
 !   provides: gyre_ext_func
 !end dependencies
 !

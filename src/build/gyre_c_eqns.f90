@@ -4,7 +4,7 @@
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
 !   includes: ../diff/gyre_eqns.inc
-!   uses: core_kinds gyre_state gyre_point
+!   uses: gyre_state gyre_point core_kinds
 !   provides: gyre_c_eqns
 !end dependencies
 !

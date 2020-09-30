@@ -4,7 +4,7 @@
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
 !   includes: ../extern/core/core.inc
-!   uses: core_kinds core_linalg ISO_FORTRAN_ENV core_order
+!   uses: core_kinds ISO_FORTRAN_ENV core_linalg core_order
 !   provides: gyre_linalg
 !end dependencies
 !
@@ -158,48 +158,6 @@ contains
     complex(WP) :: norm
     integer     :: ind(SIZE(A, 1))
 
-  if(SIZE(A, 1)/= SIZE(A, 2)) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A, 1) :', SIZE(A, 1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A, 2) :', SIZE(A, 2)
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(A, 1)==SIZE(A, 2) failed at line 131 <gyre_linalg:eigen_decompose_r_>'
-    stop
-  endif
-
-  if(SIZE(lambda)/= SIZE(A, 1)) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(lambda) :', SIZE(lambda)
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A, 1) :', SIZE(A, 1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(lambda)==SIZE(A, 1) failed at line 132 <gyre_linalg:eigen_decompose_r_>'
-    stop
-  endif
-
-  if(SIZE(V_l, 1)/= SIZE(A, 1)) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(V_l, 1) :', SIZE(V_l, 1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A, 1) :', SIZE(A, 1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(V_l, 1)==SIZE(A, 1) failed at line 134 <gyre_linalg:eigen_decompose_r_>'
-    stop
-  endif
-
-  if(SIZE(V_l, 2)/= SIZE(A, 2)) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(V_l, 2) :', SIZE(V_l, 2)
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A, 2) :', SIZE(A, 2)
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(V_l, 2)==SIZE(A, 2) failed at line 135 <gyre_linalg:eigen_decompose_r_>'
-    stop
-  endif
-
-  if(SIZE(V_r, 1)/= SIZE(A, 1)) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(V_r, 1) :', SIZE(V_r, 1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A, 1) :', SIZE(A, 1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(V_r, 1)==SIZE(A, 1) failed at line 137 <gyre_linalg:eigen_decompose_r_>'
-    stop
-  endif
-
-  if(SIZE(V_r, 2)/= SIZE(A, 2)) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(V_r, 2) :', SIZE(V_r, 2)
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A, 2) :', SIZE(A, 2)
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(V_r, 2)==SIZE(A, 2) failed at line 138 <gyre_linalg:eigen_decompose_r_>'
-    stop
-  endif
-
     if(PRESENT(sort)) then
        sort_ = sort
     else
@@ -333,48 +291,6 @@ contains
     complex(WP) :: norm
     integer     :: ind(SIZE(A, 1))
 
-  if(SIZE(A, 1)/= SIZE(A, 2)) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A, 1) :', SIZE(A, 1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A, 2) :', SIZE(A, 2)
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(A, 1)==SIZE(A, 2) failed at line 265 <gyre_linalg:eigen_decompose_c_>'
-    stop
-  endif
-
-  if(SIZE(lambda)/= SIZE(A, 1)) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(lambda) :', SIZE(lambda)
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A, 1) :', SIZE(A, 1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(lambda)==SIZE(A, 1) failed at line 266 <gyre_linalg:eigen_decompose_c_>'
-    stop
-  endif
-
-  if(SIZE(V_l, 1)/= SIZE(A, 1)) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(V_l, 1) :', SIZE(V_l, 1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A, 1) :', SIZE(A, 1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(V_l, 1)==SIZE(A, 1) failed at line 268 <gyre_linalg:eigen_decompose_c_>'
-    stop
-  endif
-
-  if(SIZE(V_l, 2)/= SIZE(A, 2)) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(V_l, 2) :', SIZE(V_l, 2)
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A, 2) :', SIZE(A, 2)
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(V_l, 2)==SIZE(A, 2) failed at line 269 <gyre_linalg:eigen_decompose_c_>'
-    stop
-  endif
-
-  if(SIZE(V_r, 1)/= SIZE(A, 1)) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(V_r, 1) :', SIZE(V_r, 1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A, 1) :', SIZE(A, 1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(V_r, 1)==SIZE(A, 1) failed at line 271 <gyre_linalg:eigen_decompose_c_>'
-    stop
-  endif
-
-  if(SIZE(V_r, 2)/= SIZE(A, 2)) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(V_r, 2) :', SIZE(V_r, 2)
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A, 2) :', SIZE(A, 2)
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(V_r, 2)==SIZE(A, 2) failed at line 272 <gyre_linalg:eigen_decompose_c_>'
-    stop
-  endif
-
     if(PRESENT(sort)) then
        sort_ = sort
     else
@@ -451,60 +367,11 @@ contains
     complex(WP) :: V_r_(2,2)
     integer     :: i
 
-  if(SIZE(A, 1)/= 2) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A, 1) :', SIZE(A, 1)
-    write(UNIT=ERROR_UNIT, FMT=*) '2 :', 2
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(A, 1)==2 failed at line 421 <gyre_linalg:eigen_decompose_2_r_>'
-    stop
-  endif
-
-  if(SIZE(A, 2)/= 2) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A, 2) :', SIZE(A, 2)
-    write(UNIT=ERROR_UNIT, FMT=*) '2 :', 2
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(A, 2)==2 failed at line 421 <gyre_linalg:eigen_decompose_2_r_>'
-    stop
-  endif
-
-  if(SIZE(lambda)/= SIZE(A, 1)) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(lambda) :', SIZE(lambda)
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A, 1) :', SIZE(A, 1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(lambda)==SIZE(A, 1) failed at line 421 <gyre_linalg:eigen_decompose_2_r_>'
-    stop
-  endif
-
     if(PRESENT(V_l)) then
-
-  if(SIZE(V_l, 1)/= SIZE(A, 1)) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(V_l, 1) :', SIZE(V_l, 1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A, 1) :', SIZE(A, 1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(V_l, 1)==SIZE(A, 1) failed at line 421 <gyre_linalg:eigen_decompose_2_r_>'
-    stop
-  endif
-
-  if(SIZE(V_l, 2)/= SIZE(A, 2)) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(V_l, 2) :', SIZE(V_l, 2)
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A, 2) :', SIZE(A, 2)
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(V_l, 2)==SIZE(A, 2) failed at line 421 <gyre_linalg:eigen_decompose_2_r_>'
-    stop
-  endif
 
     endif
 
     if(PRESENT(V_r)) then
-
-  if(SIZE(V_r, 1)/= SIZE(A, 1)) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(V_r, 1) :', SIZE(V_r, 1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A, 1) :', SIZE(A, 1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(V_r, 1)==SIZE(A, 1) failed at line 421 <gyre_linalg:eigen_decompose_2_r_>'
-    stop
-  endif
-
-  if(SIZE(V_r, 2)/= SIZE(A, 2)) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(V_r, 2) :', SIZE(V_r, 2)
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A, 2) :', SIZE(A, 2)
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(V_r, 2)==SIZE(A, 2) failed at line 421 <gyre_linalg:eigen_decompose_2_r_>'
-    stop
-  endif
 
     endif
 
@@ -572,60 +439,11 @@ contains
     complex(WP) :: V_r_(2,2)
     integer     :: i
 
-  if(SIZE(A, 1)/= 2) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A, 1) :', SIZE(A, 1)
-    write(UNIT=ERROR_UNIT, FMT=*) '2 :', 2
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(A, 1)==2 failed at line 422 <gyre_linalg:eigen_decompose_2_c_>'
-    stop
-  endif
-
-  if(SIZE(A, 2)/= 2) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A, 2) :', SIZE(A, 2)
-    write(UNIT=ERROR_UNIT, FMT=*) '2 :', 2
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(A, 2)==2 failed at line 422 <gyre_linalg:eigen_decompose_2_c_>'
-    stop
-  endif
-
-  if(SIZE(lambda)/= SIZE(A, 1)) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(lambda) :', SIZE(lambda)
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A, 1) :', SIZE(A, 1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(lambda)==SIZE(A, 1) failed at line 422 <gyre_linalg:eigen_decompose_2_c_>'
-    stop
-  endif
-
     if(PRESENT(V_l)) then
-
-  if(SIZE(V_l, 1)/= SIZE(A, 1)) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(V_l, 1) :', SIZE(V_l, 1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A, 1) :', SIZE(A, 1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(V_l, 1)==SIZE(A, 1) failed at line 422 <gyre_linalg:eigen_decompose_2_c_>'
-    stop
-  endif
-
-  if(SIZE(V_l, 2)/= SIZE(A, 2)) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(V_l, 2) :', SIZE(V_l, 2)
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A, 2) :', SIZE(A, 2)
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(V_l, 2)==SIZE(A, 2) failed at line 422 <gyre_linalg:eigen_decompose_2_c_>'
-    stop
-  endif
 
     endif
 
     if(PRESENT(V_r)) then
-
-  if(SIZE(V_r, 1)/= SIZE(A, 1)) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(V_r, 1) :', SIZE(V_r, 1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A, 1) :', SIZE(A, 1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(V_r, 1)==SIZE(A, 1) failed at line 422 <gyre_linalg:eigen_decompose_2_c_>'
-    stop
-  endif
-
-  if(SIZE(V_r, 2)/= SIZE(A, 2)) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(V_r, 2) :', SIZE(V_r, 2)
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A, 2) :', SIZE(A, 2)
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(V_r, 2)==SIZE(A, 2) failed at line 422 <gyre_linalg:eigen_decompose_2_c_>'
-    stop
-  endif
 
     endif
 
@@ -691,42 +509,6 @@ contains
     real(WP) :: work(5*SIZE(A, 1))
     integer  :: info
 
-  if(SIZE(sigma)/= MIN(SIZE(A, 1), SIZE(A,2))) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(sigma) :', SIZE(sigma)
-    write(UNIT=ERROR_UNIT, FMT=*) 'MIN(SIZE(A, 1), SIZE(A,2)) :', MIN(SIZE(A, 1), SIZE(A,2))
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(sigma)==MIN(SIZE(A, 1), SIZE(A,2)) failed at line 437 <gyre_linalg:sing_de' &
- & // 'compose_r_>'
-    stop
-  endif
-
-  if(SIZE(U, 1)/= SIZE(A, 1)) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(U, 1) :', SIZE(U, 1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A, 1) :', SIZE(A, 1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(U, 1)==SIZE(A, 1) failed at line 439 <gyre_linalg:sing_decompose_r_>'
-    stop
-  endif
-
-  if(SIZE(U, 2)/= SIZE(A, 1)) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(U, 2) :', SIZE(U, 2)
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A, 1) :', SIZE(A, 1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(U, 2)==SIZE(A, 1) failed at line 440 <gyre_linalg:sing_decompose_r_>'
-    stop
-  endif
-
-  if(SIZE(V_H, 1)/= SIZE(A, 2)) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(V_H, 1) :', SIZE(V_H, 1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A, 2) :', SIZE(A, 2)
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(V_H, 1)==SIZE(A, 2) failed at line 442 <gyre_linalg:sing_decompose_r_>'
-    stop
-  endif
-
-  if(SIZE(V_H, 2)/= SIZE(A, 2)) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(V_H, 2) :', SIZE(V_H, 2)
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A, 2) :', SIZE(A, 2)
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(V_H, 2)==SIZE(A, 2) failed at line 443 <gyre_linalg:sing_decompose_r_>'
-    stop
-  endif
-
     ! Perform the singular-value decomposition of A
 
     n = SIZE(A, 1)
@@ -759,42 +541,6 @@ contains
     real(WP)    :: rwork(5*SIZE(A, 1))
     integer     :: info
 
-  if(SIZE(sigma)/= MIN(SIZE(A, 1), SIZE(A, 2))) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(sigma) :', SIZE(sigma)
-    write(UNIT=ERROR_UNIT, FMT=*) 'MIN(SIZE(A, 1), SIZE(A, 2)) :', MIN(SIZE(A, 1), SIZE(A, 2))
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(sigma)==MIN(SIZE(A, 1), SIZE(A, 2)) failed at line 472 <gyre_linalg:sing_d' &
- & // 'ecompose_c_>'
-    stop
-  endif
-
-  if(SIZE(U, 1)/= SIZE(A, 1)) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(U, 1) :', SIZE(U, 1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A, 1) :', SIZE(A, 1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(U, 1)==SIZE(A, 1) failed at line 474 <gyre_linalg:sing_decompose_c_>'
-    stop
-  endif
-
-  if(SIZE(U, 2)/= SIZE(A, 1)) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(U, 2) :', SIZE(U, 2)
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A, 1) :', SIZE(A, 1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(U, 2)==SIZE(A, 1) failed at line 475 <gyre_linalg:sing_decompose_c_>'
-    stop
-  endif
-
-  if(SIZE(V_H, 1)/= SIZE(A, 2)) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(V_H, 1) :', SIZE(V_H, 1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A, 2) :', SIZE(A, 2)
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(V_H, 1)==SIZE(A, 2) failed at line 477 <gyre_linalg:sing_decompose_c_>'
-    stop
-  endif
-
-  if(SIZE(V_H, 2)/= SIZE(A, 2)) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(V_H, 2) :', SIZE(V_H, 2)
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A, 2) :', SIZE(A, 2)
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(V_H, 2)==SIZE(A, 2) failed at line 478 <gyre_linalg:sing_decompose_c_>'
-    stop
-  endif
-
     ! Perform the singular-value decomposition of A
 
     n = SIZE(A, 1)
@@ -823,20 +569,6 @@ contains
 
     real(WP) :: Mx(SIZE(x), 1)
     real(WP) :: Mb(SIZE(b), 1)
-
-  if(SIZE(A, 1)/= SIZE(A, 2)) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A, 1) :', SIZE(A, 1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A, 2) :', SIZE(A, 2)
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(A, 1)==SIZE(A, 2) failed at line 572 <gyre_linalg:linear_solve_vec_r_>'
-    stop
-  endif
-
-  if(SIZE(b)/= SIZE(A, 1)) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(b) :', SIZE(b)
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A, 1) :', SIZE(A, 1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(b)==SIZE(A, 1) failed at line 572 <gyre_linalg:linear_solve_vec_r_>'
-    stop
-  endif
 
     ! Solve the linear system A x = b
 
@@ -874,20 +606,6 @@ contains
 
     character(1) :: equed
 
-  if(SIZE(A, 1)/= SIZE(A, 2)) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A, 1) :', SIZE(A, 1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A, 2) :', SIZE(A, 2)
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(A, 1)==SIZE(A, 2) failed at line 572 <gyre_linalg:linear_solve_mat_r_>'
-    stop
-  endif
-
-  if(SIZE(B, 1)/= SIZE(A, 1)) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(B, 1) :', SIZE(B, 1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A, 1) :', SIZE(A, 1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(B, 1)==SIZE(A, 1) failed at line 572 <gyre_linalg:linear_solve_mat_r_>'
-    stop
-  endif
-
     ! Solve the linear system A X = B
 
     A_ = A
@@ -917,20 +635,6 @@ contains
 
     complex(WP) :: Mx(SIZE(x), 1)
     complex(WP) :: Mb(SIZE(b), 1)
-
-  if(SIZE(A, 1)/= SIZE(A, 2)) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A, 1) :', SIZE(A, 1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A, 2) :', SIZE(A, 2)
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(A, 1)==SIZE(A, 2) failed at line 573 <gyre_linalg:linear_solve_vec_c_>'
-    stop
-  endif
-
-  if(SIZE(b)/= SIZE(A, 1)) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(b) :', SIZE(b)
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A, 1) :', SIZE(A, 1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(b)==SIZE(A, 1) failed at line 573 <gyre_linalg:linear_solve_vec_c_>'
-    stop
-  endif
 
     ! Solve the linear system A x = b
 
@@ -968,20 +672,6 @@ contains
 
     character(1) :: equed
 
-  if(SIZE(A, 1)/= SIZE(A, 2)) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A, 1) :', SIZE(A, 1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A, 2) :', SIZE(A, 2)
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(A, 1)==SIZE(A, 2) failed at line 573 <gyre_linalg:linear_solve_mat_c_>'
-    stop
-  endif
-
-  if(SIZE(B, 1)/= SIZE(A, 1)) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(B, 1) :', SIZE(B, 1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A, 1) :', SIZE(A, 1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(B, 1)==SIZE(A, 1) failed at line 573 <gyre_linalg:linear_solve_mat_c_>'
-    stop
-  endif
-
     ! Solve the linear system A X = B
 
     A_ = A
@@ -1011,27 +701,6 @@ contains
     real(WP), intent(in) :: B(:,:)
     real(WP)             :: C(SIZE(A, 1),SIZE(A, 2))
 
-  if(SIZE(A, 1)/= SIZE(A, 2)) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A, 1) :', SIZE(A, 1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A, 2) :', SIZE(A, 2)
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(A, 1)==SIZE(A, 2) failed at line 605 <gyre_linalg:commutator_r_>'
-    stop
-  endif
-
-  if(SIZE(B, 1)/= SIZE(B, 2)) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(B, 1) :', SIZE(B, 1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(B, 2) :', SIZE(B, 2)
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(B, 1)==SIZE(B, 2) failed at line 605 <gyre_linalg:commutator_r_>'
-    stop
-  endif
-
-  if(SIZE(B, 1)/= SIZE(A, 1)) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(B, 1) :', SIZE(B, 1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A, 1) :', SIZE(A, 1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(B, 1)==SIZE(A, 1) failed at line 605 <gyre_linalg:commutator_r_>'
-    stop
-  endif
-
     ! Calculate the commutator [A,B]
 
     C = MATMUL(A, B) - MATMUL(B, A)
@@ -1047,27 +716,6 @@ contains
     complex(WP), intent(in) :: A(:,:)
     complex(WP), intent(in) :: B(:,:)
     complex(WP)             :: C(SIZE(A, 1),SIZE(A, 2))
-
-  if(SIZE(A, 1)/= SIZE(A, 2)) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A, 1) :', SIZE(A, 1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A, 2) :', SIZE(A, 2)
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(A, 1)==SIZE(A, 2) failed at line 606 <gyre_linalg:commutator_c_>'
-    stop
-  endif
-
-  if(SIZE(B, 1)/= SIZE(B, 2)) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(B, 1) :', SIZE(B, 1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(B, 2) :', SIZE(B, 2)
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(B, 1)==SIZE(B, 2) failed at line 606 <gyre_linalg:commutator_c_>'
-    stop
-  endif
-
-  if(SIZE(B, 1)/= SIZE(A, 1)) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(B, 1) :', SIZE(B, 1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A, 1) :', SIZE(A, 1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(B, 1)==SIZE(A, 1) failed at line 606 <gyre_linalg:commutator_c_>'
-    stop
-  endif
 
     ! Calculate the commutator [A,B]
 
@@ -1093,13 +741,6 @@ contains
     integer :: i_min
     integer :: i_max
     integer :: k
-
-  if(SIZE(A, 1)/= SIZE(A, 2)) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A, 1) :', SIZE(A, 1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A, 2) :', SIZE(A, 2)
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(A, 1)==SIZE(A, 2) failed at line 673 <gyre_linalg:measure_bandwidth_full_r_>'
-    stop
-  endif
 
     ! Measure the lower bandwidth
 
@@ -1153,13 +794,6 @@ contains
     integer :: i_min
     integer :: i_max
     integer :: k
-
-  if(SIZE(A, 1)/= SIZE(A, 2)) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A, 1) :', SIZE(A, 1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A, 2) :', SIZE(A, 2)
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(A, 1)==SIZE(A, 2) failed at line 674 <gyre_linalg:measure_bandwidth_full_c_>'
-    stop
-  endif
 
     ! Measure the lower bandwidth
 
@@ -1351,13 +985,6 @@ contains
     complex(WP) :: V_l(SIZE(A, 1),SIZE(A, 2))
     complex(WP) :: V_r(SIZE(A, 1),SIZE(A, 2))
 
-  if(SIZE(A, 1)/= SIZE(A, 2)) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A, 1) :', SIZE(A, 1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A, 2) :', SIZE(A, 2)
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(A, 1)==SIZE(A, 2) failed at line 833 <gyre_linalg:matrix_exp_r_>'
-    stop
-  endif
-
     ! Calculate the matrix exponential exp(A*t)
 
     A_ = A
@@ -1385,13 +1012,6 @@ contains
     complex(WP) :: V_l(SIZE(A, 1),SIZE(A, 2))
     complex(WP) :: V_r(SIZE(A, 1),SIZE(A, 2))
 
-  if(SIZE(A, 1)/= SIZE(A, 2)) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A, 1) :', SIZE(A, 1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A, 2) :', SIZE(A, 2)
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(A, 1)==SIZE(A, 2) failed at line 834 <gyre_linalg:matrix_exp_c_>'
-    stop
-  endif
-
     ! Calculate the matrix exponential exp(A*t)
 
     A_ = A
@@ -1417,34 +1037,6 @@ contains
     complex(WP)             :: exp_At(SIZE(lambda),SIZE(lambda))
 
     integer :: i
-
-  if(SIZE(V_l, 2)/= SIZE(V_l, 1)) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(V_l, 2) :', SIZE(V_l, 2)
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(V_l, 1) :', SIZE(V_l, 1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(V_l, 2)==SIZE(V_l, 1) failed at line 848 <gyre_linalg:matrix_exp_eigen_>'
-    stop
-  endif
-
-  if(SIZE(V_r, 2)/= SIZE(V_r, 1)) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(V_r, 2) :', SIZE(V_r, 2)
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(V_r, 1) :', SIZE(V_r, 1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(V_r, 2)==SIZE(V_r, 1) failed at line 849 <gyre_linalg:matrix_exp_eigen_>'
-    stop
-  endif
-
-  if(SIZE(V_l, 1)/= SIZE(lambda)) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(V_l, 1) :', SIZE(V_l, 1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(lambda) :', SIZE(lambda)
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(V_l, 1)==SIZE(lambda) failed at line 851 <gyre_linalg:matrix_exp_eigen_>'
-    stop
-  endif
-
-  if(SIZE(V_r, 1)/= SIZE(lambda)) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(V_r, 1) :', SIZE(V_r, 1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(lambda) :', SIZE(lambda)
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(V_r, 1)==SIZE(lambda) failed at line 852 <gyre_linalg:matrix_exp_eigen_>'
-    stop
-  endif
 
     ! Calculate the matrix exponential exp(At) from the
     ! eigendecomposition of A
@@ -1522,34 +1114,6 @@ contains
     logical, intent(in)    :: mask_c(:)
     real(WP), intent(out) :: A_part(:,:)
 
-  if(SIZE(mask_r)/= SIZE(A, 1)) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(mask_r) :', SIZE(mask_r)
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A, 1) :', SIZE(A, 1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(mask_r)==SIZE(A, 1) failed at line 947 <gyre_linalg:partition_r_>'
-    stop
-  endif
-
-  if(SIZE(mask_c)/= SIZE(A, 2)) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(mask_c) :', SIZE(mask_c)
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A, 2) :', SIZE(A, 2)
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(mask_c)==SIZE(A, 2) failed at line 947 <gyre_linalg:partition_r_>'
-    stop
-  endif
-
-  if(COUNT(mask_r)/= SIZE(A_part, 1)) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'COUNT(mask_r) :', COUNT(mask_r)
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A_part, 1) :', SIZE(A_part, 1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS COUNT(mask_r)==SIZE(A_part, 1) failed at line 947 <gyre_linalg:partition_r_>'
-    stop
-  endif
-
-  if(COUNT(mask_c)/= SIZE(A_part, 2)) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'COUNT(mask_c) :', COUNT(mask_c)
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A_part, 2) :', SIZE(A_part, 2)
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS COUNT(mask_c)==SIZE(A_part, 2) failed at line 947 <gyre_linalg:partition_r_>'
-    stop
-  endif
-
     ! Partition A according to the row and column masks
 
     A_part = RESHAPE(PACK(A, outer_product(mask_r, mask_c)), SHAPE(A_part))
@@ -1566,34 +1130,6 @@ contains
     logical, intent(in)    :: mask_r(:)
     logical, intent(in)    :: mask_c(:)
     complex(WP), intent(out) :: A_part(:,:)
-
-  if(SIZE(mask_r)/= SIZE(A, 1)) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(mask_r) :', SIZE(mask_r)
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A, 1) :', SIZE(A, 1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(mask_r)==SIZE(A, 1) failed at line 948 <gyre_linalg:partition_c_>'
-    stop
-  endif
-
-  if(SIZE(mask_c)/= SIZE(A, 2)) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(mask_c) :', SIZE(mask_c)
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A, 2) :', SIZE(A, 2)
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(mask_c)==SIZE(A, 2) failed at line 948 <gyre_linalg:partition_c_>'
-    stop
-  endif
-
-  if(COUNT(mask_r)/= SIZE(A_part, 1)) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'COUNT(mask_r) :', COUNT(mask_r)
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A_part, 1) :', SIZE(A_part, 1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS COUNT(mask_r)==SIZE(A_part, 1) failed at line 948 <gyre_linalg:partition_c_>'
-    stop
-  endif
-
-  if(COUNT(mask_c)/= SIZE(A_part, 2)) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'COUNT(mask_c) :', COUNT(mask_c)
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(A_part, 2) :', SIZE(A_part, 2)
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS COUNT(mask_c)==SIZE(A_part, 2) failed at line 948 <gyre_linalg:partition_c_>'
-    stop
-  endif
 
     ! Partition A according to the row and column masks
 

@@ -4,7 +4,7 @@
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
 !   includes: ../extern/core/core.inc
-!   uses: gyre_ext gyre_state gyre_ad_bound gyre_ad_eqns gyre_ad_diff gyre_ad_trans gyre_interp gyre_num_par core_kinds gyre_bvp ISO_FORTRAN_ENV gyre_wave gyre_grid_factory gyre_context gyre_model gyre_mode_par gyre_point gyre_grid gyre_osc_par gyre_qad_eval
+!   uses: gyre_ad_trans gyre_context gyre_bvp gyre_wave gyre_ad_eqns core_kinds ISO_FORTRAN_ENV gyre_state gyre_model gyre_osc_par gyre_mode_par gyre_ad_diff gyre_grid gyre_ext gyre_num_par gyre_point gyre_qad_eval gyre_interp gyre_ad_bound gyre_grid_factory
 !   provides: gyre_ad_bvp
 !end dependencies
 !
@@ -216,20 +216,6 @@ contains
     real(WP) :: y(4,bp%n_k)
     integer  :: k
 
-  if(SIZE(w_i)/= bp%n_i) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(w_i) :', SIZE(w_i)
-    write(UNIT=ERROR_UNIT, FMT=*) 'bp%n_i :', bp%n_i
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(w_i)==bp%n_i failed at line 189 <gyre_ad_bvp:wave_t_inhom_>'
-    stop
-  endif
-
-  if(SIZE(w_o)/= bp%n_o) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(w_o) :', SIZE(w_o)
-    write(UNIT=ERROR_UNIT, FMT=*) 'bp%n_o :', bp%n_o
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(w_o)==bp%n_o failed at line 190 <gyre_ad_bvp:wave_t_inhom_>'
-    stop
-  endif
-
     ! Calculate the inhomogeneous solution vector
 
     call bp%build(st)
@@ -266,20 +252,6 @@ contains
     type(c_state_t) :: st_c
     complex(WP)     :: y_c(6,bp%n_k)
     type(c_ext_t)   :: discrim
-
-  if(SIZE(y, 1)/= bp%n_e) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(y, 1) :', SIZE(y, 1)
-    write(UNIT=ERROR_UNIT, FMT=*) 'bp%n_e :', bp%n_e
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(y, 1)==bp%n_e failed at line 229 <gyre_ad_bvp:wave_t_y_>'
-    stop
-  endif
-
-  if(SIZE(y, 2)/= bp%n_k) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(y, 2) :', SIZE(y, 2)
-    write(UNIT=ERROR_UNIT, FMT=*) 'bp%n_k :', bp%n_k
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(y, 2)==bp%n_k failed at line 230 <gyre_ad_bvp:wave_t_y_>'
-    stop
-  endif
 
     ! Set up complex eigenfunctions
 

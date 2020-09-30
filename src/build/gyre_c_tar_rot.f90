@@ -4,7 +4,7 @@
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
 !   includes: ../extern/core/core.inc ../rot/gyre_tar_rot.inc
-!   uses: gyre_constants gyre_tar_fit gyre_mode_par gyre_rot core_kinds core_hgroup gyre_freq ISO_FORTRAN_ENV
+!   uses: gyre_tar_fit gyre_freq ISO_FORTRAN_ENV gyre_constants core_hgroup gyre_rot core_kinds gyre_mode_par
 !   provides: gyre_c_tar_rot
 !end dependencies
 !

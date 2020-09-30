@@ -4,7 +4,7 @@
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
 !   includes: ../extern/core/core.inc
-!   uses: ISO_FORTRAN_ENV omp_lib core_kinds core_order
+!   uses: core_kinds core_order omp_lib ISO_FORTRAN_ENV
 !   provides: core_parallel
 !end dependencies
 !

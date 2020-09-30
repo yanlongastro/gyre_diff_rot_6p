@@ -4,7 +4,7 @@
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
 !   includes: ../extern/core/core.inc
-!   uses: gyre_grid gyre_context gyre_point gyre_freq ISO_FORTRAN_ENV gyre_model gyre_rot_factory core_func gyre_rot gyre_state core_kinds
+!   uses: gyre_state gyre_grid gyre_context gyre_rot_factory gyre_model core_kinds ISO_FORTRAN_ENV gyre_rot gyre_point gyre_freq core_func
 !   provides: gyre_grid_util
 !end dependencies
 !
@@ -103,18 +103,6 @@ contains
     type(gamma_func_t) :: gf
     type(point_t)      :: pt_a
     type(point_t)      :: pt_b
-
-    if(.NOT. (cx%pt_i == gr%pt_i())) then
-      write(UNIT=ERROR_UNIT, FMT=*) 'ASSERT ''cx%pt_i == gr%pt_i()'' failed at line 77 <gyre_grid_util:find_turn>:'
-      write(UNIT=ERROR_UNIT, FMT=*) 'Context and grid are not conformable'
-      stop
-    endif
-
-    if(.NOT. (cx%pt_o == gr%pt_o())) then
-      write(UNIT=ERROR_UNIT, FMT=*) 'ASSERT ''cx%pt_o == gr%pt_o()'' failed at line 78 <gyre_grid_util:find_turn>:'
-      write(UNIT=ERROR_UNIT, FMT=*) 'Context and grid are not conformable'
-      stop
-    endif
 
     ! Find the cell index and abscissa (in grid gr) of the inner
     ! turning point, where the local solution for state st first

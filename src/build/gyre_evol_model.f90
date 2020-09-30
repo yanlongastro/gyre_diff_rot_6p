@@ -4,7 +4,7 @@
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
 !   includes: ../extern/core/core.inc
-!   uses: gyre_constants gyre_util ISO_FORTRAN_ENV core_kinds gyre_interp gyre_model gyre_point gyre_grid gyre_model_par
+!   uses: gyre_constants gyre_model gyre_model_par core_kinds ISO_FORTRAN_ENV gyre_util gyre_interp gyre_point gyre_grid
 !   provides: gyre_evol_model
 !end dependencies
 !
@@ -195,12 +195,6 @@ contains
     real(WP)              :: coeff_0
     integer               :: s
 
-    if(.NOT. (i >= 1 .AND. i <= I_LAST)) then
-      write(UNIT=ERROR_UNIT, FMT=*) 'ASSERT ''i >= 1 .AND. i <= I_LAST'' failed at line 168 <gyre_evol_model:define>:'
-      write(UNIT=ERROR_UNIT, FMT=*) 'Invalid index'
-      stop
-    endif
-
     ! Define the i'th coefficient
 
     ! If necessary, add a central point
@@ -234,13 +228,6 @@ contains
        coeff_ = coeff
 
     endif
-
-  if(SIZE(coeff_)/= this%gr%n_k) then
-    write(UNIT=ERROR_UNIT, FMT=*) 'SIZE(coeff_) :', SIZE(coeff_)
-    write(UNIT=ERROR_UNIT, FMT=*) 'this%gr%n_k :', this%gr%n_k
-    write(UNIT=ERROR_UNIT, FMT=*) 'CHECK_BOUNDS SIZE(coeff_)==this%gr%n_k failed at line 204 <gyre_evol_model:define>'
-    stop
-  endif
 
     ! If necessary, repair data at segment boundaries
 
@@ -322,25 +309,6 @@ contains
     type(point_t), intent(in)       :: pt
     real(WP)                        :: coeff
 
-    if(.NOT. (i >= 1 .AND. i <= I_LAST)) then
-      write(UNIT=ERROR_UNIT, FMT=*) 'ASSERT ''i >= 1 .AND. i <= I_LAST'' failed at line 286 <gyre_evol_model:coeff>:'
-      write(UNIT=ERROR_UNIT, FMT=*) 'Invalid index'
-      stop
-    endif
-
-    if(.NOT. (this%is_defined(i))) then
-      write(UNIT=ERROR_UNIT, FMT=*) 'ASSERT ''this%is_defined(i)'' failed at line 287 <gyre_evol_model:coeff>:'
-      write(UNIT=ERROR_UNIT, FMT=*) 'Undefined coefficient'
-      stop
-    endif
-
-    if(.NOT. (pt%s >= this%s_i .AND. pt%s <= this%s_o)) then
-      write(UNIT=ERROR_UNIT, FMT=*) 'ASSERT ''pt%s >= this%s_i .AND. pt%s <= this%s_o'' failed at line 289 <gyre_evol_model:coe' &
- & // 'ff>:'
-      write(UNIT=ERROR_UNIT, FMT=*) 'Invalid segment'
-      stop
-    endif
-
     ! Evaluate the i'th coefficient
 
     associate (s => pt%s, x => pt%x)
@@ -361,25 +329,6 @@ contains
     integer, intent(in)             :: i
     type(point_t), intent(in)       :: pt
     real(WP)                        :: dcoeff
-
-    if(.NOT. (i >= 1 .AND. i <= I_LAST)) then
-      write(UNIT=ERROR_UNIT, FMT=*) 'ASSERT ''i >= 1 .AND. i <= I_LAST'' failed at line 312 <gyre_evol_model:dcoeff>:'
-      write(UNIT=ERROR_UNIT, FMT=*) 'Invalid index'
-      stop
-    endif
-
-    if(.NOT. (this%is_defined(i))) then
-      write(UNIT=ERROR_UNIT, FMT=*) 'ASSERT ''this%is_defined(i)'' failed at line 313 <gyre_evol_model:dcoeff>:'
-      write(UNIT=ERROR_UNIT, FMT=*) 'Undefined coefficient'
-      stop
-    endif
-
-    if(.NOT. (pt%s >= this%s_i .AND. pt%s <= this%s_o)) then
-      write(UNIT=ERROR_UNIT, FMT=*) 'ASSERT ''pt%s >= this%s_i .AND. pt%s <= this%s_o'' failed at line 315 <gyre_evol_model:dco' &
- & // 'eff>:'
-      write(UNIT=ERROR_UNIT, FMT=*) 'Invalid segment'
-      stop
-    endif
 
     ! Evaluate the logarithmic derivative of the i'th coefficient
 
@@ -478,12 +427,6 @@ contains
     integer, intent(in)             :: i
     logical                         :: is_defined
 
-    if(.NOT. (i >= 1 .AND. i <= I_LAST)) then
-      write(UNIT=ERROR_UNIT, FMT=*) 'ASSERT ''i >= 1 .AND. i <= I_LAST'' failed at line 414 <gyre_evol_model:is_defined>:'
-      write(UNIT=ERROR_UNIT, FMT=*) 'Invalid index'
-      stop
-    endif
-
     ! Return the definition status of the i'th coefficient
 
     is_defined = this%in_def(i)
@@ -501,13 +444,6 @@ contains
     class(evol_model_t), intent(in) :: this
     type(point_t), intent(in)       :: pt
     logical                         :: is_vacuum
-
-    if(.NOT. (pt%s >= this%s_i .AND. pt%s <= this%s_o)) then
-      write(UNIT=ERROR_UNIT, FMT=*) 'ASSERT ''pt%s >= this%s_i .AND. pt%s <= this%s_o'' failed at line 434 <gyre_evol_model:is_' &
- & // 'vacuum>:'
-      write(UNIT=ERROR_UNIT, FMT=*) 'Invalid segment'
-      stop
-    endif
 
     ! Return whether the point is a vacuum
 

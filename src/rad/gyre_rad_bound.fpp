@@ -225,6 +225,7 @@ contains
       select case (this%type_o)
       case (VACUUM_TYPE)
          this%coeff(2, J_U) = ml%coeff(I_U, pt_o)
+         this%coeff(2,J_V) = ml%coeff(I_V_2, pt_o)*pt_o%x**2
       case (DZIEM_TYPE)
          this%coeff(2,J_V) = ml%coeff(I_V_2, pt_o)*pt_o%x**2
          this%coeff(2,J_C_1) = ml%coeff(I_C_1, pt_o)
@@ -328,7 +329,7 @@ contains
       !print *, c_1
 
       !B(1,1) = c_1*alpha_om*omega_c**2
-      B(1,1) = c_1*alpha_om*omega_c**2 - c_1*Omega_rot**2*(-2._WP - 2._WP*f_Omega)
+      B(1,1) = c_1*alpha_om*omega_c**2 + c_1*Omega_rot**2*(2._WP*f_Omega)
       !B(1,2) = 0._WP
       B(1,2) = 0._WP
 
@@ -435,12 +436,19 @@ contains
 
     !syl200817
     associate(&
-      Omega_rot => this%coeff(1,J_OMEGA_ROT))
+      Omega_rot => this%coeff(2,J_OMEGA_ROT), &
+      V => this%coeff(2,J_V), &
+      W => this%coeff(2,J_W))
 
-    !print *, Omega_rot
-    B(1,1) = 1._WP
-    !B(1,2) = -1._WP
-    B(1,2) = -(1._WP + Omega_rot**2)
+    !print *, Omega_rot**2
+    !B(1,1) = 1._WP
+    B(1,1) = 1._WP - Omega_rot**2
+    !B(1,1) = V
+
+    B(1,2) = -1._WP
+    !B(1,2) = -(1._WP + Omega_rot**2)
+    !Qprint *, W, V, Omega_rot**2
+    !B(1,2) = -(V+W)
     !print *, B(1,2)
       
     scl = 1._WP
