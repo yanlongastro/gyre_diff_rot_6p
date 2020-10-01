@@ -211,6 +211,7 @@ contains
     real(WP) :: omega_c
     real(WP) :: lambda
     real(WP) :: l_i
+    real(WP) :: W
 
     ! syl200808: New variables for centrifugal forces
     !real(WP) :: W
@@ -228,7 +229,7 @@ contains
          Omega_rot_i => this%coeff(i,J_OMEGA_ROT_I), &
          alpha_gr => this%alpha_gr, &
          alpha_om => this%alpha_om, &
-         W => this%coeff(i,J_W), &
+         !W => this%coeff(i,J_W), &
          f_Omega => this%coeff(i,J_F_OMEGA), &
          dOmega_dr => this%coeff(i,J_DOMEGA_DX))
          !added new variables above
@@ -238,21 +239,23 @@ contains
       lambda = this%cx%lambda(Omega_rot, st)
       l_i = this%cx%l_e(Omega_rot_i, st)
 
+      W = c_1*Omega_rot**2 *V
+
       !syl200811: debug
       !print *, i, SQRT(W/V)
 
       ! Set up the matrix
 
-      xA(1,1) = V/Gamma_1 - 1._WP - l_i
+      xA(1,1) = V*(1-c_1*Omega_rot**2)/Gamma_1 - 1._WP - l_i
       !xA(1,2) = lambda/(c_1*alpha_om*omega_c**2) - V/Gamma_1
-      xA(1,2) = lambda/(c_1*alpha_om*omega_c**2) - (V+W)/Gamma_1
+      xA(1,2) = lambda/(c_1*alpha_om*omega_c**2) - (V)/Gamma_1
       xA(1,3) = alpha_gr*(lambda/(c_1*alpha_om*omega_c**2))
       xA(1,4) = alpha_gr*(0._WP)
 
       !xA(2,1) = c_1*alpha_om*omega_c**2 - As
-      xA(2,1) = c_1*alpha_om*omega_c**2 - (1-c_1*Omega_rot**2)*As - c_1*Omega_rot**2*(V/Gamma_1 -2._WP - 2._WP*f_Omega)
+      xA(2,1) = c_1*alpha_om*omega_c**2 - (1-c_1*Omega_rot**2)*As - c_1*Omega_rot**2*( - 2._WP*f_Omega)
       !xA(2,2) = As - U + 3._WP - l_i
-      xA(2,2) = As - U + 3._WP - l_i + c_1*Omega_rot**2*(V+W)/Gamma_1
+      xA(2,2) = As - U + 3._WP - l_i
       xA(2,3) = alpha_gr*(0._WP)
       xA(2,4) = alpha_gr*(-1._WP)
 
@@ -262,8 +265,8 @@ contains
       xA(3,4) = alpha_gr*(1._WP)
 
       xA(4,1) = alpha_gr*(U*As)
-      !xA(4,2) = alpha_gr*(U*V/Gamma_1)
-      xA(4,2) = alpha_gr*(U*(V+W)/Gamma_1)
+      xA(4,2) = alpha_gr*(U*V/Gamma_1)
+      !xA(4,2) = alpha_gr*(U*(V+W)/Gamma_1)
       xA(4,3) = alpha_gr*(lambda)
       xA(4,4) = alpha_gr*(-U - l_i + 2._WP)
 
