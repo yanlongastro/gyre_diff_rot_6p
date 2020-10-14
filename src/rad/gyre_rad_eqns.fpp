@@ -204,6 +204,7 @@ contains
 
     real(WP) :: omega_c
     real(WP) :: W
+    real(WP) :: alpha_om
     
     ! Evaluate the log(x)-space RHS matrix
 
@@ -214,7 +215,7 @@ contains
          U => this%coeff(i,J_U), &
          c_1 => this%coeff(i,J_C_1), &
          Gamma_1 => this%coeff(i,J_GAMMA_1), &
-         alpha_om => this%alpha_om, &
+         !alpha_om => this%alpha_om, &
          Omega_rot => this%coeff(i,J_OMEGA_ROT), &
          !W => this%coeff(i,J_W), &
          f_Omega => this%coeff(i,J_F_OMEGA), &
@@ -222,6 +223,12 @@ contains
          ! syl200817: add new variables
 
       omega_c = omega
+
+      if (omega_c<0) then
+        alpha_om = -1._WP
+      else
+        alpha_om = 1._WP
+      endif
 
       ! syl200930: alnternative W
       !W = c_1*Omega_rot**2/(1-c_1*Omega_rot**2) *V

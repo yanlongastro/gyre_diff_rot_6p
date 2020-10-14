@@ -4,7 +4,7 @@
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
 !   includes: ../extern/core/core.inc
-!   uses: gyre_osc_par ISO_FORTRAN_ENV gyre_rad_trans core_kinds gyre_model gyre_model_util gyre_context gyre_atmos gyre_mode_par gyre_point gyre_state gyre_bound
+!   uses: gyre_atmos gyre_rad_trans gyre_point gyre_context gyre_state gyre_mode_par gyre_model_util gyre_model gyre_osc_par ISO_FORTRAN_ENV gyre_bound core_kinds
 !   provides: gyre_rad_bound
 !end dependencies
 !
@@ -369,6 +369,7 @@ contains
     real(WP), intent(out)          :: scl(:)
 
     real(WP) :: omega_c
+    real(WP) :: alpha_om
 
     ! Evaluate the inner boundary conditions (regular-enforcing)
 
@@ -376,7 +377,7 @@ contains
          omega => st%omega, &
          c_1 => this%coeff(1,J_C_1), &
          Omega_rot => this%coeff(1,J_OMEGA_ROT), &
-         alpha_om => this%alpha_om, &
+         !alpha_om => this%alpha_om, &
          f_Omega => this%coeff(1,J_F_OMEGA))
 
       omega_c = omega
@@ -384,7 +385,15 @@ contains
       ! Set up the boundary conditions
       !syl200817
 
-      !print *, c_1
+      !print *, omega_c
+
+      if (omega_c<0) then
+         alpha_om = -1._WP
+      else
+         alpha_om = 1._WP
+      endif
+
+      !print *, omega_c, alpha_om
 
       !B(1,1) = c_1*alpha_om*omega_c**2
       B(1,1) = c_1*alpha_om*omega_c**2 + c_1*Omega_rot**2*(2._WP*f_Omega)
@@ -452,7 +461,7 @@ contains
        call this%build_luan_o_(st, B, scl)
     case default
 
-    write(UNIT=ERROR_UNIT, FMT=*) 'ABORT at line 406 <gyre_rad_bound:build_o>:'
+    write(UNIT=ERROR_UNIT, FMT=*) 'ABORT at line 415 <gyre_rad_bound:build_o>:'
     write(UNIT=ERROR_UNIT, FMT=*) 'Invalid type_o'
 
   stop 'Program aborted'

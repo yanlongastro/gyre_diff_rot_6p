@@ -227,7 +227,7 @@ contains
              omega_c(k) = omega_corot(omega(j), Omega_rot, md_p%m)
           end do
 
-          $ASSERT(ALL(SIGN(1._WP, omega_c) == SIGN(1._WP, omega_c_prev)),Transition between prograde and retrograde)
+          !$ASSERT(ALL(SIGN(1._WP, omega_c) == SIGN(1._WP, omega_c_prev)),Transition between prograde and retrograde)
 
        end do
 

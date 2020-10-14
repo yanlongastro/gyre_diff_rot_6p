@@ -4,7 +4,7 @@
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
 !   includes: ../extern/core/core.inc
-!   uses: gyre_ad_bvp gyre_rot_factory gyre_rot gyre_model gyre_mode_par gyre_freq gyre_rad_bvp gyre_context gyre_state gyre_osc_par core_parallel ISO_FORTRAN_ENV gyre_ext gyre_scan_par core_order gyre_util gyre_point gyre_constants gyre_status gyre_discrim_func gyre_num_par core_memory core_kinds gyre_root gyre_grid gyre_bvp gyre_wave gyre_mode
+!   uses: gyre_mode_par core_order gyre_osc_par gyre_constants gyre_wave gyre_point gyre_freq gyre_ad_bvp gyre_rot_factory gyre_num_par gyre_ext gyre_discrim_func gyre_scan_par gyre_grid gyre_mode gyre_util ISO_FORTRAN_ENV gyre_rad_bvp gyre_rot core_kinds core_memory core_parallel gyre_state gyre_bvp gyre_status gyre_root gyre_context gyre_model
 !   provides: gyre_r_search
 !end dependencies
 !
@@ -272,12 +272,7 @@ contains
              omega_c(k) = omega_corot(omega(j), Omega_rot, md_p%m)
           end do
 
-    if(.NOT. (ALL(SIGN(1._WP, omega_c) == SIGN(1._WP, omega_c_prev)))) then
-      write(UNIT=ERROR_UNIT, FMT=*) 'ASSERT ''ALL(SIGN(1._WP, omega_c) == SIGN(1._WP, omega_c_prev))'' failed at line 230 <gyre' &
- & // '_r_search:check_scan>:'
-      write(UNIT=ERROR_UNIT, FMT=*) 'Transition between prograde and retrograde'
-      stop
-    endif
+          !$ASSERT(ALL(SIGN(1._WP, omega_c) == SIGN(1._WP, omega_c_prev)),Transition between prograde and retrograde)
 
        end do
 
