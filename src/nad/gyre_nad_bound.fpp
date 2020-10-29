@@ -68,7 +68,14 @@ module gyre_nad_bound
   $endif
   integer, parameter :: J_OMEGA_ROT = 11
 
-  integer, parameter :: J_LAST = J_OMEGA_ROT
+  !integer, parameter :: J_LAST = J_OMEGA_ROT
+
+    !syl201029: add new variables
+  integer, parameter :: J_W = 12
+  integer, parameter :: J_F_OMEGA = 13
+  integer, parameter :: J_DOMEGA_DX = 14
+
+  integer, parameter :: J_LAST = J_DOMEGA_DX
 
   ! Derived-type definitions
 
@@ -221,7 +228,7 @@ contains
 
     associate (ml => this%cx%ml)
 
-      call check_model(ml, [I_V_2,I_U,I_C_1,I_NABLA_AD,I_C_THN,I_OMEGA_ROT])
+      call check_model(ml, [I_V_2,I_U,I_C_1,I_NABLA_AD,I_C_THN,I_OMEGA_ROT,I_W,I_F_OMEGA,I_DOMEGA_DX])
 
       allocate(this%coeff(2,J_LAST))
 
@@ -237,6 +244,11 @@ contains
       end select
 
       this%coeff(1,J_OMEGA_ROT) = ml%coeff(I_OMEGA_ROT, pt_i)
+
+      !syl200812: new variables
+      this%coeff(1,J_W) = ml%coeff(I_W, pt_i)
+      this%coeff(1,J_F_OMEGA) = ml%coeff(I_F_OMEGA, pt_i)
+      this%coeff(1,J_DOMEGA_DX) = ml%coeff(I_DOMEGA_DX, pt_i)
 
       ! Outer boundary
 
@@ -269,6 +281,11 @@ contains
       this%coeff(2,J_NABLA_AD) = ml%coeff(I_NABLA_AD, pt_o)
       this%coeff(2,J_C_THN) = ml%coeff(I_C_THN, pt_o)
       this%coeff(2,J_OMEGA_ROT) = ml%coeff(I_OMEGA_ROT, pt_o)
+
+      !syl200812: new variables
+      this%coeff(2,J_W) = ml%coeff(I_W, pt_o)
+      this%coeff(2,J_F_OMEGA) = ml%coeff(I_F_OMEGA, pt_o)
+      this%coeff(2,J_DOMEGA_DX) = ml%coeff(I_DOMEGA_DX, pt_o)
 
     end associate
       
@@ -337,7 +354,8 @@ contains
          c_1 => this%coeff(1,J_C_1), &
          Omega_rot => this%coeff(1,J_OMEGA_ROT), &
          alpha_gr => this%alpha_gr, &
-         alpha_om => this%alpha_om)
+         alpha_om => this%alpha_om, &
+         f_Omega => this%coeff(1,J_F_OMEGA))
 
       omega_c = this%cx%omega_c(Omega_rot, st)
 
@@ -345,7 +363,10 @@ contains
 
       ! Set up the boundary conditions
 
-      B(1,1) = c_1*alpha_om*omega_c**2
+      !syl201029: new boundary
+
+      !B(1,1) = c_1*alpha_om*omega_c**2
+      B(1,1) = c_1*alpha_om*omega_c**2 + 2._WP*c_1*(f_Omega)*Omega_rot**2
       B(1,2) = -l_i
       B(1,3) = alpha_gr*(-l_i)
       B(1,4) = alpha_gr*(0._WP)
@@ -559,8 +580,10 @@ contains
       f_rh = 1._WP - 0.25_WP*alpha_rh*i_omega_c*c_thn
 
       ! Set up the boundary conditions
+      ! syl201029
 
-      B(1,1) = 1._WP
+      !B(1,1) = 1._WP
+      B(1,1) = 1._WP -Omega_rot**2
       B(1,2) = -1._WP
       B(1,3) = alpha_gr*(0._WP)
       B(1,4) = alpha_gr*(0._WP)
@@ -574,7 +597,7 @@ contains
       B(2,5) = alpha_gr*(0._WP)
       B(2,6) = alpha_gr*(0._WP)
 
-      B(3,1) = 2._WP - 4._WP*nabla_ad*V
+      B(3,1) = 2._WP - 4._WP*nabla_ad*V *(1._WP -Omega_rot**2)
       B(3,2) = 4._WP*nabla_ad*V
       B(3,3) = alpha_gr*(0._WP)
       B(3,4) = alpha_gr*(0._WP)

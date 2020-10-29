@@ -4,7 +4,7 @@
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
 !   includes: ../extern/core/core.inc
-!   uses: gyre_model ISO_FORTRAN_ENV gyre_model_util gyre_ad_trans gyre_context gyre_bound gyre_atmos gyre_state gyre_point core_kinds gyre_osc_par gyre_mode_par
+!   uses: gyre_model_util gyre_bound gyre_ad_trans gyre_context gyre_atmos gyre_state ISO_FORTRAN_ENV gyre_osc_par core_kinds gyre_model gyre_point gyre_mode_par
 !   provides: gyre_ad_bound
 !end dependencies
 !
@@ -268,7 +268,7 @@ contains
 
     associate (ml => this%cx%ml)
 
-      call check_model(ml, [I_V_2,I_U,I_C_1,I_OMEGA_ROT])
+      call check_model(ml, [I_V_2,I_U,I_C_1,I_OMEGA_ROT,I_W,I_F_OMEGA,I_DOMEGA_DX])
 
       allocate(this%coeff(2,J_LAST))
 
@@ -388,6 +388,8 @@ contains
 
     real(WP) :: omega_c
     real(WP) :: l_i
+
+    !real(WP) :: alpha_om
 
     ! Evaluate the inner boundary conditions (regular-enforcing)
 
@@ -522,7 +524,7 @@ contains
        call this%build_luan_o_(st, B, scl)
     case default
 
-    write(UNIT=ERROR_UNIT, FMT=*) 'ABORT at line 462 <gyre_ad_bound:build_o>:'
+    write(UNIT=ERROR_UNIT, FMT=*) 'ABORT at line 464 <gyre_ad_bound:build_o>:'
     write(UNIT=ERROR_UNIT, FMT=*) 'Invalid type_o'
 
   stop 'Program aborted'

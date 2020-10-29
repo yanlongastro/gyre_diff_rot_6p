@@ -306,7 +306,7 @@ contains
     real(WP), intent(out)          :: scl(:)
 
     real(WP) :: omega_c
-    real(WP) :: alpha_om
+    !real(WP) :: alpha_om
 
     $CHECK_BOUNDS(SIZE(B, 1),this%n_i)
     $CHECK_BOUNDS(SIZE(B, 2),this%n_e)
@@ -319,7 +319,7 @@ contains
          omega => st%omega, &
          c_1 => this%coeff(1,J_C_1), &
          Omega_rot => this%coeff(1,J_OMEGA_ROT), &
-         !alpha_om => this%alpha_om, &
+         alpha_om => this%alpha_om, &
          f_Omega => this%coeff(1,J_F_OMEGA))
 
       omega_c = omega
@@ -328,12 +328,6 @@ contains
       !syl200817
 
       !print *, omega_c
-
-      if (omega_c<0) then
-         alpha_om = -1._WP
-      else
-         alpha_om = 1._WP
-      endif
 
       !print *, omega_c, alpha_om
 

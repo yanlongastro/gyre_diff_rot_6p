@@ -206,7 +206,7 @@ contains
 
     associate (ml => this%cx%ml)
 
-      call check_model(ml, [I_V_2,I_U,I_C_1,I_OMEGA_ROT])
+      call check_model(ml, [I_V_2,I_U,I_C_1,I_OMEGA_ROT,I_W,I_F_OMEGA,I_DOMEGA_DX])
 
       allocate(this%coeff(2,J_LAST))
 
@@ -311,6 +311,8 @@ contains
  
     real(WP) :: omega_c
     real(WP) :: l_i
+
+    !real(WP) :: alpha_om
 
     $CHECK_BOUNDS(SIZE(B, 1),this%n_i)
     $CHECK_BOUNDS(SIZE(B, 2),this%n_e)

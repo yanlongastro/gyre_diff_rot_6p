@@ -4,7 +4,7 @@
 !   dir: ~/gyre_rot/src/build 
 !   sources: -
 !   includes: ../extern/core/core.inc
-!   uses: gyre_point gyre_context gyre_model gyre_mode_par core_kinds gyre_eqns gyre_state ISO_FORTRAN_ENV gyre_model_util gyre_osc_par gyre_ad_trans
+!   uses: gyre_context gyre_eqns gyre_model_util ISO_FORTRAN_ENV core_kinds gyre_state gyre_ad_trans gyre_osc_par gyre_model gyre_mode_par gyre_point
 !   provides: gyre_ad_eqns
 !end dependencies
 !
@@ -250,6 +250,7 @@ contains
     ! syl200808: New variables for centrifugal forces
     !real(WP) :: W
     !real(WP) :: f_Omega
+    !real(WP) :: alpha_om
 
     ! Evaluate the log(x)-space RHS matrix
 

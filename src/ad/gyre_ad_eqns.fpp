@@ -216,6 +216,7 @@ contains
     ! syl200808: New variables for centrifugal forces
     !real(WP) :: W
     !real(WP) :: f_Omega
+    !real(WP) :: alpha_om
     
     ! Evaluate the log(x)-space RHS matrix
 
@@ -233,7 +234,7 @@ contains
          f_Omega => this%coeff(i,J_F_OMEGA), &
          dOmega_dr => this%coeff(i,J_DOMEGA_DX))
          !added new variables above
-
+    
       omega_c = this%cx%omega_c(Omega_rot, st)
 
       lambda = this%cx%lambda(Omega_rot, st)
