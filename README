@@ -1,5 +1,12 @@
 This is a modified version of gyre, that includes centrifugal force in its mode calculations.
 
+Some guides
+- Search 'syl' for modifications made by Yanlong.
+- The core equations we modified is at /src/rad (2 variables) and /src/nad (6 variables).
+- In each folder, gyre_xxx_eqns.fpp contains the equations, as shown in xA.
+- gyre_xxx_bound.fpp contains boundary conditions, where build_regular_i_ is for inner boundary and build_vacuum_o_ for outer boundary.
+
+
 
 ===== original Readme =====
 
