@@ -1,10 +1,10 @@
 !fpx3_header(0.13_3a)
 !
 !dependencies
-!   dir: ~/gyre_rot/src/build 
+!   dir: ~/gyre_diff_rot_6p/src/build 
 !   sources: -
 !   includes: ../extern/core/core.inc
-!   uses: gyre_ext_func gyre_bvp core_kinds gyre_status gyre_state ISO_FORTRAN_ENV gyre_ext
+!   uses: gyre_state ISO_FORTRAN_ENV gyre_bvp gyre_ext_func gyre_status gyre_ext core_kinds
 !   provides: gyre_r_discrim_func
 !end dependencies
 !
@@ -132,7 +132,7 @@ contains
 
     omega = real(rx)
 
-    if (omega >= this%omega_min .AND. omega <= this%omega_max) then
+    if (omega >= this%omega_min -1.0 .AND. omega <= this%omega_max+1) then
 
        this%st%omega = omega
 

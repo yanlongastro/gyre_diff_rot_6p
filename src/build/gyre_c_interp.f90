@@ -1,10 +1,10 @@
 !fpx3_header(0.13_3a)
 !
 !dependencies
-!   dir: ~/gyre_rot/src/build 
+!   dir: ~/gyre_diff_rot_6p/src/build 
 !   sources: -
-!   includes: ../interp/gyre_interp.inc ../extern/core/core.inc ../extern/core/core_parallel.inc
-!   uses: core_kinds core_linalg core_parallel gyre_calc core_hgroup ISO_FORTRAN_ENV core_order
+!   includes: ../extern/core/core_parallel.inc ../interp/gyre_interp.inc ../extern/core/core.inc
+!   uses: core_kinds core_hgroup core_linalg core_order ISO_FORTRAN_ENV gyre_calc core_parallel
 !   provides: gyre_c_interp
 !end dependencies
 !

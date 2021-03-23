@@ -1,10 +1,10 @@
 !fpx3_header(0.13_3a)
 !
 !dependencies
-!   dir: ~/gyre_rot/src/build 
+!   dir: ~/gyre_diff_rot_6p/src/build 
 !   sources: -
 !   includes: 
-!   uses: gyre_c_eqns gyre_r_eqns
+!   uses: gyre_r_eqns gyre_c_eqns
 !   provides: gyre_eqns
 !end dependencies
 !

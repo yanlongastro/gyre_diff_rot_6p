@@ -61,7 +61,7 @@ module gyre_ad_bound
 
   !syl200811: add new variables
   integer, parameter :: J_W = 7
-  integer, parameter :: J_F_OMEGA = 8
+
   integer, parameter :: J_DOMEGA_DX = 9
 
   integer, parameter :: J_LAST = J_DOMEGA_DX
@@ -206,7 +206,7 @@ contains
 
     associate (ml => this%cx%ml)
 
-      call check_model(ml, [I_V_2,I_U,I_C_1,I_OMEGA_ROT,I_W,I_F_OMEGA,I_DOMEGA_DX])
+      call check_model(ml, [I_V_2,I_U,I_C_1,I_OMEGA_ROT,I_DOMEGA_DX])
 
       allocate(this%coeff(2,J_LAST))
 
@@ -225,7 +225,6 @@ contains
 
       !syl200812: new variables
       this%coeff(1,J_W) = ml%coeff(I_W, pt_i)
-      this%coeff(1,J_F_OMEGA) = ml%coeff(I_F_OMEGA, pt_i)
       this%coeff(1,J_DOMEGA_DX) = ml%coeff(I_DOMEGA_DX, pt_i)
 
       ! Outer boundary
@@ -253,7 +252,7 @@ contains
 
       !syl200812: new variables
       this%coeff(2,J_W) = ml%coeff(I_W, pt_o)
-      this%coeff(2,J_F_OMEGA) = ml%coeff(I_F_OMEGA, pt_o)
+      
       this%coeff(2,J_DOMEGA_DX) = ml%coeff(I_DOMEGA_DX, pt_o)
 
     end associate
@@ -312,6 +311,12 @@ contains
     real(WP) :: omega_c
     real(WP) :: l_i
 
+    ! syl201201: for l .neq. 0 modes
+    real(WP) :: alpha_rot   ! This parameter is for 'effective rotational rate' for rotating stars, which varies for different modes.
+    real(WP) :: alpha_rot_steady = 2._WP/3._WP   ! This parameter is for 'effective rotational rate' for non-perturbed rotating stars
+    real(WP) :: alpha_rot_z1
+    real(WP) :: alpha_Omega
+
     !real(WP) :: alpha_om
 
     $CHECK_BOUNDS(SIZE(B, 1),this%n_i)
@@ -325,16 +330,26 @@ contains
          c_1 => this%coeff(1,J_C_1), &
          Omega_rot => this%coeff(1,J_OMEGA_ROT), &
          alpha_gr => this%alpha_gr, &
-         alpha_om => this%alpha_om, &
-         f_Omega => this%coeff(1,J_F_OMEGA))
+         alpha_om => this%alpha_om)
 
       omega_c = this%cx%omega_c(Omega_rot, st)
 
       l_i = this%cx%l_e(Omega_rot, st)
 
+
+      ! syl201201: set alpha_rot
+      if (l_i==0._WP) then
+         alpha_rot = 2._WP / 3._WP
+         ! alpha_rot_z1 = 0._WP
+         ! alpha_Omega = 0._WP
+       else if (l_i==2._WP) then
+         alpha_rot = 10._WP / 21._WP
+         ! alpha_Omega = 12._WP / 21._WP
+       end if
+
       ! Set up the boundary conditions
 
-      B(1,1) = c_1*alpha_om*omega_c**2 + 2._WP*c_1*(f_Omega)*Omega_rot**2
+      B(1,1) = c_1*alpha_om*omega_c**2 + 2._WP*c_1*(0.0)*Omega_rot**2*alpha_rot
       B(1,2) = -l_i
       B(1,3) = alpha_gr*(-l_i)
       B(1,4) = alpha_gr*(0._WP)
@@ -485,6 +500,12 @@ contains
 
     real(WP) :: l_e
 
+   ! syl201201: for l .neq. 0 modes
+    real(WP) :: alpha_rot   ! This parameter is for 'effective rotational rate' for rotating stars, which varies for different modes.
+    real(WP) :: alpha_rot_steady = 2._WP/3._WP   ! This parameter is for 'effective rotational rate' for non-perturbed rotating stars
+    real(WP) :: alpha_rot_z1
+    real(WP) :: alpha_Omega
+
     $CHECK_BOUNDS(SIZE(B, 1),this%n_o)
     $CHECK_BOUNDS(SIZE(B, 2),this%n_e)
 
@@ -499,9 +520,20 @@ contains
 
       l_e = this%cx%l_e(Omega_rot, st)
 
+      ! syl201201: set alpha_rot
+      ! if (l_e==0._WP) then
+      !    alpha_rot = 2._WP / 3._WP
+      !    alpha_rot_z1 = 0._WP
+      !    alpha_Omega = 0._WP
+      !  else if (l_e==2._WP) then
+      !    alpha_rot = 10._WP / 21._WP
+      !    alpha_Omega = 12._WP / 21._WP
+      !  end if
+
+
       ! Set up the boundary conditions
 
-      B(1,1) = 1._WP -Omega_rot**2
+      B(1,1) = 1._WP -Omega_rot**2*alpha_rot_steady
       B(1,2) = -1._WP
       !syl200811: modify boundary condition
       !B(1,2) = -1._WP -Omega_rot**2

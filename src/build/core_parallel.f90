@@ -1,10 +1,10 @@
 !fpx3_header(0.13_3a)
 !
 !dependencies
-!   dir: ~/gyre_rot/src/build 
+!   dir: ~/gyre_diff_rot_6p/src/build 
 !   sources: -
 !   includes: ../extern/core/core.inc
-!   uses: core_kinds core_order omp_lib ISO_FORTRAN_ENV
+!   uses: ISO_FORTRAN_ENV omp_lib core_order core_kinds
 !   provides: core_parallel
 !end dependencies
 !

@@ -1,10 +1,10 @@
 !fpx3_header(0.13_3a)
 !
 !dependencies
-!   dir: ~/gyre_rot/src/build 
+!   dir: ~/gyre_diff_rot_6p/src/build 
 !   sources: -
 !   includes: ../extern/core/core.inc
-!   uses: gyre_point gyre_diff gyre_osc_par gyre_rad_trans gyre_state gyre_ext ISO_FORTRAN_ENV gyre_model gyre_model_util gyre_mode_par core_kinds gyre_context
+!   uses: gyre_ext gyre_rad_trans gyre_osc_par gyre_model_util gyre_point ISO_FORTRAN_ENV gyre_state gyre_diff core_kinds gyre_mode_par gyre_context gyre_model
 !   provides: gyre_rad_match
 !end dependencies
 !
@@ -73,8 +73,11 @@ module gyre_rad_match
   ! Parameter definitions
 
   integer, parameter :: J_U = 1
+  integer, parameter :: J_C_1 = 2
+  integer, parameter :: J_OMEGA_ROT = 3
+  ! syl210315: new variables used in jump conditions
 
-  integer, parameter :: J_LAST = J_U
+  integer, parameter :: J_LAST = J_OMEGA_ROT
 
   ! Derived-type definitions
 
@@ -147,6 +150,14 @@ contains
       this%coeff(1,J_U) = ml%coeff(I_U, pt_a)
       this%coeff(2,J_U) = ml%coeff(I_U, pt_b)
 
+      this%coeff(1,J_C_1) = ml%coeff(I_C_1, pt_a)
+      this%coeff(2,J_C_1) = ml%coeff(I_C_1, pt_b)
+
+      this%coeff(1,J_OMEGA_ROT) = ml%coeff(I_OMEGA_ROT, pt_a)
+      this%coeff(2,J_OMEGA_ROT) = ml%coeff(I_OMEGA_ROT, pt_b)
+
+      ! syl210315: add new variables (c_1, Omega_rot)
+
     end associate
 
     ! Set up stencil for the tr component
@@ -175,14 +186,19 @@ contains
 
     associate( &
       U_l => this%coeff(1,J_U), &
-      U_r => this%coeff(2,J_U))
+      U_r => this%coeff(2,J_U), &
+      c_1_l => this%coeff(1,J_C_1), &
+      c_1_r => this%coeff(2,J_C_1), &
+      Omega_rot_l => this%coeff(1,J_OMEGA_ROT), &
+      Omega_rot_r => this%coeff(2,J_OMEGA_ROT))
+      ! syl210315: add new variables
 
       ! Evaluate the match conditions (y_1 continuous, y_2 not)
 
       E_l(1,1) = -1._WP
       E_l(1,2) = 0._WP
 
-      E_l(2,1) = U_l
+      E_l(2,1) = U_l *(1-c_1_l*Omega_rot_l**2) ! syl210315
       E_l(2,2) = -U_l
 
       !
@@ -190,7 +206,7 @@ contains
       E_r(1,1) = 1._WP
       E_r(1,2) = 0._WP
 
-      E_r(2,1) = -U_r
+      E_r(2,1) = -U_r *(1-c_1_r*Omega_rot_r**2) ! syl210315
       E_r(2,2) = U_r
 
       scl = r_ext_t(1._WP)

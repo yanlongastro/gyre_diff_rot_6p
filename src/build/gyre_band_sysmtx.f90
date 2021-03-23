@@ -1,7 +1,7 @@
 !fpx3_header(0.13_3a)
 !
 !dependencies
-!   dir: ~/gyre_rot/src/build 
+!   dir: ~/gyre_diff_rot_6p/src/build 
 !   sources: -
 !   includes: 
 !   uses: gyre_c_band_sysmtx gyre_r_band_sysmtx

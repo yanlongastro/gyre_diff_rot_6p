@@ -1,10 +1,10 @@
 !fpx3_header(0.13_3a)
 !
 !dependencies
-!   dir: ~/gyre_rot/src/build 
+!   dir: ~/gyre_diff_rot_6p/src/build 
 !   sources: -
 !   includes: ../extern/core/core.inc
-!   uses: ISO_FORTRAN_ENV core_kinds gyre_band_sysmtx gyre_num_par gyre_sysmtx gyre_block_sysmtx
+!   uses: gyre_band_sysmtx ISO_FORTRAN_ENV gyre_sysmtx gyre_block_sysmtx gyre_num_par core_kinds
 !   provides: gyre_sysmtx_factory
 !end dependencies
 !

@@ -111,7 +111,7 @@ contains
 
     omega = cmplx(cx)
 
-    if (REAL(omega) >= this%omega_min .AND. REAL(omega) <= this%omega_max) then
+    if (REAL(omega) >= this%omega_min - 1.0 .AND. REAL(omega) <= this%omega_max+1.0) then
 
        this%st%omega = omega
 

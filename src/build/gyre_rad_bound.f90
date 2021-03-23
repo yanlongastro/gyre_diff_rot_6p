@@ -1,10 +1,10 @@
 !fpx3_header(0.13_3a)
 !
 !dependencies
-!   dir: ~/gyre_rot/src/build 
+!   dir: ~/gyre_diff_rot_6p/src/build 
 !   sources: -
 !   includes: ../extern/core/core.inc
-!   uses: gyre_model_util gyre_rad_trans gyre_context gyre_atmos core_kinds gyre_osc_par gyre_model gyre_bound gyre_mode_par gyre_point gyre_state ISO_FORTRAN_ENV
+!   uses: gyre_rad_trans gyre_model_util gyre_atmos gyre_osc_par core_kinds gyre_point gyre_model gyre_mode_par gyre_context gyre_state gyre_bound ISO_FORTRAN_ENV
 !   provides: gyre_rad_bound
 !end dependencies
 !
@@ -89,7 +89,6 @@ module gyre_rad_bound
   !syl200811: add new variables
   integer, parameter :: J_OMEGA_ROT = 6
   integer, parameter :: J_W = 7
-  integer, parameter :: J_F_OMEGA = 8
   integer, parameter :: J_DOMEGA_DX = 9
 
   integer, parameter :: J_LAST = J_DOMEGA_DX
@@ -155,7 +154,7 @@ contains
     case ('REGULAR')
 
     if(.NOT. (pt_i%x == 0._WP)) then
-      write(UNIT=ERROR_UNIT, FMT=*) 'ASSERT ''pt_i%x == 0._WP'' failed at line 128 <gyre_rad_bound:rad_bound_t_>:'
+      write(UNIT=ERROR_UNIT, FMT=*) 'ASSERT ''pt_i%x == 0._WP'' failed at line 127 <gyre_rad_bound:rad_bound_t_>:'
       write(UNIT=ERROR_UNIT, FMT=*) 'Boundary condition invalid for x /= 0'
       stop
     endif
@@ -164,7 +163,7 @@ contains
     case ('ZERO_R')
 
     if(.NOT. (pt_i%x /= 0._WP)) then
-      write(UNIT=ERROR_UNIT, FMT=*) 'ASSERT ''pt_i%x /= 0._WP'' failed at line 131 <gyre_rad_bound:rad_bound_t_>:'
+      write(UNIT=ERROR_UNIT, FMT=*) 'ASSERT ''pt_i%x /= 0._WP'' failed at line 130 <gyre_rad_bound:rad_bound_t_>:'
       write(UNIT=ERROR_UNIT, FMT=*) 'Boundary condition invalid for x == 0'
       stop
     endif
@@ -172,7 +171,7 @@ contains
        bd%type_i = ZERO_R_TYPE
     case default
 
-    write(UNIT=ERROR_UNIT, FMT=*) 'ABORT at line 134 <gyre_rad_bound:rad_bound_t_>:'
+    write(UNIT=ERROR_UNIT, FMT=*) 'ABORT at line 133 <gyre_rad_bound:rad_bound_t_>:'
     write(UNIT=ERROR_UNIT, FMT=*) 'Invalid inner_bound'
 
   stop 'Program aborted'
@@ -208,7 +207,7 @@ contains
        endif
     case default
 
-    write(UNIT=ERROR_UNIT, FMT=*) 'ABORT at line 165 <gyre_rad_bound:rad_bound_t_>:'
+    write(UNIT=ERROR_UNIT, FMT=*) 'ABORT at line 164 <gyre_rad_bound:rad_bound_t_>:'
     write(UNIT=ERROR_UNIT, FMT=*) 'Invalid outer_bound'
 
   stop 'Program aborted'
@@ -222,7 +221,7 @@ contains
        bd%alpha_om = -1._WP
     case default
 
-    write(UNIT=ERROR_UNIT, FMT=*) 'ABORT at line 174 <gyre_rad_bound:rad_bound_t_>:'
+    write(UNIT=ERROR_UNIT, FMT=*) 'ABORT at line 173 <gyre_rad_bound:rad_bound_t_>:'
     write(UNIT=ERROR_UNIT, FMT=*) 'Invalid time_factor'
 
   stop 'Program aborted'
@@ -266,7 +265,7 @@ contains
       case (ZERO_R_TYPE)
       case default
 
-    write(UNIT=ERROR_UNIT, FMT=*) 'ABORT at line 213 <gyre_rad_bound:stencil_>:'
+    write(UNIT=ERROR_UNIT, FMT=*) 'ABORT at line 212 <gyre_rad_bound:stencil_>:'
     write(UNIT=ERROR_UNIT, FMT=*) 'Invalid type_i'
 
   stop 'Program aborted'
@@ -276,7 +275,6 @@ contains
       !syl200812: new variables
       this%coeff(1,J_OMEGA_ROT) = ml%coeff(I_OMEGA_ROT, pt_i)
       this%coeff(1,J_W) = ml%coeff(I_W, pt_i)
-      this%coeff(1,J_F_OMEGA) = ml%coeff(I_F_OMEGA, pt_i)
       this%coeff(1,J_DOMEGA_DX) = ml%coeff(I_DOMEGA_DX, pt_i)
 
       ! Outer boundary
@@ -299,7 +297,7 @@ contains
               this%coeff(2,J_AS), this%coeff(2,J_U), this%coeff(2,J_C_1))
       case default
 
-    write(UNIT=ERROR_UNIT, FMT=*) 'ABORT at line 242 <gyre_rad_bound:stencil_>:'
+    write(UNIT=ERROR_UNIT, FMT=*) 'ABORT at line 240 <gyre_rad_bound:stencil_>:'
     write(UNIT=ERROR_UNIT, FMT=*) 'Invalid type_o'
 
   stop 'Program aborted'
@@ -309,7 +307,6 @@ contains
       !syl200812: new variables
       this%coeff(2,J_OMEGA_ROT) = ml%coeff(I_OMEGA_ROT, pt_o)
       this%coeff(2,J_W) = ml%coeff(I_W, pt_o)
-      this%coeff(2,J_F_OMEGA) = ml%coeff(I_F_OMEGA, pt_o)
       this%coeff(2,J_DOMEGA_DX) = ml%coeff(I_DOMEGA_DX, pt_o)
 
     end associate
@@ -342,7 +339,7 @@ contains
        call this%build_zero_r_i_(st, B, scl)
     case default
 
-    write(UNIT=ERROR_UNIT, FMT=*) 'ABORT at line 286 <gyre_rad_bound:build_i>:'
+    write(UNIT=ERROR_UNIT, FMT=*) 'ABORT at line 283 <gyre_rad_bound:build_i>:'
     write(UNIT=ERROR_UNIT, FMT=*) 'Invalid type_i'
 
   stop 'Program aborted'
@@ -377,8 +374,7 @@ contains
          omega => st%omega, &
          c_1 => this%coeff(1,J_C_1), &
          Omega_rot => this%coeff(1,J_OMEGA_ROT), &
-         alpha_om => this%alpha_om, &
-         f_Omega => this%coeff(1,J_F_OMEGA))
+         alpha_om => this%alpha_om)
 
       omega_c = omega
 
@@ -387,14 +383,12 @@ contains
 
       !print *, omega_c
 
-      !print *, omega_c, alpha_om
+      !print *, Omega_rot**2
 
       !B(1,1) = c_1*alpha_om*omega_c**2
-      B(1,1) = c_1*alpha_om*omega_c**2 + c_1*Omega_rot**2*(2._WP*f_Omega)
+      B(1,1) = c_1*alpha_om*omega_c**2 + c_1*Omega_rot**2*(2._WP*(-2._WP))
       !B(1,2) = 0._WP
       B(1,2) = 0._WP
-
-      !print *, - c_1*Omega_rot**2*(-2._WP - 2._WP*f_Omega)
 
       scl = 1._WP
 
@@ -455,7 +449,7 @@ contains
        call this%build_luan_o_(st, B, scl)
     case default
 
-    write(UNIT=ERROR_UNIT, FMT=*) 'ABORT at line 409 <gyre_rad_bound:build_o>:'
+    write(UNIT=ERROR_UNIT, FMT=*) 'ABORT at line 404 <gyre_rad_bound:build_o>:'
     write(UNIT=ERROR_UNIT, FMT=*) 'Invalid type_o'
 
   stop 'Program aborted'
@@ -491,7 +485,7 @@ contains
       V => this%coeff(2,J_V), &
       W => this%coeff(2,J_W))
 
-    !print *, Omega_rot**2
+    ! print *, Omega_rot**2
     !B(1,1) = 1._WP
     B(1,1) = 1._WP - Omega_rot**2
     !B(1,1) = V

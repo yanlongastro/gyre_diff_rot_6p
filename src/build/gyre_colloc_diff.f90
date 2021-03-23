@@ -1,10 +1,10 @@
 !fpx3_header(0.13_3a)
 !
 !dependencies
-!   dir: ~/gyre_rot/src/build 
+!   dir: ~/gyre_diff_rot_6p/src/build 
 !   sources: -
 !   includes: 
-!   uses: gyre_r_colloc_diff gyre_c_colloc_diff
+!   uses: gyre_c_colloc_diff gyre_r_colloc_diff
 !   provides: gyre_colloc_diff
 !end dependencies
 !

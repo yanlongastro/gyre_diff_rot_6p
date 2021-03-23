@@ -1,10 +1,10 @@
 !fpx3_header(0.13_3a)
 !
 !dependencies
-!   dir: ~/gyre_rot/src/build 
+!   dir: ~/gyre_diff_rot_6p/src/build 
 !   sources: -
 !   includes: ../extern/core/core.inc
-!   uses: gyre_util gyre_constants gyre_model_util core_order core_kinds gyre_evol_model gyre_model ISO_FORTRAN_ENV gyre_model_par
+!   uses: gyre_model core_order gyre_util gyre_constants gyre_evol_model gyre_model_par gyre_model_util core_kinds ISO_FORTRAN_ENV
 !   provides: gyre_losc_file
 !end dependencies
 !

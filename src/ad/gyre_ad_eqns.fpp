@@ -51,7 +51,7 @@ module gyre_ad_eqns
 
   !syl200811: add new variables
   integer, parameter :: J_W = 8
-  integer, parameter :: J_F_OMEGA = 9
+
   integer, parameter :: J_DOMEGA_DX =10
 
 
@@ -143,7 +143,7 @@ contains
 
       !call check_model(ml, [I_V_2,I_AS,I_U,I_C_1,I_GAMMA_1,I_OMEGA_ROT])
       !syl200811: add new variables
-      call check_model(ml, [I_V_2,I_AS,I_U,I_C_1,I_GAMMA_1,I_OMEGA_ROT,I_W,I_F_OMEGA,I_DOMEGA_DX])
+      call check_model(ml, [I_V_2,I_AS,I_U,I_C_1,I_GAMMA_1,I_OMEGA_ROT,I_W,I_DOMEGA_DX])
 
       n_s = SIZE(pt)
 
@@ -160,7 +160,6 @@ contains
 
          !syl200811: add new variables
          this%coeff(i,J_W) = ml%coeff(I_W, pt(i))
-         this%coeff(i,J_F_OMEGA) = ml%coeff(I_F_OMEGA, pt(i))
          this%coeff(i,J_DOMEGA_DX) = ml%coeff(I_DOMEGA_DX, pt(i))
       end do
 
@@ -213,10 +212,12 @@ contains
     real(WP) :: l_i
     real(WP) :: W
 
-    ! syl200808: New variables for centrifugal forces
+    ! syl201130: New variables for centrifugal forces
     !real(WP) :: W
-    !real(WP) :: f_Omega
-    !real(WP) :: alpha_om
+    real(WP) :: alpha_rot   ! This parameter is for 'effective rotational rate' for rotating stars, which varies for different modes.
+    real(WP) :: alpha_rot_steady = 2._WP/3._WP   ! This parameter is for 'effective rotational rate' for non-perturbed rotating stars
+    real(WP) :: alpha_rot_z1
+    real(WP) :: alpha_Omega
     
     ! Evaluate the log(x)-space RHS matrix
 
@@ -231,7 +232,6 @@ contains
          alpha_gr => this%alpha_gr, &
          alpha_om => this%alpha_om, &
          !W => this%coeff(i,J_W), &
-         f_Omega => this%coeff(i,J_F_OMEGA), &
          dOmega_dr => this%coeff(i,J_DOMEGA_DX))
          !added new variables above
     
@@ -240,6 +240,17 @@ contains
       lambda = this%cx%lambda(Omega_rot, st)
       l_i = this%cx%l_e(Omega_rot_i, st)
 
+      ! syl201130: set alpha_rot
+      if (l_i==0._WP) then
+        alpha_rot = 2._WP / 3._WP
+        alpha_rot_z1 = 0._WP
+        alpha_Omega = 0._WP
+      else if (l_i==2._WP) then
+        alpha_rot = 10._WP / 21._WP
+        alpha_rot_z1 = (2*0.0-1._WP)*Omega_rot**2/(21._WP*omega_c**2 +12._WP*Omega_rot**2)
+        alpha_Omega = 12._WP / 21._WP
+      end if
+
       W = c_1*Omega_rot**2 *V
 
       !syl200811: debug
@@ -247,14 +258,14 @@ contains
 
       ! Set up the matrix
 
-      xA(1,1) = V*(1-c_1*Omega_rot**2)/Gamma_1 - 1._WP - l_i
+      xA(1,1) = V*(1-c_1*Omega_rot**2*alpha_rot_steady)/Gamma_1 - 1._WP - l_i + alpha_rot_z1
       !xA(1,2) = lambda/(c_1*alpha_om*omega_c**2) - V/Gamma_1
-      xA(1,2) = lambda/(c_1*alpha_om*omega_c**2) - (V)/Gamma_1
-      xA(1,3) = alpha_gr*(lambda/(c_1*alpha_om*omega_c**2))
+      xA(1,2) = lambda/(c_1*alpha_om*(omega_c**2 +alpha_Omega*Omega_rot**2 )) - (V)/Gamma_1
+      xA(1,3) = alpha_gr*(lambda/(c_1*alpha_om*(omega_c**2 +alpha_Omega*Omega_rot**2 )))
       xA(1,4) = alpha_gr*(0._WP)
 
       !xA(2,1) = c_1*alpha_om*omega_c**2 - As
-      xA(2,1) = c_1*alpha_om*omega_c**2 - (1-c_1*Omega_rot**2)*As - c_1*Omega_rot**2*( - 2._WP*f_Omega)
+      xA(2,1) = c_1*alpha_om*omega_c**2 - (1-c_1*Omega_rot**2*alpha_rot_steady)*As - c_1*Omega_rot**2*( - 2._WP*0.0*alpha_rot)
       !xA(2,2) = As - U + 3._WP - l_i
       xA(2,2) = As - U + 3._WP - l_i
       xA(2,3) = alpha_gr*(0._WP)

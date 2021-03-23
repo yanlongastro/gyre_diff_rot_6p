@@ -1,10 +1,10 @@
 !fpx3_header(0.13_3a)
 !
 !dependencies
-!   dir: ~/gyre_rot/src/build 
+!   dir: ~/gyre_diff_rot_6p/src/build 
 !   sources: -
 !   includes: ../extern/core/core.inc
-!   uses: gyre_point core_kinds gyre_grid
+!   uses: gyre_grid core_kinds gyre_point
 !   provides: gyre_model
 !end dependencies
 !
@@ -83,13 +83,15 @@ module gyre_model
   integer, parameter :: I_F_LUAN_C = 21
   integer, parameter :: I_OMEGA_ROT = 22
 
-  !syl200811: add new variables in coefficents
+  !syl210202: add new variables in coefficents
   integer, parameter :: I_W = 23
-  integer, parameter :: I_F_OMEGA = 24
-  integer, parameter :: I_DOMEGA_DX = 25
+  integer, parameter :: I_DOMEGA_DX = 24
+  integer, parameter :: I_F_OMEGA = 25
+  integer, parameter :: I_NU = 26
+  integer, parameter :: I_DNU_DX = 27
 
-  !syl200811: also update I_LAST
-  integer, parameter :: I_LAST = I_DOMEGA_DX
+  !syl210202: also update I_LAST
+  integer, parameter :: I_LAST = I_DNU_DX
 
   ! Derived-type definitions
 
@@ -199,9 +201,11 @@ module gyre_model
   public :: I_OMEGA_ROT
   public :: I_LAST
 
-  !syl200811: add new coeff's
+  !syl210202: add new coeff's
   public :: I_W
-  public :: I_F_OMEGA
   public :: I_DOMEGA_DX
+  public :: I_F_OMEGA
+  public :: I_NU
+  public :: I_DNU_DX
 
 end module gyre_model

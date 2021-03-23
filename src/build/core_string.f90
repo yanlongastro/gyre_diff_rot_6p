@@ -1,9 +1,9 @@
 !fpx3_header(0.13_3a)
 !
 !dependencies
-!   dir: ~/gyre_rot/src/build 
+!   dir: ~/gyre_diff_rot_6p/src/build 
 !   sources: -
-!   includes: ../extern/core/core_parallel.inc ../extern/core/core.inc
+!   includes: ../extern/core/core.inc ../extern/core/core_parallel.inc
 !   uses: core_kinds ISO_FORTRAN_ENV
 !   provides: core_string
 !end dependencies

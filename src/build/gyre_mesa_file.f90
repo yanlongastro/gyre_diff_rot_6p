@@ -1,10 +1,10 @@
 !fpx3_header(0.13_3a)
 !
 !dependencies
-!   dir: ~/gyre_rot/src/build 
+!   dir: ~/gyre_diff_rot_6p/src/build 
 !   sources: -
 !   includes: ../extern/core/core.inc
-!   uses: core_kinds gyre_constants ISO_FORTRAN_ENV gyre_model_util gyre_model_par core_order gyre_model gyre_evol_model gyre_util
+!   uses: gyre_model_par gyre_constants gyre_util core_kinds core_order gyre_model_util gyre_model gyre_evol_model ISO_FORTRAN_ENV
 !   provides: gyre_mesa_file
 !end dependencies
 !
@@ -72,7 +72,7 @@ module gyre_mesa_file
   integer, parameter :: N_COLS_V0_01 = 18
   integer, parameter :: N_COLS_V0_19 = 18
   integer, parameter :: N_COLS_V1_0X = 18
-  integer, parameter :: N_COLS_V2_33 = 20    ! syl200803
+  integer, parameter :: N_COLS_V2_33 = 22    ! syl210202
 
   ! Access specifiers
 
@@ -211,8 +211,10 @@ contains
     real(WP), allocatable       :: kap_rho(:)
     real(WP), allocatable       :: kap_T(:)
     real(WP), allocatable       :: Omega_rot(:)
-    real(WP), allocatable       :: dOmega_dr(:)
-    real(WP), allocatable       :: f_Omega(:)      !syl200803
+    real(WP), allocatable       :: dlnOmega_dlnr(:)
+    real(WP), allocatable       :: f_Omega(:)
+    real(WP), allocatable       :: nu_viscosity(:)
+    real(WP), allocatable       :: dlnnu_dlnr(:)      !syl210202
     real(WP), allocatable       :: x(:)
     real(WP), allocatable       :: V_2(:)
     real(WP), allocatable       :: As(:)
@@ -251,7 +253,7 @@ contains
        call extract_data_v2_33_()   !syl200803
     case default
 
-    write(UNIT=ERROR_UNIT, FMT=*) 'ABORT at line 212 <gyre_mesa_file:init_mesa_model>:'
+    write(UNIT=ERROR_UNIT, FMT=*) 'ABORT at line 214 <gyre_mesa_file:init_mesa_model>:'
     write(UNIT=ERROR_UNIT, FMT=*) 'Unrecognized MESA memory version'
 
   stop 'Program aborted'
@@ -286,7 +288,7 @@ contains
        V_2 = 4._WP*PI*G_GRAVITY*rho(1)**2*R_star**2/(3._WP*P(1))
        As = 0._WP
        U = 3._WP
-       c_1 = 3._WP*(M_star/R_star**3)/(4._WP*PI*rho)
+       c_1 = 3._WP*(M_star/R_star**3)/(4._WP*PI*rho(1))
        c_lum = 4._WP*PI*rho(1)*eps(1)*R_star**3/L_star
     end where
 
@@ -324,10 +326,12 @@ contains
 
     !syl200811: set up new coeff's
     W = rho*(Omega_rot*SQRT((G_GRAVITY*M_star)/R_star**3) *r)**2 / (P)
+    nu_viscosity = nu_viscosity/SQRT(G_GRAVITY*M_star*R_star)
 
     print *, '  Omega_rot(1)^2 =', Omega_rot(1)**2
-    print *, '  f_Omega(1) =', f_Omega(1)
     print *, '  Gamma_1(1) =', Gamma_1(1)
+    print *, '  nu_viscosity(1) =', nu_viscosity(1)
+    print *, '  f_Om(1) =', f_Omega(1)
 
     ! Initialize the evol_model_t
 
@@ -361,10 +365,12 @@ contains
 
     call em%define(I_OMEGA_ROT, Omega_rot)
 
-    !syl200811: define new coeff's
+    !syl210202: define new coeff's
     call em%define(I_W, W)
+    call em%define(I_NU, nu_viscosity)
+    call em%define(I_DOMEGA_DX, dlnOmega_dlnr)
     call em%define(I_F_OMEGA, f_Omega)
-    call em%define(I_DOMEGA_DX, dOmega_dr)
+    call em%define(I_DNU_DX, dlnnu_dlnr)
 
     ! Finish
 
@@ -402,11 +408,17 @@ contains
       allocate(Omega_rot(n))
       Omega_rot = 0._WP
 
-      allocate(dOmega_dr(n))
-      dOmega_dr = 0._WP
+      allocate(dlnOmega_dlnr(n))
+      dlnOmega_dlnr = 0._WP
 
       allocate(f_Omega(n))
-      f_Omega = 0._WP      !syl200803: allocate new variables
+      f_Omega = 0._WP
+
+      allocate(nu_viscosity(n))
+      nu_viscosity = 0._WP
+
+      allocate(dlnnu_dlnr(n))
+      dlnnu_dlnr = 0._WP      !syl210202: allocate new variables
 
       ! Evaluate eps_rho and eps_T from eps_eps_*
 
@@ -476,11 +488,17 @@ contains
          eps_T = 0._WP
       end where
 
-      allocate(dOmega_dr(n))
-      dOmega_dr = 0._WP
+      allocate(dlnOmega_dlnr(n))
+      dlnOmega_dlnr = 0._WP
 
       allocate(f_Omega(n))
-      f_Omega = 0._WP      !syl200803: allocate new variables
+      f_Omega = 0._WP
+
+      allocate(nu_viscosity(n))
+      nu_viscosity = 0._WP
+
+      allocate(dlnnu_dlnr(n))
+      dlnnu_dlnr = 0._WP      !syl210202: allocate new variables
 
       ! Finish
 
@@ -532,11 +550,17 @@ contains
       kap_T = kap_kap_T/kap
       kap_rho = kap_kap_rho/kap
 
-      allocate(dOmega_dr(n))
-      dOmega_dr = 0._WP
+      allocate(dlnOmega_dlnr(n))
+      dlnOmega_dlnr = 0._WP
 
       allocate(f_Omega(n))
-      f_Omega = 0._WP         !syl200803: allocate new variables
+      f_Omega = 0._WP
+
+      allocate(nu_viscosity(n))
+      nu_viscosity = 0._WP
+
+      allocate(dlnnu_dlnr(n))
+      dlnnu_dlnr = 0._WP      !syl210202: allocate new variables
 
       ! Finish
 
@@ -544,7 +568,7 @@ contains
 
     end subroutine extract_data_v1_0X_
 
-   !syl200803: read mesa initial files with rotation gradient and f_Omega
+   !syl200803: read mesa initial files with differential rotation
 
     subroutine extract_data_v2_33_ ()
 
@@ -573,8 +597,10 @@ contains
       eps_eps_T = point_data(16,:)
       eps_eps_rho = point_data(17,:)
       Omega_rot = point_data(18,:)
-      dOmega_dr = point_data(19,:) !syl200803: added this and the next line.
+      dlnOmega_dlnr = point_data(19,:) !syl200202: added this and the next line.
       f_Omega = point_data(20,:)
+      nu_viscosity = point_data(21,:)
+      dlnnu_dlnr = point_data(22,:)
 
       ! Note: technically incorrect in version 1.00, because eps in versions < 1.01 includes eps_grav
 

@@ -1,10 +1,10 @@
 !fpx3_header(0.13_3a)
 !
 !dependencies
-!   dir: ~/gyre_rot/src/build 
+!   dir: ~/gyre_diff_rot_6p/src/build 
 !   sources: -
 !   includes: ../extern/core/core.inc
-!   uses: gyre_c_state gyre_r_state
+!   uses: gyre_r_state gyre_c_state
 !   provides: gyre_state
 !end dependencies
 !

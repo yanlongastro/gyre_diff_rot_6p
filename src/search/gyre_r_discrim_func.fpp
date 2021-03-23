@@ -102,7 +102,7 @@ contains
 
     omega = real(rx)
 
-    if (omega >= this%omega_min .AND. omega <= this%omega_max) then
+    if (omega >= this%omega_min -1.0 .AND. omega <= this%omega_max+1) then
 
        this%st%omega = omega
 

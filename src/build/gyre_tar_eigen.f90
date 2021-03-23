@@ -1,10 +1,10 @@
 !fpx3_header(0.13_3a)
 !
 !dependencies
-!   dir: ~/gyre_rot/src/build 
+!   dir: ~/gyre_diff_rot_6p/src/build 
 !   sources: -
 !   includes: ../extern/core/core.inc
-!   uses: core_kinds f95_lapack ISO_FORTRAN_ENV
+!   uses: ISO_FORTRAN_ENV f95_lapack core_kinds
 !   provides: gyre_tar_eigen
 !end dependencies
 !

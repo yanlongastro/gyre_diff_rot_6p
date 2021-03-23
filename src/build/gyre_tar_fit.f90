@@ -1,10 +1,10 @@
 !fpx3_header(0.13_3a)
 !
 !dependencies
-!   dir: ~/gyre_rot/src/build 
+!   dir: ~/gyre_diff_rot_6p/src/build 
 !   sources: -
 !   includes: ../extern/core/core.inc
-!   uses: core_constants gyre_cheb_fit core_hgroup core_kinds gyre_tar_eigen ISO_FORTRAN_ENV core_parallel
+!   uses: core_constants core_parallel core_hgroup gyre_cheb_fit gyre_tar_eigen ISO_FORTRAN_ENV core_kinds
 !   provides: gyre_tar_fit
 !end dependencies
 !

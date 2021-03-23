@@ -1,10 +1,10 @@
 !fpx3_header(0.13_3a)
 !
 !dependencies
-!   dir: ~/gyre_rot/src/build 
+!   dir: ~/gyre_diff_rot_6p/src/build 
 !   sources: -
 !   includes: ../extern/core/core.inc
-!   uses: gyre_state gyre_context gyre_diff_factory gyre_num_par gyre_ad_eqns core_kinds gyre_point gyre_diff gyre_ext ISO_FORTRAN_ENV gyre_osc_par gyre_mode_par gyre_ad_match
+!   uses: gyre_ext gyre_state gyre_diff gyre_ad_match core_kinds gyre_diff_factory gyre_mode_par gyre_point ISO_FORTRAN_ENV gyre_osc_par gyre_context gyre_num_par gyre_ad_eqns
 !   provides: gyre_ad_diff
 !end dependencies
 !

@@ -1,9 +1,9 @@
 !fpx3_header(0.13_3a)
 !
 !dependencies
-!   dir: ~/gyre_rot/src/build 
+!   dir: ~/gyre_diff_rot_6p/src/build 
 !   sources: -
-!   includes: ../matrix/gyre_sysmtx.inc ../extern/core/core.inc
+!   includes: ../extern/core/core.inc ../matrix/gyre_sysmtx.inc
 !   uses: gyre_ext core_kinds
 !   provides: gyre_c_sysmtx
 !end dependencies

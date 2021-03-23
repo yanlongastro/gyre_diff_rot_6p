@@ -1,10 +1,10 @@
 !fpx3_header(0.13_3a)
 !
 !dependencies
-!   dir: ~/gyre_rot/src/build 
+!   dir: ~/gyre_diff_rot_6p/src/build 
 !   sources: -
 !   includes: ../extern/core/core.inc
-!   uses: core_kinds ISO_FORTRAN_ENV core_linalg core_order
+!   uses: core_kinds core_order ISO_FORTRAN_ENV core_linalg
 !   provides: gyre_linalg
 !end dependencies
 !

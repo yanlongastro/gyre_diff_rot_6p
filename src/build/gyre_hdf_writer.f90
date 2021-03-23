@@ -1,10 +1,10 @@
 !fpx3_header(0.13_3a)
 !
 !dependencies
-!   dir: ~/gyre_rot/src/build 
+!   dir: ~/gyre_diff_rot_6p/src/build 
 !   sources: -
 !   includes: ../extern/core/core.inc
-!   uses: core_hgroup gyre_writer core_kinds
+!   uses: core_kinds core_hgroup gyre_writer
 !   provides: gyre_hdf_writer
 !end dependencies
 !

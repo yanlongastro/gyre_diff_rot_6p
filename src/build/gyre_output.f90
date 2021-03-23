@@ -1,10 +1,10 @@
 !fpx3_header(0.13_3a)
 !
 !dependencies
-!   dir: ~/gyre_rot/src/build 
+!   dir: ~/gyre_diff_rot_6p/src/build 
 !   sources: -
 !   includes: ../extern/core/core.inc ../output/gyre_output.inc
-!   uses: ISO_FORTRAN_ENV gyre_hdf_writer gyre_freq core_kinds core_string gyre_constants gyre_point gyre_model gyre_evol_model gyre_txt_writer gyre_out_par gyre_mode gyre_util gyre_poly_model gyre_writer
+!   uses: gyre_point gyre_evol_model gyre_writer ISO_FORTRAN_ENV gyre_constants core_kinds core_string gyre_txt_writer gyre_model gyre_freq gyre_poly_model gyre_out_par gyre_hdf_writer gyre_util gyre_mode
 !   provides: gyre_output
 !end dependencies
 !

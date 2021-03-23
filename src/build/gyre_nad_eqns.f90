@@ -1,10 +1,10 @@
 !fpx3_header(0.13_3a)
 !
 !dependencies
-!   dir: ~/gyre_rot/src/build 
+!   dir: ~/gyre_diff_rot_6p/src/build 
 !   sources: -
 !   includes: ../extern/core/core.inc
-!   uses: gyre_point core_kinds ISO_FORTRAN_ENV gyre_model gyre_mode_par gyre_eqns gyre_osc_par gyre_state gyre_nad_trans gyre_model_util gyre_context gyre_linalg
+!   uses: gyre_model_util core_kinds gyre_linalg gyre_context gyre_model gyre_point gyre_eqns gyre_state gyre_osc_par ISO_FORTRAN_ENV gyre_mode_par gyre_nad_trans
 !   provides: gyre_nad_eqns
 !end dependencies
 !
@@ -103,14 +103,14 @@ module gyre_nad_eqns
   integer, parameter :: J_OMEGA_ROT = 22
   integer, parameter :: J_OMEGA_ROT_I = 23
 
-   !syl200811: add new variables
-  integer, parameter :: J_W = 24
-  integer, parameter :: J_F_OMEGA = 25
-  integer, parameter :: J_DOMEGA_DX = 26
+   !syl210202: add new variables
 
-  !integer, parameter :: J_LAST = J_OMEGA_ROT_I
-  !syl200811: update J_LAST
-  integer, parameter :: J_LAST = J_DOMEGA_DX
+  integer, parameter :: J_W = 24
+  integer, parameter :: J_DOMEGA_DX = 25
+  integer, parameter :: J_NU = 26
+  integer, parameter :: J_DNU_DX = 27
+
+  integer, parameter :: J_LAST = J_DNU_DX
 
   ! Derived-type definitions
 
@@ -194,7 +194,7 @@ contains
        eq%alpha_om = -1._WP
     case default
 
-    write(UNIT=ERROR_UNIT, FMT=*) 'ABORT at line 166 <gyre_nad_eqns:nad_eqns_t_>:'
+    write(UNIT=ERROR_UNIT, FMT=*) 'ABORT at line 167 <gyre_nad_eqns:nad_eqns_t_>:'
     write(UNIT=ERROR_UNIT, FMT=*) 'Invalid time_factor'
 
   stop 'Program aborted'
@@ -208,7 +208,7 @@ contains
        eq%conv_scheme = P4_CONV_SCHEME
     case default
 
-    write(UNIT=ERROR_UNIT, FMT=*) 'ABORT at line 175 <gyre_nad_eqns:nad_eqns_t_>:'
+    write(UNIT=ERROR_UNIT, FMT=*) 'ABORT at line 176 <gyre_nad_eqns:nad_eqns_t_>:'
     write(UNIT=ERROR_UNIT, FMT=*) 'Invalid conv_scheme'
 
   stop 'Program aborted'
@@ -224,7 +224,7 @@ contains
        eq%deps_scheme = ZERO_DEPS_SCHEME
     case default
 
-    write(UNIT=ERROR_UNIT, FMT=*) 'ABORT at line 186 <gyre_nad_eqns:nad_eqns_t_>:'
+    write(UNIT=ERROR_UNIT, FMT=*) 'ABORT at line 187 <gyre_nad_eqns:nad_eqns_t_>:'
     write(UNIT=ERROR_UNIT, FMT=*) 'Invalid deps_scheme'
 
   stop 'Program aborted'
@@ -256,7 +256,7 @@ contains
       call check_model(ml, [ &
            I_V_2,I_AS,I_U,I_C_1,I_GAMMA_1,I_NABLA,I_NABLA_AD,I_DELTA, &
            I_C_LUM,I_C_RAD,I_C_THN,I_C_THK,I_C_EPS, &
-           I_EPS_RHO,I_EPS_T,I_KAP_RHO,I_KAP_T,I_OMEGA_ROT,I_W,I_F_OMEGA,I_DOMEGA_DX])
+           I_EPS_RHO,I_EPS_T,I_KAP_RHO,I_KAP_T,I_OMEGA_ROT,I_W,I_NU,I_DNU_DX,I_DOMEGA_DX])
 
       n_s = SIZE(pt)
 
@@ -287,10 +287,11 @@ contains
          this%coeff(i,J_KAP_T) = ml%coeff(I_KAP_T, pt(i))
          this%coeff(i,J_OMEGA_ROT) = ml%coeff(I_OMEGA_ROT, pt(i))
 
-         !syl200811: add new variables
+         !syl210202: add new variables
          this%coeff(i,J_W) = ml%coeff(I_W, pt(i))
-         this%coeff(i,J_F_OMEGA) = ml%coeff(I_F_OMEGA, pt(i))
          this%coeff(i,J_DOMEGA_DX) = ml%coeff(I_DOMEGA_DX, pt(i))
+         this%coeff(i,J_NU) = ml%coeff(I_NU, pt(i))
+         this%coeff(i,J_DNU_DX) = ml%coeff(I_DNU_DX, pt(i))
       end do
 
       this%coeff(:,J_OMEGA_ROT_I) = ml%coeff(I_OMEGA_ROT, this%cx%pt_i)
@@ -382,9 +383,10 @@ contains
          alpha_hf => this%alpha_hf, &
          alpha_rh => this%alpha_rh, &
          alpha_om => this%alpha_om, &
-         ! syl201029: new variables
-         f_Omega => this%coeff(i,J_F_OMEGA), &
-         dOmega_dr => this%coeff(i,J_DOMEGA_DX))
+         ! syl210202: new variables
+         nu_viscosity => this%coeff(i,J_NU), &
+         dlnnu_dlnr => this%coeff(i,J_DNU_DX), &
+         dlnOmega_dlnr => this%coeff(i,J_DOMEGA_DX))
 
       omega_c = this%cx%omega_c(Omega_rot, st)
       i_omega_c = (0._WP,1._WP)*SQRT(CMPLX(alpha_om, KIND=WP))*omega_c
@@ -402,7 +404,7 @@ contains
          conv_term = lambda*(c_lum*(3._WP + dc_lum) - (c_lum - c_rad))/(c_1*alpha_om*omega_c**2)
       case default
 
-    write(UNIT=ERROR_UNIT, FMT=*) 'ABORT at line 360 <gyre_nad_eqns:xA>:'
+    write(UNIT=ERROR_UNIT, FMT=*) 'ABORT at line 363 <gyre_nad_eqns:xA>:'
     write(UNIT=ERROR_UNIT, FMT=*) 'Invalid conv_scheme'
 
   stop 'Program aborted'
@@ -421,7 +423,7 @@ contains
          eps_T = 0._WP
       case default
 
-    write(UNIT=ERROR_UNIT, FMT=*) 'ABORT at line 374 <gyre_nad_eqns:xA>:'
+    write(UNIT=ERROR_UNIT, FMT=*) 'ABORT at line 377 <gyre_nad_eqns:xA>:'
     write(UNIT=ERROR_UNIT, FMT=*) 'Invalid deps_scheme'
 
   stop 'Program aborted'
@@ -445,15 +447,15 @@ contains
       xA(1,2) = lambda/(c_1*alpha_om*omega_c**2) - V/Gamma_1
       xA(1,3) = alpha_gr*(lambda/(c_1*alpha_om*omega_c**2))
       xA(1,4) = alpha_gr*(0._WP)
-      xA(1,5) = delta
+      xA(1,5) = 0._WP
       xA(1,6) = 0._WP
 
       !xA(2,1) = c_1*alpha_om*omega_c**2 - As
-      xA(2,1) = c_1*alpha_om*omega_c**2 - (1-c_1*Omega_rot**2)*As - c_1*Omega_rot**2*( - 2._WP*f_Omega)
+      xA(2,1) = c_1*alpha_om*omega_c**2 - (1-c_1*Omega_rot**2)*As + c_1*2*dlnOmega_dlnr *Omega_rot**2
       xA(2,2) = As - U + 3._WP - l_i
       xA(2,3) = alpha_gr*(0._WP)
       xA(2,4) = alpha_gr*(-1._WP)
-      xA(2,5) = delta
+      xA(2,5) = 2*c_1*Omega_rot**2
       xA(2,6) = 0._WP
 
       xA(3,1) = alpha_gr*(0._WP)
@@ -467,29 +469,22 @@ contains
       xA(4,2) = alpha_gr*(U*V/Gamma_1)
       xA(4,3) = alpha_gr*(lambda)
       xA(4,4) = alpha_gr*(-U - l_i + 2._WP)
-      xA(4,5) = alpha_gr*(-U*delta)
+      xA(4,5) = alpha_gr*(0._WP)
       xA(4,6) = alpha_gr*(0._WP)
 
-      !xA(5,1) = V*(nabla_ad*(U - c_1*alpha_om*omega_c**2) - 4._WP*(nabla_ad - nabla) + c_dif)/f_rh
-      xA(5,1) = V*(nabla_ad*(U - c_1*alpha_om*omega_c**2 - c_1*Omega_rot**2*(2._WP*f_Omega)) - 4._WP*(nabla_ad - nabla) + (1- &
- & c_1*Omega_rot**2)*c_dif)/f_rh
-      xA(5,2) = V*(lambda/(c_1*alpha_om*omega_c**2)*(nabla_ad - nabla) - c_dif)/f_rh
-      xA(5,3) = alpha_gr*(V*lambda/(c_1*alpha_om*omega_c**2)*(nabla_ad - nabla))/f_rh
-      xA(5,4) = alpha_gr*(V*nabla_ad)/f_rh
-      xA(5,5) = V*nabla*(4._WP*f_rh - kap_S)/f_rh - df_rh - (l_i - 2._WP)
-      xA(5,6) = -V*nabla/(c_rad*f_rh)
+      xA(5,1) = -dlnOmega_dlnr*As
+      xA(5,2) = -dlnOmega_dlnr*V/Gamma_1
+      xA(5,3) = 0._WP
+      xA(5,4) = 0._WP
+      xA(5,5) = -dlnOmega_dlnr + 2._WP
+      xA(5,6) = 1._WP
 
-      !xA(6,1) = alpha_hf*lambda*(nabla_ad/nabla - 1._WP)*c_rad - V*c_eps_ad
-      xA(6,1) = alpha_hf*lambda*((1-c_1*Omega_rot**2)*nabla_ad/nabla - 1._WP)*c_rad - (1-c_1*Omega_rot**2)*V*c_eps_ad
-      xA(6,2) = V*c_eps_ad - lambda*c_rad*alpha_hf*nabla_ad/nabla + conv_term
-      xA(6,3) = alpha_gr*conv_term
-      xA(6,4) = alpha_gr*(0._WP)
-      if (x > 0._WP) then
-         xA(6,5) = c_eps_S - alpha_hf*lambda*c_rad/(nabla*V) + alpha_th*i_omega_c*c_thk
-      else
-         xA(6,5) = -alpha_hf*HUGE(0._WP)
-      endif
-      xA(6,6) = -1._WP - l_i
+      xA(6,1) = -i_omega_c*x**2/nu_viscosity*(2._WP+dlnOmega_dlnr)
+      xA(6,2) = 0._WP
+      xA(6,3) = 0._WP
+      xA(6,4) = 0._WP
+      xA(6,5) = -i_omega_c*x**2/nu_viscosity
+      xA(6,6) = V*(1-c_1*Omega_rot**2)/Gamma_1 + As -3._WP -dlnOmega_dlnr - dlnnu_dlnr + 2._WP
 
     end associate
 

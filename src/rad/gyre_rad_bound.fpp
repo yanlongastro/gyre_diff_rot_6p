@@ -61,7 +61,6 @@ module gyre_rad_bound
   !syl200811: add new variables
   integer, parameter :: J_OMEGA_ROT = 6
   integer, parameter :: J_W = 7
-  integer, parameter :: J_F_OMEGA = 8
   integer, parameter :: J_DOMEGA_DX = 9
 
   integer, parameter :: J_LAST = J_DOMEGA_DX
@@ -217,7 +216,6 @@ contains
       !syl200812: new variables
       this%coeff(1,J_OMEGA_ROT) = ml%coeff(I_OMEGA_ROT, pt_i)
       this%coeff(1,J_W) = ml%coeff(I_W, pt_i)
-      this%coeff(1,J_F_OMEGA) = ml%coeff(I_F_OMEGA, pt_i)
       this%coeff(1,J_DOMEGA_DX) = ml%coeff(I_DOMEGA_DX, pt_i)
 
       ! Outer boundary
@@ -246,7 +244,6 @@ contains
       !syl200812: new variables
       this%coeff(2,J_OMEGA_ROT) = ml%coeff(I_OMEGA_ROT, pt_o)
       this%coeff(2,J_W) = ml%coeff(I_W, pt_o)
-      this%coeff(2,J_F_OMEGA) = ml%coeff(I_F_OMEGA, pt_o)
       this%coeff(2,J_DOMEGA_DX) = ml%coeff(I_DOMEGA_DX, pt_o)
 
     end associate
@@ -319,8 +316,7 @@ contains
          omega => st%omega, &
          c_1 => this%coeff(1,J_C_1), &
          Omega_rot => this%coeff(1,J_OMEGA_ROT), &
-         alpha_om => this%alpha_om, &
-         f_Omega => this%coeff(1,J_F_OMEGA))
+         alpha_om => this%alpha_om)
 
       omega_c = omega
 
@@ -329,14 +325,13 @@ contains
 
       !print *, omega_c
 
-      !print *, omega_c, alpha_om
+      !print *, Omega_rot**2
 
       !B(1,1) = c_1*alpha_om*omega_c**2
-      B(1,1) = c_1*alpha_om*omega_c**2 + c_1*Omega_rot**2*(2._WP*f_Omega)
+      B(1,1) = c_1*alpha_om*omega_c**2 + c_1*Omega_rot**2*(2._WP*(-2._WP))
       !B(1,2) = 0._WP
       B(1,2) = 0._WP
 
-      !print *, - c_1*Omega_rot**2*(-2._WP - 2._WP*f_Omega)
 
       scl = 1._WP
 
@@ -443,7 +438,7 @@ contains
       V => this%coeff(2,J_V), &
       W => this%coeff(2,J_W))
 
-    !print *, Omega_rot**2
+    ! print *, Omega_rot**2
     !B(1,1) = 1._WP
     B(1,1) = 1._WP - Omega_rot**2
     !B(1,1) = V

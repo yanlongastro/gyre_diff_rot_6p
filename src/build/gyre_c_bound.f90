@@ -1,10 +1,10 @@
 !fpx3_header(0.13_3a)
 !
 !dependencies
-!   dir: ~/gyre_rot/src/build 
+!   dir: ~/gyre_diff_rot_6p/src/build 
 !   sources: -
-!   includes: ../extern/core/core.inc ../bvp/gyre_bound.inc
-!   uses: core_kinds gyre_state
+!   includes: ../bvp/gyre_bound.inc ../extern/core/core.inc
+!   uses: gyre_state core_kinds
 !   provides: gyre_c_bound
 !end dependencies
 !
