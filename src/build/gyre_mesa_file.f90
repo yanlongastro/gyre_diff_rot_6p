@@ -4,7 +4,7 @@
 !   dir: ~/gyre_diff_rot_6p/src/build 
 !   sources: -
 !   includes: ../extern/core/core.inc
-!   uses: gyre_model_par gyre_constants gyre_util core_kinds core_order gyre_model_util gyre_model gyre_evol_model ISO_FORTRAN_ENV
+!   uses: core_order gyre_model gyre_evol_model gyre_constants core_kinds gyre_model_util gyre_util ISO_FORTRAN_ENV gyre_model_par
 !   provides: gyre_mesa_file
 !end dependencies
 !
@@ -329,6 +329,7 @@ contains
     nu_viscosity = nu_viscosity/SQRT(G_GRAVITY*M_star*R_star)
 
     print *, '  Omega_rot(1)^2 =', Omega_rot(1)**2
+    print *, '  Omega_rot(-1)^2 =', Omega_rot(size(Omega_rot))**2
     print *, '  Gamma_1(1) =', Gamma_1(1)
     print *, '  nu_viscosity(1) =', nu_viscosity(1)
     print *, '  f_Om(1) =', f_Omega(1)

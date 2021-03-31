@@ -284,6 +284,7 @@ contains
     nu_viscosity = nu_viscosity/SQRT(G_GRAVITY*M_star*R_star)
     
     print *, '  Omega_rot(1)^2 =', Omega_rot(1)**2
+    print *, '  Omega_rot(-1)^2 =', Omega_rot(size(Omega_rot))**2
     print *, '  Gamma_1(1) =', Gamma_1(1)
     print *, '  nu_viscosity(1) =', nu_viscosity(1)
     print *, '  f_Om(1) =', f_Omega(1)

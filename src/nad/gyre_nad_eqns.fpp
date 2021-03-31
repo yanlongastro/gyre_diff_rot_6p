@@ -399,7 +399,7 @@ contains
       xA(1,6) = 0._WP
 
       !xA(2,1) = c_1*alpha_om*omega_c**2 - As
-      xA(2,1) = c_1*alpha_om*omega_c**2 - (1-c_1*Omega_rot**2)*As + c_1*2*dlnOmega_dlnr *Omega_rot**2
+      xA(2,1) = c_1*alpha_om*omega_c**2 - (1-c_1*Omega_rot**2)*As !+ c_1*2*dlnOmega_dlnr *Omega_rot**2
       xA(2,2) = As - U + 3._WP - l_i
       xA(2,3) = alpha_gr*(0._WP)
       xA(2,4) = alpha_gr*(-1._WP)

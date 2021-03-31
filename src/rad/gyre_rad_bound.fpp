@@ -316,6 +316,7 @@ contains
          omega => st%omega, &
          c_1 => this%coeff(1,J_C_1), &
          Omega_rot => this%coeff(1,J_OMEGA_ROT), &
+         dlnOmega_dlnr => this%coeff(1,J_DOMEGA_DX), &
          alpha_om => this%alpha_om)
 
       omega_c = omega
@@ -328,7 +329,7 @@ contains
       !print *, Omega_rot**2
 
       !B(1,1) = c_1*alpha_om*omega_c**2
-      B(1,1) = c_1*alpha_om*omega_c**2 + c_1*Omega_rot**2*(2._WP*(-2._WP))
+      B(1,1) = c_1*alpha_om*omega_c**2 + c_1*Omega_rot**2*(2._WP*(-2._WP)) - 2*c_1*dlnOmega_dlnr*Omega_rot**2
       !B(1,2) = 0._WP
       B(1,2) = 0._WP
 

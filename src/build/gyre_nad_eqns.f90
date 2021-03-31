@@ -4,7 +4,7 @@
 !   dir: ~/gyre_diff_rot_6p/src/build 
 !   sources: -
 !   includes: ../extern/core/core.inc
-!   uses: gyre_model_util core_kinds gyre_linalg gyre_context gyre_model gyre_point gyre_eqns gyre_state gyre_osc_par ISO_FORTRAN_ENV gyre_mode_par gyre_nad_trans
+!   uses: gyre_osc_par ISO_FORTRAN_ENV gyre_model gyre_point core_kinds gyre_nad_trans gyre_model_util gyre_state gyre_mode_par gyre_eqns gyre_context gyre_linalg
 !   provides: gyre_nad_eqns
 !end dependencies
 !
@@ -451,7 +451,7 @@ contains
       xA(1,6) = 0._WP
 
       !xA(2,1) = c_1*alpha_om*omega_c**2 - As
-      xA(2,1) = c_1*alpha_om*omega_c**2 - (1-c_1*Omega_rot**2)*As + c_1*2*dlnOmega_dlnr *Omega_rot**2
+      xA(2,1) = c_1*alpha_om*omega_c**2 - (1-c_1*Omega_rot**2)*As !+ c_1*2*dlnOmega_dlnr *Omega_rot**2
       xA(2,2) = As - U + 3._WP - l_i
       xA(2,3) = alpha_gr*(0._WP)
       xA(2,4) = alpha_gr*(-1._WP)

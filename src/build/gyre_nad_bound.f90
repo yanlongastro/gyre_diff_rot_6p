@@ -4,7 +4,7 @@
 !   dir: ~/gyre_diff_rot_6p/src/build 
 !   sources: -
 !   includes: ../extern/core/core.inc
-!   uses: gyre_atmos gyre_osc_par gyre_point gyre_context gyre_bound ISO_FORTRAN_ENV gyre_mode_par gyre_rot gyre_model_util gyre_nad_trans core_kinds gyre_model gyre_state
+!   uses: gyre_mode_par gyre_atmos ISO_FORTRAN_ENV gyre_bound gyre_osc_par gyre_context gyre_rot gyre_nad_trans gyre_model_util gyre_model core_kinds gyre_point gyre_state
 !   provides: gyre_nad_bound
 !end dependencies
 !
@@ -422,7 +422,7 @@ contains
       !syl201029: new boundary
 
       !B(1,1) = c_1*alpha_om*omega_c**2
-      B(1,1) = c_1*alpha_om*omega_c**2 + 2._WP*c_1*(0.0)*Omega_rot**2
+      B(1,1) = c_1*alpha_om*omega_c**2 !+ 2._WP*c_1*(0.0)*Omega_rot**2
       B(1,2) = -l_i
       B(1,3) = alpha_gr*(-l_i)
       B(1,4) = alpha_gr*(0._WP)

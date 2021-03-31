@@ -4,7 +4,7 @@
 !   dir: ~/gyre_diff_rot_6p/src/build 
 !   sources: -
 !   includes: ../extern/core/core.inc
-!   uses: gyre_rad_trans gyre_model_util gyre_atmos gyre_osc_par core_kinds gyre_point gyre_model gyre_mode_par gyre_context gyre_state gyre_bound ISO_FORTRAN_ENV
+!   uses: gyre_point core_kinds gyre_model gyre_state gyre_osc_par gyre_mode_par gyre_model_util gyre_bound gyre_atmos gyre_context ISO_FORTRAN_ENV gyre_rad_trans
 !   provides: gyre_rad_bound
 !end dependencies
 !
@@ -374,6 +374,7 @@ contains
          omega => st%omega, &
          c_1 => this%coeff(1,J_C_1), &
          Omega_rot => this%coeff(1,J_OMEGA_ROT), &
+         dlnOmega_dlnr => this%coeff(1,J_DOMEGA_DX), &
          alpha_om => this%alpha_om)
 
       omega_c = omega
@@ -386,7 +387,7 @@ contains
       !print *, Omega_rot**2
 
       !B(1,1) = c_1*alpha_om*omega_c**2
-      B(1,1) = c_1*alpha_om*omega_c**2 + c_1*Omega_rot**2*(2._WP*(-2._WP))
+      B(1,1) = c_1*alpha_om*omega_c**2 + c_1*Omega_rot**2*(2._WP*(-2._WP)) - 2*c_1*dlnOmega_dlnr*Omega_rot**2
       !B(1,2) = 0._WP
       B(1,2) = 0._WP
 
@@ -449,7 +450,7 @@ contains
        call this%build_luan_o_(st, B, scl)
     case default
 
-    write(UNIT=ERROR_UNIT, FMT=*) 'ABORT at line 404 <gyre_rad_bound:build_o>:'
+    write(UNIT=ERROR_UNIT, FMT=*) 'ABORT at line 405 <gyre_rad_bound:build_o>:'
     write(UNIT=ERROR_UNIT, FMT=*) 'Invalid type_o'
 
   stop 'Program aborted'

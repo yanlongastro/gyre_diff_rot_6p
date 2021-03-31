@@ -4,7 +4,7 @@
 !   dir: ~/gyre_diff_rot_6p/src/build 
 !   sources: -
 !   includes: ../extern/core/core.inc
-!   uses: gyre_osc_par gyre_model ISO_FORTRAN_ENV gyre_point gyre_state gyre_context gyre_eqns gyre_model_util gyre_rad_trans gyre_mode_par core_kinds
+!   uses: gyre_rad_trans gyre_model gyre_mode_par gyre_osc_par gyre_context gyre_eqns core_kinds gyre_state gyre_model_util gyre_point ISO_FORTRAN_ENV
 !   provides: gyre_rad_eqns
 !end dependencies
 !
@@ -248,7 +248,7 @@ contains
          alpha_om => this%alpha_om, &
          Omega_rot => this%coeff(i,J_OMEGA_ROT), &
          !W => this%coeff(i,J_W), &
-         dOmega_dr => this%coeff(i,J_DOMEGA_DX))
+         dlnOmega_dlnr => this%coeff(i,J_DOMEGA_DX))
          ! syl200817: add new variables
 
       omega_c = omega
@@ -270,7 +270,8 @@ contains
       !xA(2,1) = c_1*alpha_om*omega_c**2 + U - As
       !xA(2,1) = c_1*alpha_om*omega_c**2 - (1-c_1*Omega_rot**2)*As - c_1*Omega_rot**2*(V/Gamma_1 -2._WP - 2._WP*0.0) + U
       !xA(2,1) = -V/Gamma_1 -As + U -1._WP +V -c_1*Omega_rot**2*(-V/Gamma_1-As+2._WP+V) - V/(V+W)*(V-V/Gamma_1-1._WP) +c_1*(omega_c**2+(3._WP+2._WP*0.0)*Omega_rot**2)
-      xA(2,1) = c_1*alpha_om*omega_c**2 - (1-c_1*Omega_rot**2)*As + c_1*Omega_rot**2*(2._WP*(-2._WP)) + U
+      xA(2,1) = c_1*alpha_om*omega_c**2 - (1-c_1*Omega_rot**2)*As + c_1*Omega_rot**2*(2._WP*(-2._WP)) + U - 2*c_1*dlnOmega_dlnr &
+ & *Omega_rot**2
       xA(2,2) = As - U + 3._WP
       !xA(2,2) = As - U + 3._WP + c_1*Omega_rot**2*(V+W)/Gamma_1
 

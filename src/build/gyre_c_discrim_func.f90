@@ -4,7 +4,7 @@
 !   dir: ~/gyre_diff_rot_6p/src/build 
 !   sources: -
 !   includes: ../extern/core/core.inc
-!   uses: gyre_state gyre_ext gyre_status gyre_ext_func ISO_FORTRAN_ENV core_kinds gyre_bvp
+!   uses: core_kinds gyre_ext ISO_FORTRAN_ENV gyre_ext_func gyre_state gyre_bvp gyre_status
 !   provides: gyre_c_discrim_func
 !end dependencies
 !
@@ -141,7 +141,7 @@ contains
 
     omega = cmplx(cx)
 
-    if (REAL(omega) >= this%omega_min - 1.0 .AND. REAL(omega) <= this%omega_max) then
+    if (REAL(omega) >= this%omega_min - 1.0 .AND. REAL(omega) <= this%omega_max+1.0) then
 
        this%st%omega = omega
 

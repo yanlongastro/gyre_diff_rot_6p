@@ -372,7 +372,7 @@ contains
       !syl201029: new boundary
 
       !B(1,1) = c_1*alpha_om*omega_c**2
-      B(1,1) = c_1*alpha_om*omega_c**2 + 2._WP*c_1*(0.0)*Omega_rot**2
+      B(1,1) = c_1*alpha_om*omega_c**2 !+ 2._WP*c_1*(0.0)*Omega_rot**2
       B(1,2) = -l_i
       B(1,3) = alpha_gr*(-l_i)
       B(1,4) = alpha_gr*(0._WP)
